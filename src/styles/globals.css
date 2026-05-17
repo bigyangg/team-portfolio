@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --background: #f8f9fc;
+  --foreground: #131b2f;
+  --card: #ffffff;
+  --card-foreground: #131b2f;
+  --popover: #ffffff;
+  --popover-foreground: #131b2f;
+  --primary: #a73045;
+  --primary-foreground: #fff6f8;
+  --secondary: #e6ebf5;
+  --secondary-foreground: #131b2f;
+  --muted-surface: #e6ebf5;
+  --muted-foreground: #4f5d77;
+  --accent: #e38a9a;
+  --accent-foreground: #131b2f;
+  --destructive: #a73045;
+  --destructive-foreground: #fff6f8;
+  --border: #cfd8e7;
+  --input: #ffffff;
+  --ring: #a73045;
+  --radius: 0.625rem;
+
+  --navy: #101626;
+  --navy2: #151d31;
+  --gold: #c53d55;
+  --gold2: #e38a9a;
+  --white: #fff6f8;
+  --plat: var(--background);
+  --gray: var(--secondary);
+  --text: var(--foreground);
+  --muted: var(--muted-foreground);
+  --red: var(--destructive);
+  --green: #1f6b67;
+  --gradient-bg: linear-gradient(135deg, #f8f9fc 0%, #e6ebf5 100%);
+  --gradient-accent: linear-gradient(90deg, #a73045 0%, #d0576d 100%);
+}
+
+.dark {
+  --background: #101626;
+  --foreground: #e7ecf7;
+  --card: #151d31;
+  --card-foreground: #e7ecf7;
+  --popover: #151d31;
+  --popover-foreground: #e7ecf7;
+  --primary: #c53d55;
+  --primary-foreground: #fff6f8;
+  --secondary: #202b42;
+  --secondary-foreground: #e7ecf7;
+  --muted-surface: #202b42;
+  --muted-foreground: #aab6cf;
+  --accent: #e38a9a;
+  --accent-foreground: #101626;
+  --destructive: #d0576d;
+  --destructive-foreground: #fff6f8;
+  --border: #344561;
+  --input: #151d31;
+  --ring: #d0576d;
+  --gradient-bg: linear-gradient(135deg, #101626 0%, #151d31 100%);
+  --gradient-accent: linear-gradient(90deg, #c53d55 0%, #e38a9a 100%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--plat);
+  line-height: 1.5;
+}
+
+.font-heading,
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.bg-brand-bg {
+  background: var(--gradient-bg);
+}
+
+.bg-brand-accent {
+  background: var(--gradient-accent);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
