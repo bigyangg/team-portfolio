@@ -9,7 +9,7 @@ const toList = (value) => {
   }
   if (typeof value === 'string') {
     return value
-      .split(',')
+      .split(/[\n,]/)
       .map((item) => item.trim())
       .filter(Boolean)
   }
@@ -17,6 +17,13 @@ const toList = (value) => {
 }
 
 const normalizeStatus = (value) => (toText(value).toLowerCase() === 'available' ? 'available' : 'pending')
+
+const normalizeVisibility = (value) => {
+  if (typeof value === 'boolean') return value
+  const normalized = toText(value).toLowerCase()
+  if (normalized === 'archived' || normalized === 'hidden' || normalized === 'false') return false
+  return true
+}
 
 const buildId = (value) => {
   const clean = toText(value)
@@ -31,12 +38,16 @@ export const MEMBER_SCHEMA_OVERVIEW = [
   { field: 'fullName', required: 'Yes', type: 'string' },
   { field: 'role', required: 'Yes', type: 'string' },
   { field: 'summary', required: 'Yes', type: 'string' },
+  { field: 'portfolio', required: 'No', type: 'long string' },
+  { field: 'photoUrl', required: 'No', type: 'image url | data url' },
+  { field: 'cvUrl', required: 'No', type: 'pdf url' },
   { field: 'location', required: 'No', type: 'string' },
   { field: 'focusAreas', required: 'No', type: 'string[]' },
   { field: 'highlights', required: 'No', type: 'string[]' },
   { field: 'education', required: 'No', type: 'string' },
   { field: 'contact.email', required: 'No', type: 'email' },
   { field: 'contact.phone', required: 'No', type: 'string' },
+  { field: 'isVisible', required: 'No', type: 'boolean' },
   { field: 'cvStatus', required: 'No', type: 'available | pending' },
   { field: 'sourceFile', required: 'No', type: 'string' },
 ]
@@ -45,8 +56,11 @@ export const normalizeMember = (rawMember, index = 0) => ({
   id: buildId(rawMember?.id || `seed-${index + 1}`),
   fullName: toText(rawMember?.fullName),
   role: toText(rawMember?.role),
+  photoUrl: toText(rawMember?.photoUrl),
+  cvUrl: toText(rawMember?.cvUrl || rawMember?.cv_url),
   location: toText(rawMember?.location) || 'Nepal',
   summary: toText(rawMember?.summary),
+  portfolio: toText(rawMember?.portfolio || rawMember?.bio),
   focusAreas: toList(rawMember?.focusAreas),
   highlights: toList(rawMember?.highlights),
   education: toText(rawMember?.education) || 'Not added yet',
@@ -54,6 +68,7 @@ export const normalizeMember = (rawMember, index = 0) => ({
     email: toText(rawMember?.contact?.email).toLowerCase(),
     phone: toText(rawMember?.contact?.phone),
   },
+  isVisible: normalizeVisibility(rawMember?.isVisible ?? rawMember?.show_on_portfolio ?? rawMember?.profile_status),
   cvStatus: normalizeStatus(rawMember?.cvStatus),
   sourceFile: toText(rawMember?.sourceFile) || 'Manually added',
   createdAt: toText(rawMember?.createdAt) || new Date().toISOString(),
@@ -71,6 +86,32 @@ export const validateMemberDraft = (draft) => {
     errors.email = 'Use a valid email address.'
   }
 
+  const photoUrl = toText(draft.photoUrl)
+  if (
+    photoUrl &&
+    !(
+      photoUrl.startsWith('http://') ||
+      photoUrl.startsWith('https://') ||
+      photoUrl.startsWith('data:image/') ||
+      photoUrl.startsWith('/')
+    )
+  ) {
+    errors.photoUrl = 'Use a valid image URL or upload a photo.'
+  }
+
+  const cvUrl = toText(draft.cvUrl)
+  if (
+    cvUrl &&
+    !(
+      cvUrl.startsWith('http://') ||
+      cvUrl.startsWith('https://') ||
+      cvUrl.startsWith('data:application/pdf') ||
+      cvUrl.startsWith('/')
+    )
+  ) {
+    errors.cvUrl = 'Use a valid public PDF URL.'
+  }
+
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
@@ -82,15 +123,19 @@ export const createMemberFromDraft = (draft) =>
     id: buildId(),
     fullName: draft.fullName,
     role: draft.role,
+    photoUrl: draft.photoUrl,
+    cvUrl: draft.cvUrl,
     location: draft.location,
     summary: draft.summary,
+    portfolio: draft.portfolio,
     focusAreas: draft.focusAreas,
-    highlights: [],
-    education: 'Not added yet',
+    highlights: draft.highlights,
+    education: draft.education,
     contact: {
       email: draft.email,
       phone: draft.phone,
     },
+    isVisible: draft.isVisible,
     cvStatus: draft.cvStatus,
     sourceFile: normalizeStatus(draft.cvStatus) === 'available' ? 'Manually added' : 'CV pending',
     createdAt: new Date().toISOString(),
@@ -125,7 +170,23 @@ export const mergeSeedAndStoredMembers = (seedMembers, storedMembers) => {
   })
   storedMembers.forEach((member, index) => {
     const normalized = normalizeMember(member, index)
-    mergedMap.set(normalized.id, normalized)
+    const isLegacySeed = normalized.sourceFile.startsWith('docs/TEAM/')
+    if (mergedMap.has(normalized.id)) {
+      const existing = mergedMap.get(normalized.id)
+      mergedMap.set(normalized.id, {
+        ...existing,
+        ...normalized,
+        contact: {
+          ...existing?.contact,
+          ...normalized.contact,
+        },
+      })
+      return
+    }
+
+    if (!isLegacySeed) {
+      mergedMap.set(normalized.id, normalized)
+    }
   })
   return Array.from(mergedMap.values())
 }

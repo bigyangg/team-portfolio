@@ -2,25 +2,94 @@ import { normalizeMember } from './memberSchema'
 
 const rawTeamMembers = [
   {
+    id: 'bipana-pun-magar',
+    fullName: 'Bipana Pun Magar',
+    role: 'Chemistry Instructor / Researcher',
+    location: 'Budhanilkanth, Kathmandu',
+    summary:
+      'Chemistry instructor and researcher working on hydroxyapatite nanoparticle synthesis and arsenic adsorption with applied publication work in progress.',
+    focusAreas: [
+      'Chemistry Instruction',
+      'Hydroxyapatite Synthesis System',
+      'Arsenic (As III) Adsorption Workflow',
+      'Material Characterization',
+    ],
+    highlights: [
+      'Leads synthesis of hydroxyapatite nanoparticles from chicken bones across different calcification temperatures.',
+      'Runs characterization and arsenic (As III) adsorption testing workflow for applied chemistry validation.',
+      'Elsevier publication currently in processing.',
+    ],
+    education: 'M.Sc. Chemistry, Trichandra Multiple Campus, Tribhuvan University (2016-2018)',
+    contact: {
+      phone: '+977-9860469543',
+    },
+    cvUrl: '/cvs/cv-bipana-pun-magar-1-2.pdf',
+    cvStatus: 'available',
+    sourceFile: 'docs/NGHTT-National-Green-Hydrogen-Think-Tank.pdf (Bipana section)',
+  },
+  {
+    id: 'luza-maharjan',
+    fullName: 'Luza Maharjan',
+    role: 'Lead Communicator and Project Strategist',
+    location: 'Lalitpur, Nepal',
+    summary:
+      "Lead communicator for NGHTT handling stakeholder engagement and policy proposal drafting for the Ministry of Energy, Water Resources and Irrigation, with strong digital operations leadership.",
+    focusAreas: ['Digital Strategy', 'Policy Communication', 'Full-Stack Development', 'AI Automation'],
+    highlights: [
+      'Manager - Digital Strategy and Web Operations at The Everest Holiday Pvt. Ltd. (2025-Present)',
+      'Built custom WordPress CMS and managed travel platforms with 43.1K impressions and 476 indexed pages',
+      'Builds multi-LLM automation workflows using Claude Code and related tooling',
+    ],
+    education: 'Independent systems builder and digital strategy practitioner',
+    contact: {
+      email: 'maharjanluza380@gmail.com',
+      phone: '+977-9748265710',
+    },
+    cvStatus: 'available',
+    sourceFile: 'docs/NGHTT-National-Green-Hydrogen-Think-Tank.pdf (Luza section)',
+  },
+  {
+    id: 'bigyan-ghimire',
+    fullName: 'Bigyan Ghimire',
+    role: 'AI Engineer - Multi-Agent Systems and Full-Stack AI',
+    location: 'Nepal',
+    summary:
+      'AI engineer building agentic systems and RAG products with FastAPI, LangChain, TensorFlow/Keras, and Hugging Face models, with shipped platforms in healthcare exam prep, market intelligence, voice AI, and Web3.',
+    focusAreas: ['Multi-Agent Systems', 'RAG Pipelines', 'FastAPI', 'TensorFlow/Keras'],
+    highlights: [
+      "Built Nurvexa Labs for Nepal's PCL Nursing exam preparation",
+      'Developed AFI market event intelligence pipeline with concurrent agent enrichment',
+      'Shipped voice AI and Web3 product prototypes with production-focused API integrations.',
+    ],
+    education: 'B.Sc. Computer Architecture and Systems Engineering, University of Sunderland (Nov 2024-Present)',
+    contact: {
+      email: 'akagg07@proton.me',
+    },
+    cvStatus: 'available',
+    sourceFile: 'docs/NGHTT-National-Green-Hydrogen-Think-Tank.pdf (Bigyan section)',
+  },
+  {
     id: 'lochan-raj-dahal',
     fullName: 'Lochan Raj Dahal',
-    role: 'Agentic Systems Builder · Full-Stack Developer',
+    role: 'AI and Computer Science Professor / Agentic Systems Builder',
     location: 'Biratnagar, Nepal',
     summary:
-      'Founder of LucazSoft with 5 years of technical teaching and full-stack delivery experience. Builds production-ready AI and blockchain systems with a strong security background.',
-    focusAreas: ['Solana', 'Agentic AI', 'Full-Stack Systems', 'Cybersecurity'],
+      'Technical faculty and founder with deep experience in full-stack platforms, agent orchestration, and security, contributing to national and international hackathon-grade systems.',
+    focusAreas: ['LangChain', 'Multi-LLM Systems', 'React/Next.js', 'Solana'],
     highlights: [
-      'Building AETHER-LOGOS for Solana Colosseum Frontier 2026',
-      'Building FORGE for AMD Developer Hackathon 2026',
+      'Technical Trainer and Faculty at ISMT College (2021-Present)',
+      'Founder of LucazSoft with products including DrPharmas, Ghargharmaa, and GadiSewa',
+      'Contributed to AETHER-LOGOS and FORGE hackathon projects in 2026',
       'Certified Ethical Hacker (CEH)',
     ],
-    education: 'MBA in progress',
+    education:
+      'B.Tech in Computer Science and Engineering, JNTUK (2014-2018); MBA in Strategic Management (in progress)',
     contact: {
       email: 'lochanrajdahal@gmail.com',
       phone: '+977-9842580027',
     },
     cvStatus: 'available',
-    sourceFile: 'docs/TEAM/Lochan_Raj_Dahal_CV-1.docx',
+    sourceFile: 'docs/NGHTT-National-Green-Hydrogen-Think-Tank.pdf (Lochan section)',
   },
   {
     id: 'dinesh-paudel',
@@ -28,41 +97,42 @@ const rawTeamMembers = [
     role: 'Chemistry Instructor · Organic Chemistry Researcher',
     location: 'Kathmandu, Nepal',
     summary:
-      'Chemistry instructor with M.Sc. in Organic Chemistry (CGPA 3.66), focused on medicinal chemistry, phytochemistry, food chemistry, and environmental remediation.',
+      'Chemist and instructor focused on organic synthesis, medicinal chemistry, and sustainable chemistry with active publication work and national professional engagement.',
     focusAreas: ['Organic Chemistry', 'Medicinal Chemistry', 'Food Chemistry', 'Teaching'],
     highlights: [
-      'Instructor at St. Xavier’s College, Kathmandu',
-      'Research on antidiabetic and antioxidant medicinal plants',
+      "Chemistry Instructor at St. Xavier's College, Kathmandu (2023-Present)",
+      'Remote Observer, 55th International Chemistry Olympiad, Switzerland (2023)',
       'Life Member, Nepal Chemical Society',
     ],
-    education: 'M.Sc. Organic Chemistry, Tribhuvan University',
+    education: 'M.Sc. Organic Chemistry (3.66 CGPA), Tribhuvan University (2021)',
     contact: {
       email: 'dinesh11poudel@gmail.com',
       phone: '+977-9848169898',
     },
+    cvUrl: '/cvs/dinesh-paudel-main.pdf',
     cvStatus: 'available',
-    sourceFile: 'docs/TEAM/DINESH PAUDEL main.pdf + Dinesh Paudel(profile).docx',
+    sourceFile: 'docs/NGHTT-National-Green-Hydrogen-Think-Tank.pdf (Dinesh section)',
   },
   {
-    id: 'pujan-nepal',
-    fullName: 'Pujan Nepal',
-    role: 'Nanomaterials, Electrocatalysis & Photocatalysis Researcher',
-    location: 'Jeonju, South Korea / Rupandehi, Nepal',
+    id: 'dr-dasu-ram-paudel',
+    fullName: 'Dr. Dasu Ram Paudel',
+    role: 'Senior Research Lead - Green Hydrogen and Nanomaterial Science',
+    location: 'Kathmandu-32, Balkhu',
     summary:
-      'Research assistant at Jeonbuk National University working on electrochemical and photochemical applications of nanomaterials for environmental and catalytic use cases.',
-    focusAreas: ['Nanomaterials', 'Electrocatalysis', 'Photocatalysis', 'Environmental Remediation'],
+      "Senior academic lead at NGHTT providing scientific direction for Nepal's hydrogen research agenda, with deep expertise in green hydrogen, nanomaterials, and energy catalysis.",
+    focusAreas: ['Green Hydrogen', 'Nanomaterial Science', 'Energy Catalysis', 'Research Leadership'],
     highlights: [
-      'Published in Journal of Nanotechnology and BIBECHANA',
-      'Lecturer in Chemistry at Kathmandu Model Secondary School',
-      'Laboratory Instructor at Tribhuvan University',
+      'Professor of Chemistry at Tribhuvan University',
+      "Provides scientific direction and subject-matter leadership for NGHTT's hydrogen agenda",
+      "Recognized as a senior authority in Nepal's clean-energy chemistry ecosystem",
     ],
-    education: 'Master Degree, Tribhuvan University',
+    education: 'Professor of Chemistry, Tribhuvan University',
     contact: {
-      email: 'pujan.nepal@jbnu.ac.kr',
-      phone: '+977-9860988393',
+      email: 'drpaudel005@gmail.com',
+      phone: '+977-9849888864',
     },
     cvStatus: 'available',
-    sourceFile: 'docs/TEAM/CV_Nepal_F.pdf',
+    sourceFile: 'docs/NGHTT-National-Green-Hydrogen-Think-Tank.pdf (Dr. Dasu section)',
   },
   {
     id: 'sushan-adhikari',
@@ -70,20 +140,112 @@ const rawTeamMembers = [
     role: 'AI/ML Engineer · NLP & Computer Vision Researcher',
     location: 'Nepal',
     summary:
-      'Final-year Computer Engineering student with research and industry experience in ML/MLOps, NLP, CV, LLMs, and RAG. Contributed to national-scale digital systems.',
-    focusAreas: ['AI/ML', 'NLP', 'Computer Vision', 'LLMs'],
+      'Computing engineer building AI systems across NLP, computer vision, and applied research, with strong publication output and national-level innovation awards.',
+    focusAreas: ['AI/ML', 'NLP', 'Computer Vision', 'PyTorch'],
     highlights: [
-      'First author on multiple AI publications',
-      'Worked on Nepal’s national pension platform',
-      'Strong academic profile (CGPA 3.88/4.0)',
+      'First author publications in legal MT and ethical reasoning for tiny LLMs',
+      "Hult Prize OnCampus Winner 2024 and NASA Space Apps People's Choice Winner 2024",
+      'Final-year Computer Engineering student at Kathmandu University (CGPA 3.88/4.0)',
     ],
-    education: 'B.Eng. Computer Engineering, Kathmandu University',
+    education: 'Final-year B.Eng. Computer Engineering, Kathmandu University; exchange at IIT Palakkad (2025)',
     contact: {
       email: 'sushan.adhikari2060@gmail.com',
       phone: '+977-9810538507',
     },
+    cvUrl: '/cvs/sushan-adhikari-cv-1-5.pdf',
     cvStatus: 'available',
-    sourceFile: 'docs/TEAM/Sushan_Adhikari_CV (1) (5).pdf',
+    sourceFile: 'docs/NGHTT-National-Green-Hydrogen-Think-Tank.pdf (Sushan section)',
+  },
+  {
+    id: 'gagan-singh-bist',
+    fullName: 'Gagan Singh Bist',
+    role: 'Engineering & Sustainable Energy Systems Lead',
+    location: 'Mid-West University, Nepal',
+    summary:
+      'Mechanical engineer and academic focused on sustainable energy systems, simulation, and institutional planning for applied hydrogen infrastructure.',
+    focusAreas: ['Mechanical Engineering', 'Sustainable Energy Systems', 'Automation & Control', 'Engine Simulation'],
+    highlights: [
+      'Assistant Professor at Mid-West University (2023-present)',
+      'Editor-in-Chief, Mid-West University Journal of Engineering and Innovation (2025-present)',
+      'University Strategic Planning Committee member (2024-present)',
+      'Published diesel engine performance and emission research on neem biodiesel blends',
+    ],
+    education:
+      'MSc Mechanical Systems Design and Engineering, Tribhuvan University (2018-2021); BE Mechanical Engineering, Tribhuvan University (2014-2018)',
+    contact: {
+      email: 'gagan.bist@mu.edu.np',
+      phone: '+977-9848829070',
+    },
+    cvStatus: 'pending',
+    sourceFile: 'User-provided profile brief (Gagan Singh Bist)',
+  },
+  {
+    id: 'pujan-nepal',
+    fullName: 'Pujan Nepal',
+    role: 'Catalysis & Materials Science Lead',
+    location: 'Jeonbuk National University, South Korea',
+    summary:
+      'Research scientist in electrocatalysis and photocatalysis focused on catalyst development, benchmarking, and durability pathways for green hydrogen systems.',
+    focusAreas: ['Electrocatalysis', 'Photocatalysis', 'Nanomaterials', 'Electrochemical Analysis'],
+    highlights: [
+      'Research Assistant at Jeonbuk National University (2024-present)',
+      'Former Lecturer in Chemistry at Kathmandu Model Secondary School',
+      'Former Lab Instructor at Amrit Campus, Tribhuvan University',
+      'Published CuO@ZnO nanocomposite photocatalysis and silver nanoparticle studies',
+    ],
+    education:
+      "Master's Degree, Amrit Campus, Tribhuvan University (2019-2021); Bachelor's Degree, Butwal Multiple Campus, Tribhuvan University (2015-2019)",
+    contact: {
+      email: 'pujannepal25@gmail.com',
+      phone: '+977-9860988393',
+    },
+    cvStatus: 'pending',
+    sourceFile: 'User-provided profile brief (Pujan Nepal)',
+  },
+  {
+    id: 'sagarman-pariyar',
+    fullName: 'Sagarman Pariyar',
+    role: 'Legal Counsel & Regulatory Framework Lead',
+    location: 'Kathmandu, Nepal',
+    summary:
+      'Practising advocate leading legal and regulatory structuring for institutional setup, ministerial engagement, contract review, and policy compliance.',
+    focusAreas: ['Regulatory Framework', 'Litigation', 'Legal Drafting', 'Governance'],
+    highlights: [
+      'Appeared across Supreme, High, District, Special, and quasi-judicial forums',
+      'Drafted petitions, contracts, legal notices, and formal legal opinions',
+      'LLM (Criminal and Commercial Law) in progress at Nepal Law Campus',
+      'Leads trust deed and ministerial designation legal structure in NGHTT',
+    ],
+    education: 'BALLB, National Law College (2017-2023, CGPA 3.52); LLM in progress, Nepal Law Campus',
+    contact: {
+      email: 'sagarmanpariyar@gmail.com',
+      phone: '+977-9867754665',
+    },
+    cvStatus: 'pending',
+    sourceFile: 'User-provided profile brief (Sagarman Pariyar)',
+  },
+  {
+    id: 'shisir-gc',
+    fullName: 'Er. Shisir G.C.',
+    role: 'Mechanical Engineer · Young Scientist',
+    location: 'Butwal, Nepal',
+    summary:
+      'Mechanical engineer, awarded Young Scientist by the Government of Nepal, leading applied R&D initiatives in fuel systems, aerospace projects, and technical deployment.',
+    focusAreas: ['Mechanical Engineering', 'Hydrogen Systems', 'R&D Leadership', 'Automation'],
+    highlights: [
+      'CTO at Gurkha Watch and Consultant Engineer (R&D) at Nepal Army Headquarters',
+      'Founder and CEO of G.C. Research & Development Udhyog',
+      'Led installation of 20 oxygen plants across Nepal during COVID-19',
+      'Recipient of Young Scientist and national innovation awards',
+    ],
+    education:
+      "Master's in Entrepreneurship, Swiss School of Management (2021); Bachelor's in Mechanical Engineering, VTU University (2016)",
+    contact: {
+      email: 'shisirgc@gmail.com',
+      phone: '+977-9857025765',
+    },
+    cvStatus: 'pending',
+    sourceFile: 'User-provided profile brief (Er. Shisir G.C.)',
   },
 ].map((member, index) => normalizeMember(member, index))
 

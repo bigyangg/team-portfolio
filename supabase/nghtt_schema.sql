@@ -73,6 +73,7 @@ create table if not exists members (
   bio text,
   summary text,
   cv_status cv_status_t not null default 'pending',
+  cv_url text,
   profile_status member_profile_status_t not null default 'published',
   photo_url text,
   source_reference text,
@@ -350,6 +351,16 @@ create policy member_events_read_public on member_events for select to anon, aut
 drop policy if exists member_events_write_auth on member_events;
 create policy member_events_write_auth on member_events for all to authenticated using (true) with check (true);
 
+-- Compatibility upgrades for existing deployments
+alter table if exists members
+  add column if not exists cv_url text;
+
+alter table if exists team_members
+  add column if not exists cv_url text;
+
+alter table if exists team_members
+  add column if not exists show_on_portfolio boolean not null default true;
+
 -- Helpful view for app queries
 create or replace view v_member_portfolio as
 select
@@ -376,7 +387,9 @@ select
     select coalesce(json_agg(mri.interest order by mri.sort_order), '[]'::json)
     from member_research_interests mri
     where mri.member_id = m.id
-  ) as research_interests
+  ) as research_interests,
+  m.bio,
+  m.cv_url
 from members m
 left join member_contacts mc on mc.member_id = m.id;
 

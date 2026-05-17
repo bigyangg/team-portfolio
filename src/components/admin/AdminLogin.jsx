@@ -25,12 +25,12 @@ function AdminLogin({ onSuccess }) {
     <section className="mx-auto mt-10 w-full max-w-md rounded-2xl border border-[var(--border)] bg-white p-6">
       <h2 className="font-heading text-4xl text-[var(--navy)]">Admin Access</h2>
       <p className="mt-2 text-sm text-[var(--muted)]">
-        Enter the admin password to access submissions.
+        Enter your admin PIN to access submissions.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-5 space-y-4">
         <label className="space-y-1 text-sm font-medium">
-          <span>Password</span>
+          <span>Admin PIN</span>
           <input
             type="password"
             className="h-11 w-full rounded-md border border-[var(--border)] bg-white px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2"
@@ -39,7 +39,7 @@ function AdminLogin({ onSuccess }) {
               setPassword(event.target.value)
               setError('')
             }}
-            placeholder="Enter admin password"
+            placeholder="Enter admin PIN"
             autoComplete="current-password"
             required
           />

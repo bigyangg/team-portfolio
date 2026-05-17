@@ -12,4 +12,5 @@ export const supabase = isSupabaseConfigured
 /*
 Run this in Supabase SQL Editor:
   supabase/nghtt_schema.sql
+  supabase/nghtt_manage_lock.sql
 */
