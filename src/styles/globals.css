@@ -96,6 +96,7 @@ body {
   background: var(--gradient-bg);
   background-attachment: fixed;
   line-height: 1.5;
+  overflow-x: hidden;
   transition: background-color 150ms ease-out, color 150ms ease-out;
 }
 
@@ -149,6 +150,21 @@ textarea {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+@media (max-width: 640px) {
+  .glass-card,
+  .glass-card-strong,
+  .glass-pill {
+    box-shadow: 0 6px 18px rgba(16, 37, 68, 0.08);
+  }
+
+  .dark .glass-card,
+  .dark .glass-card-strong,
+  .dark .glass-pill {
+    border-color: rgba(146, 168, 206, 0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.26);
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {

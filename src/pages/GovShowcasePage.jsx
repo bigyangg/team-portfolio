@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { CheckCircle2 } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { CheckCircle2, ChevronRight } from 'lucide-react'
 import initialTeamMembers from '../data/teamMembers'
 import {
   loadMembersFromStorage,
@@ -15,6 +15,11 @@ import {
   updateShowcaseMemberProfile,
 } from '../lib/showcaseMemberService'
 import { getManageEditLockState, setManageEditLockState } from '../lib/adminAuth'
+import {
+  MANAGE_LOCK_STATE_REQUESTED_EVENT,
+  MANAGE_LOCK_TOGGLE_REQUESTED_EVENT,
+  emitManageLockState,
+} from '../lib/manageLockEvents'
 
 const EMPTY_FORM = {
   fullName: '',
@@ -193,6 +198,7 @@ function GovShowcasePage() {
   const [manageAuthAction, setManageAuthAction] = useState('unlock')
   const [managePin, setManagePin] = useState('')
   const [manageAuthError, setManageAuthError] = useState('')
+  const profileDetailRef = useRef(null)
 
   useEffect(() => {
     saveMembersToStorage(members)
@@ -321,6 +327,13 @@ function GovShowcasePage() {
     setPhotoTargetMemberId(memberId)
   }
 
+  const focusMemberDetailsOnMobile = () => {
+    if (!window.matchMedia('(max-width: 1023px)').matches) return
+    window.requestAnimationFrame(() => {
+      profileDetailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
   const openManageAuthDialog = (action) => {
     setManageAuthAction(action)
     setManagePin('')
@@ -334,9 +347,30 @@ function GovShowcasePage() {
     setManageAuthError('')
   }
 
-  const handleManageAccessToggle = () => {
-    openManageAuthDialog(isManageLocked ? 'unlock' : 'lock')
-  }
+  useEffect(() => {
+    emitManageLockState(isManageLocked)
+  }, [isManageLocked])
+
+  useEffect(() => {
+    const handleToggleRequest = () => {
+      setManageAuthAction(isManageLocked ? 'unlock' : 'lock')
+      setManagePin('')
+      setManageAuthError('')
+      setIsManageAuthOpen(true)
+    }
+
+    const handleStateRequest = () => {
+      emitManageLockState(isManageLocked)
+    }
+
+    window.addEventListener(MANAGE_LOCK_TOGGLE_REQUESTED_EVENT, handleToggleRequest)
+    window.addEventListener(MANAGE_LOCK_STATE_REQUESTED_EVENT, handleStateRequest)
+
+    return () => {
+      window.removeEventListener(MANAGE_LOCK_TOGGLE_REQUESTED_EVENT, handleToggleRequest)
+      window.removeEventListener(MANAGE_LOCK_STATE_REQUESTED_EVENT, handleStateRequest)
+    }
+  }, [isManageLocked])
 
   const handleConfirmManageAccess = async (event) => {
     event.preventDefault()
@@ -666,44 +700,27 @@ function GovShowcasePage() {
 
   return (
     <>
-      <section className="glass-card-strong rounded-2xl p-6 md:p-8">
+      <section className="glass-card-strong rounded-2xl p-5 sm:p-6 md:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">
           NGHTT · National Green Hydrogen Think Tank
         </p>
-        <h2 className="mt-2 text-3xl font-semibold text-[var(--text)] md:text-4xl">Team Portfolio 2082-83</h2>
+        <h2 className="mt-2 text-2xl font-semibold text-[var(--text)] sm:text-3xl md:text-4xl">Team Portfolio 2082-83</h2>
         <p className="mt-2 max-w-3xl text-sm text-[var(--muted)]">
           Clean team directory focused on people. Select any member to view full profile details.
         </p>
       </section>
 
       <section id="team" className="mt-4">
-        <div className="glass-card rounded-2xl p-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="glass-card mx-1 rounded-2xl p-3 sm:mx-0 sm:p-4">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">Search and filter team</p>
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={handleManageAccessToggle}
-                className={`inline-flex min-h-10 items-center rounded-md border px-3 text-xs font-semibold uppercase tracking-[0.06em] shadow-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
-                  isManageLocked
-                    ? 'border-[var(--border)] bg-[var(--card)] text-[var(--text)] hover:bg-[var(--background)]'
-                    : 'border-[var(--navy)] bg-[var(--navy)] text-[var(--white)] hover:bg-[var(--navy2)]'
-                }`}
-              >
-                <span
-                  className={`mr-2 h-2.5 w-2.5 rounded-full ${
-                    isManageLocked ? 'bg-[var(--muted)]' : 'bg-[var(--white)]/90'
-                  }`}
-                  aria-hidden="true"
-                />
-                {isManageLocked ? 'Start Manage/Edit' : 'Stop Manage/Edit'}
-              </button>
-              <div className="glass-pill inline-flex rounded-xl border border-[var(--border)] p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+            <div className="w-full sm:w-auto">
+              <div className="glass-pill grid w-full grid-cols-2 gap-1 rounded-xl border border-[var(--border)] p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] sm:w-auto">
                 <button
                   type="button"
                   onClick={handleShowTeam}
                   aria-pressed={!isMediaManagerOpen}
-                  className={`inline-flex min-h-9 min-w-[96px] items-center justify-center rounded-md border px-4 text-xs font-semibold uppercase tracking-[0.06em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                  className={`inline-flex min-h-10 items-center justify-center rounded-md border px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-w-[96px] sm:text-xs ${
                     !isMediaManagerOpen
                       ? 'border-[var(--navy)] bg-[var(--navy)] text-[var(--white)] shadow-sm'
                       : 'border-[var(--border)] bg-[var(--card)] text-[var(--text)] hover:bg-[var(--background)]'
@@ -716,7 +733,7 @@ function GovShowcasePage() {
                   onClick={openMediaManager}
                   disabled={isManageLocked}
                   aria-pressed={isMediaManagerOpen}
-                  className={`ml-1 inline-flex min-h-9 min-w-[96px] items-center justify-center rounded-md border px-4 text-xs font-semibold uppercase tracking-[0.06em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                  className={`inline-flex min-h-10 items-center justify-center rounded-md border px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-w-[96px] sm:text-xs ${
                     isManageLocked
                       ? 'cursor-not-allowed border-[var(--border)] bg-[var(--input)] text-[var(--muted)] opacity-80'
                       : isMediaManagerOpen
@@ -729,10 +746,7 @@ function GovShowcasePage() {
               </div>
             </div>
           </div>
-          <p className="mt-3 text-xs font-medium text-[var(--muted)]">
-            {isManageLocked ? 'Status: Manage/Edit locked.' : 'Status: Manage/Edit active.'}
-          </p>
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
+          <div className="mt-2 grid gap-1.5 md:mt-3 md:gap-3 md:grid-cols-3">
             <label className="space-y-1 text-sm font-medium text-[var(--text)]">
               <span>Search</span>
               <input
@@ -740,7 +754,7 @@ function GovShowcasePage() {
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="name, role, expertise"
-                className="h-10 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                className="h-10 w-full rounded-md border border-transparent bg-[var(--muted-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:border-[var(--border)] sm:bg-[var(--input)]"
               />
             </label>
             <label className="space-y-1 text-sm font-medium text-[var(--text)]">
@@ -748,7 +762,7 @@ function GovShowcasePage() {
               <select
                 value={capabilityFilter}
                 onChange={(event) => setCapabilityFilter(event.target.value)}
-                className="h-10 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                className="h-10 w-full rounded-md border border-transparent bg-[var(--muted-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:border-[var(--border)] sm:bg-[var(--input)]"
               >
                 <option value="All">All</option>
                 {capabilities.map((area) => (
@@ -763,7 +777,7 @@ function GovShowcasePage() {
               <select
                 value={sortBy}
                 onChange={(event) => setSortBy(event.target.value)}
-                className="h-10 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                className="h-10 w-full rounded-md border border-transparent bg-[var(--muted-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:border-[var(--border)] sm:bg-[var(--input)]"
               >
                 <option value="name">Name A-Z</option>
               </select>
@@ -776,8 +790,11 @@ function GovShowcasePage() {
             <p className="mt-1 text-sm text-[var(--muted)]">Try changing filters or add a member.</p>
           </div>
         ) : (
-          <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_460px] xl:grid-cols-[minmax(0,1fr)_520px]">
-            <div className="space-y-3">
+          <div className="mx-1 mt-3 grid gap-3 sm:mx-0 lg:mt-4 lg:gap-4 lg:grid-cols-[minmax(0,1fr)_460px] xl:grid-cols-[minmax(0,1fr)_520px]">
+            <div className="space-y-2 px-0.5 sm:px-0">
+              <p className="text-[11px] font-medium text-[var(--muted)] lg:hidden">
+                Tap any member to view full details below.
+              </p>
               {filteredMembers.map((member) => {
                 const isActive = activeMember?.id === member.id
                 return (
@@ -789,33 +806,45 @@ function GovShowcasePage() {
                       setIsEditProfileOpen(false)
                       setEditErrors({})
                       setEditStatusMessage('')
+                      focusMemberDetailsOnMobile()
                     }}
-                    className={`glass-hover w-full rounded-2xl border p-4 text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                    className={`glass-hover w-full rounded-xl border p-3 text-left backdrop-blur-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:rounded-2xl sm:p-4 ${
                       isActive
-                        ? 'border-[var(--primary)] bg-[var(--secondary)] shadow-sm'
-                        : 'border-[var(--border)] bg-[var(--background)] hover:bg-[var(--card)]'
+                        ? 'border-[var(--ring)]/45 bg-[var(--glass-bg-strong)] shadow-[0_10px_24px_rgba(16,37,68,0.14)]'
+                        : 'border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_6px_16px_rgba(16,37,68,0.10)] hover:border-[var(--ring)]/30'
                     }`}
                   >
-                    <div className="min-w-0">
-                      <h3 className="truncate text-lg font-semibold text-[var(--text)]">{member.fullName}</h3>
-                      <p className="mt-0.5 line-clamp-2 text-sm font-medium text-[var(--text)]">{member.role}</p>
-                      <p className="mt-0.5 text-xs text-[var(--muted)]">{member.location}</p>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <h3 className="truncate text-lg font-semibold leading-tight text-[var(--text)] sm:text-xl">{member.fullName}</h3>
+                        <p className="mt-0.5 line-clamp-1 text-[13px] font-medium leading-5 text-[var(--text)] sm:line-clamp-2 sm:text-sm">
+                          {member.role}
+                        </p>
+                        <p className="mt-0.5 hidden text-xs text-[var(--muted)] sm:block">{member.location}</p>
+                      </div>
+                      <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--muted)]/80" aria-hidden="true" />
                     </div>
-                    <p className="mt-3 line-clamp-2 text-sm text-[var(--muted)]">{member.summary}</p>
+                    <p className="mt-2 line-clamp-1 text-[13px] leading-5 text-[var(--muted)] sm:mt-3 sm:line-clamp-2 sm:text-sm">
+                      {member.summary}
+                    </p>
                   </button>
                 )
               })}
             </div>
 
-            <aside className="glass-card-strong rounded-3xl p-6 md:p-7 lg:sticky lg:top-24 lg:h-fit">
+            <aside
+              ref={profileDetailRef}
+              id="member-details"
+              className="glass-card-strong rounded-2xl p-4 sm:rounded-3xl sm:p-6 md:p-7 lg:sticky lg:top-24 lg:h-fit"
+            >
               {activeMember ? (
                 <>
                  <div className="flex items-start justify-between gap-4">
                    <div className="flex min-w-0 items-start gap-4">
-                    <MemberAvatar member={activeMember} sizeClass="h-20 w-20 md:h-24 md:w-24" textSizeClass="text-lg" />
+                    <MemberAvatar member={activeMember} sizeClass="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24" textSizeClass="text-lg" />
                      <div className="min-w-0">
-                       <h3 className="text-3xl font-semibold leading-tight text-[var(--text)]">{activeMember.fullName}</h3>
-                       <p className="mt-1 text-lg font-medium leading-7 text-[var(--text)]">{activeMember.role}</p>
+                       <h3 className="text-xl font-semibold leading-tight text-[var(--text)] sm:text-3xl">{activeMember.fullName}</h3>
+                       <p className="mt-1 text-sm font-medium leading-5 text-[var(--text)] sm:text-lg sm:leading-7">{activeMember.role}</p>
                        <p className="mt-1 text-sm text-[var(--muted)]">{activeMember.location}</p>
                      </div>
                    </div>
@@ -965,16 +994,16 @@ function GovShowcasePage() {
                    </section>
                  ) : (
                    <>
-                     <p className="mt-5 text-[15px] leading-7 text-[var(--text)]">{activeMember.summary}</p>
+                     <p className="mt-4 text-[14px] leading-6 text-[var(--text)] sm:mt-5 sm:text-[15px] sm:leading-7">{activeMember.summary}</p>
 
                      {activeMember.focusAreas.length > 0 ? (
-                       <div className="mt-5 border-t border-[var(--border)] pt-4">
+                       <div className="mt-4 pt-3 sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
                          <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Focus Areas</p>
-                         <div className="mt-3 flex flex-wrap gap-2.5">
+                         <div className="mt-2 flex flex-wrap gap-2 sm:mt-3 sm:gap-2.5">
                            {activeMember.focusAreas.map((item) => (
                              <span
                                key={item}
-                               className="inline-flex items-center rounded-lg border border-[var(--border)] bg-[var(--input)] px-3 py-1.5 text-xs font-semibold text-[var(--text)]"
+                               className="inline-flex items-center rounded-lg border border-transparent bg-[var(--muted-surface)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text)] sm:border-[var(--border)] sm:bg-[var(--input)] sm:px-3 sm:py-1.5 sm:text-xs"
                              >
                                {item}
                              </span>
@@ -984,9 +1013,9 @@ function GovShowcasePage() {
                      ) : null}
 
                      {activeMember.highlights.length > 0 ? (
-                       <div className="mt-5 border-t border-[var(--border)] pt-4">
+                       <div className="mt-4 pt-3 sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
                          <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Highlights</p>
-                         <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[var(--text)]">
+                         <ul className="mt-2 list-disc space-y-1.5 pl-4 text-[14px] leading-6 text-[var(--text)] sm:mt-3 sm:space-y-2 sm:pl-5 sm:text-[15px] sm:leading-7">
                            {activeMember.highlights.map((item) => (
                              <li key={item}>{item}</li>
                            ))}
@@ -994,7 +1023,7 @@ function GovShowcasePage() {
                        </div>
                      ) : null}
 
-                     <div className="mt-5 border-t border-[var(--border)] pt-4 text-sm text-[var(--muted)]">
+                     <div className="mt-4 pt-3 text-sm text-[var(--muted)] sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
                        <p className="leading-5">
                          <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Education:</span>{' '}
                          {activeMember.education}
@@ -1446,41 +1475,41 @@ function GovShowcasePage() {
             if (event.target === event.currentTarget) setIsCvViewerOpen(false)
           }}
         >
-          <section className="glass-card-strong flex h-[85vh] w-full max-w-5xl flex-col rounded-2xl">
-            <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-4 py-3">
-              <h3 id="cv-viewer-title" className="truncate text-base font-semibold text-[var(--text)]">
+          <section className="glass-card-strong flex h-[88vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl">
+            <div className="flex flex-col gap-3 border-b border-[var(--border)] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <h3 id="cv-viewer-title" className="truncate text-base font-semibold text-[var(--text)] sm:text-lg">
                 {cvViewerTitle || 'CV Viewer'}
               </h3>
-              <div className="flex items-center gap-2">
+              <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:items-center">
                 <a
                   href={cvViewerUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-10 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                  className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-[var(--navy)] bg-[var(--navy)] px-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-h-10 sm:w-auto sm:text-xs"
                 >
                   Open
                 </a>
                 <a
                   href={cvViewerUrl}
                   download={getCvDownloadName(cvViewerUrl, cvViewerTitle)}
-                  className="inline-flex min-h-10 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                  className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-[var(--border)] bg-[var(--card)] px-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-h-10 sm:w-auto sm:text-xs"
                 >
                   Download
                 </a>
                 <button
                   type="button"
                   onClick={() => setIsCvViewerOpen(false)}
-                  className="inline-flex min-h-10 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                  className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-[var(--border)] bg-[var(--card)] px-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-h-10 sm:w-auto sm:text-xs"
                 >
                   Close
                 </button>
               </div>
             </div>
-            <div className="h-full w-full rounded-b-2xl bg-[var(--background)]">
+            <div className="h-full min-h-0 w-full overflow-y-auto rounded-b-2xl bg-[var(--background)]">
               <object
-                data={`${cvViewerUrl}#toolbar=1&navpanes=0`}
+                data={`${cvViewerUrl}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
                 type="application/pdf"
-                className="h-full w-full rounded-b-2xl"
+                className="min-h-[105vh] w-full rounded-b-2xl md:h-full md:min-h-0"
                 aria-label={cvViewerTitle || 'CV Viewer'}
               >
                 <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">

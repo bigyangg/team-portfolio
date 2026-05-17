@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { BadgeCheck, MoonStar, Sun } from 'lucide-react'
+import { BadgeCheck, Lock, MoonStar, Sun, Unlock } from 'lucide-react'
+import {
+  MANAGE_LOCK_STATE_CHANGED_EVENT,
+  requestManageLockState,
+  requestManageLockToggle,
+} from '../lib/manageLockEvents'
 
 const THEME_STORAGE_KEY = 'nghtt-theme'
 
@@ -29,11 +34,25 @@ function NepalFlagMark() {
 
 function Navbar() {
   const [theme, setTheme] = useState(getInitialTheme)
+  const [isManageLocked, setIsManageLocked] = useState(true)
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
     window.localStorage.setItem(THEME_STORAGE_KEY, theme)
   }, [theme])
+
+  useEffect(() => {
+    const handleManageLockChange = (event) => {
+      setIsManageLocked(Boolean(event?.detail?.locked))
+    }
+
+    window.addEventListener(MANAGE_LOCK_STATE_CHANGED_EVENT, handleManageLockChange)
+    requestManageLockState()
+
+    return () => {
+      window.removeEventListener(MANAGE_LOCK_STATE_CHANGED_EVENT, handleManageLockChange)
+    }
+  }, [])
 
   const isDarkMode = theme === 'dark'
   const headerClass = isDarkMode
@@ -47,7 +66,7 @@ function Navbar() {
 
   return (
     <header className={headerClass}>
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 md:flex-row md:items-start md:justify-between md:px-8">
         <div className="flex min-w-0 items-start gap-3.5">
           <div className="mt-0.5 flex h-12 w-10 items-center justify-center">
             <NepalFlagMark />
@@ -64,26 +83,40 @@ function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex w-full flex-col items-end gap-2 md:w-auto">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
+              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              className={`glass-hover relative inline-flex h-11 w-[82px] items-center rounded-full border p-1 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${controlChromeClass}`}
+            >
+              <span
+                className={`pointer-events-none absolute left-1 top-1 h-9 w-9 rounded-full shadow-sm transition-transform duration-150 ease-out ${toggleThumbClass}`}
+                aria-hidden="true"
+              />
+              <span className="relative z-10 flex w-full items-center justify-between px-1">
+                <Sun className={`h-4 w-4 ${isDarkMode ? 'text-[var(--muted)]' : 'text-[var(--navy)]'}`} aria-hidden="true" />
+                <MoonStar className={`h-4 w-4 ${isDarkMode ? 'text-[var(--white)]' : 'text-white/90'}`} aria-hidden="true" />
+              </span>
+            </button>
+            <span className={`hidden items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] md:inline-flex ${badgeTextClass}`}>
+              <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
+              NGHTT 2082-83
+            </span>
+          </div>
           <button
             type="button"
-            onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
-            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            className={`glass-hover relative inline-flex h-11 w-[82px] items-center rounded-full border p-1 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${controlChromeClass}`}
+            onClick={requestManageLockToggle}
+            className={`inline-flex min-h-9 w-auto max-w-full self-end items-center justify-center gap-1.5 rounded-md border px-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] shadow-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-h-10 sm:px-3 sm:text-xs ${
+              isManageLocked
+                ? 'border-white/22 bg-white/8 text-white/90 hover:bg-white/12'
+                : 'border-white/28 bg-white/16 text-white hover:bg-white/20'
+            }`}
           >
-            <span
-              className={`pointer-events-none absolute left-1 top-1 h-9 w-9 rounded-full shadow-sm transition-transform duration-150 ease-out ${toggleThumbClass}`}
-              aria-hidden="true"
-            />
-            <span className="relative z-10 flex w-full items-center justify-between px-1">
-              <Sun className={`h-4 w-4 ${isDarkMode ? 'text-[var(--muted)]' : 'text-[var(--navy)]'}`} aria-hidden="true" />
-              <MoonStar className={`h-4 w-4 ${isDarkMode ? 'text-[var(--white)]' : 'text-white/90'}`} aria-hidden="true" />
-            </span>
+            {isManageLocked ? <Unlock className="h-3.5 w-3.5" aria-hidden="true" /> : <Lock className="h-3.5 w-3.5" aria-hidden="true" />}
+            {isManageLocked ? 'Manage/Edit Off' : 'Manage/Edit On'}
           </button>
-          <span className={`hidden items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] md:inline-flex ${badgeTextClass}`}>
-            <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
-            NGHTT 2082-83
-          </span>
         </div>
       </div>
     </header>
