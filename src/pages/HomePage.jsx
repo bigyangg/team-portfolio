@@ -4,6 +4,7 @@ import { ArrowUpRight, FileText, Sparkles, Target, Users } from 'lucide-react'
 import HeroSection from '../components/HeroSection'
 import VisionSection from '../components/VisionSection'
 import EcosystemSection from '../components/EcosystemSection'
+import ManifestoSection from '../components/ManifestoSection'
 import SpotlightCard from '../components/motion/SpotlightCard'
 import AnimatedCounter from '../components/motion/AnimatedCounter'
 import MagneticButton from '../components/motion/MagneticButton'
@@ -44,11 +45,12 @@ const QUICK_LINKS = [
   },
 ]
 
+// Editorial targets — number is the design, label is the caption.
 const TARGETS = [
-  { v: 27, label: 'Research positions', suffix: '+' },
-  { v: 5, label: 'Field-tested machines' },
-  { v: 50, label: 'NPR crore in grants', suffix: '+' },
-  { v: 10, label: 'Peer-reviewed papers', suffix: '+' },
+  { v: 27, suffix: '+', label: 'Research positions seated by 2087 BS, funded through the Ministry of Energy.' },
+  { v: 5, suffix: '',  label: 'Field-tested hydrogen machines deployed in production, not lab demos.' },
+  { v: 50, suffix: '+', label: 'NPR crore in research grants secured across three funding cycles.' },
+  { v: 10, suffix: '+', label: 'Peer-reviewed papers published, each from a named NGHTT researcher.' },
 ]
 
 function HomePage() {
@@ -120,7 +122,7 @@ function HomePage() {
         <EcosystemSection />
       </div>
 
-      {/* Year-Five counters */}
+      {/* MEGA editorial counters — number IS the design */}
       <motion.section
         className="snap-start relative w-full py-24 md:py-32"
         initial="hidden"
@@ -129,37 +131,35 @@ function HomePage() {
         variants={staggerContainer}
       >
         <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
-          <motion.div variants={riseItem} className="text-center">
-            <p className="eyebrow">Year-Five Targets</p>
-            <h2 className="font-display mx-auto mt-3 max-w-3xl text-[28px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--text)] md:text-[42px]">
-              What we are accountable for by{' '}
-              <span className="glow-text">2087 BS</span>.
+          <motion.div variants={riseItem}>
+            <p className="eyebrow">Year-Five Targets · 2087 BS</p>
+            <h2 className="font-display mt-3 max-w-[20ch] text-[32px] font-extrabold leading-[1.04] tracking-[-0.022em] text-[var(--text)] md:text-[56px]">
+              What we are accountable for.
             </h2>
           </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            className="mt-12 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4"
-          >
-            {TARGETS.map((s) => (
+          <motion.div variants={staggerContainer} className="mt-16 flex flex-col">
+            {TARGETS.map((s, i) => (
               <motion.div
                 key={s.label}
                 variants={riseItem}
-                className="rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 text-center backdrop-blur-2xl md:p-7"
+                className={`grid grid-cols-12 items-baseline gap-6 border-t border-[var(--surface-rule)] py-8 md:py-12 ${i === TARGETS.length - 1 ? 'border-b' : ''}`}
               >
-                <AnimatedCounter
-                  value={s.v}
-                  suffix={s.suffix}
-                  className="font-display tab-num inline-block text-[44px] font-extrabold leading-none tracking-[-0.025em] text-[var(--primary)] md:text-[56px]"
-                />
-                <p className="mt-3 text-[12.5px] font-semibold text-[var(--text)]/80 md:text-[13.5px]">
+                <div className="col-span-12 md:col-span-5">
+                  <AnimatedCounter
+                    value={s.v}
+                    suffix={s.suffix}
+                    className="font-display tab-num inline-block text-[88px] font-extrabold leading-[0.9] tracking-[-0.04em] text-[var(--primary)] md:text-[160px] lg:text-[200px]"
+                  />
+                </div>
+                <p className="col-span-12 max-w-md text-[14.5px] leading-[1.55] text-[var(--text)]/75 md:col-span-7 md:text-[17px]">
                   {s.label}
                 </p>
               </motion.div>
             ))}
           </motion.div>
 
-          <motion.div variants={riseItem} className="mt-12 flex flex-wrap justify-center gap-3">
+          <motion.div variants={riseItem} className="mt-16 flex flex-wrap gap-3">
             <MagneticButton as={Link} to="/about" className="btn btn-primary">
               Read the full mission <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </MagneticButton>
@@ -169,6 +169,9 @@ function HomePage() {
           </motion.div>
         </div>
       </motion.section>
+
+      {/* Dark teal break — full-bleed manifesto */}
+      <ManifestoSection />
     </div>
   )
 }
