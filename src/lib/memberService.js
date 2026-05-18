@@ -1,7 +1,9 @@
-import { isSupabaseConfigured, supabase } from './supabase'
+import { allowClientStorageFallback, isSupabaseConfigured, supabase } from './supabase'
 
 const STORAGE_KEY = 'team-collector-members'
 const STORAGE_BUCKET = 'team-photos'
+const SUPABASE_CONFIG_ERROR =
+  'Supabase is not configured for this deployment. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or NEXT_PUBLIC_* aliases) in Vercel, then redeploy.'
 
 const fileToDataUrl = (file) =>
   new Promise((resolve, reject) => {
@@ -75,6 +77,9 @@ const uploadPhoto = async (photoFile) => {
   if (!photoFile) return ''
 
   if (!isSupabaseConfigured || !supabase) {
+    if (!allowClientStorageFallback()) {
+      throw new Error(SUPABASE_CONFIG_ERROR)
+    }
     return fileToDataUrl(photoFile)
   }
 
@@ -110,6 +115,10 @@ export const submitMemberProfile = async (data, photoFile) => {
     return inserted
   }
 
+  if (!allowClientStorageFallback()) {
+    throw new Error(SUPABASE_CONFIG_ERROR)
+  }
+
   const localMember = {
     id: crypto.randomUUID(),
     ...payload,
@@ -135,6 +144,10 @@ export const fetchMembers = async () => {
     return data ?? []
   }
 
+  if (!allowClientStorageFallback()) {
+    throw new Error(SUPABASE_CONFIG_ERROR)
+  }
+
   return getLocalMembers().sort(
     (a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime(),
   )
@@ -148,6 +161,10 @@ export const deleteMemberById = async (id) => {
       throw new Error(error.message)
     }
     return
+  }
+
+  if (!allowClientStorageFallback()) {
+    throw new Error(SUPABASE_CONFIG_ERROR)
   }
 
   const next = getLocalMembers().filter((member) => member.id !== id)

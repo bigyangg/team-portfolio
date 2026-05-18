@@ -1,5 +1,5 @@
 import { createMemberFromDraft, mergeSeedAndStoredMembers, normalizeMember } from '../data/memberSchema'
-import { isSupabaseConfigured, supabase } from './supabase'
+import { allowClientStorageFallback, isSupabaseConfigured, supabase } from './supabase'
 
 export const SHOWCASE_DATA_SOURCES = Object.freeze({
   LOCAL_SEED: 'local-seed',
@@ -10,6 +10,8 @@ export const SHOWCASE_DATA_SOURCES = Object.freeze({
 
 const CV_STORAGE_BUCKET = 'team-cvs'
 const PHOTO_STORAGE_BUCKET = 'team-photos'
+const SUPABASE_CONFIG_ERROR =
+  'Supabase is not configured for this deployment. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or NEXT_PUBLIC_* aliases) in Vercel, then redeploy.'
 
 const cleanText = (value) => (typeof value === 'string' ? value.trim() : '')
 
@@ -44,6 +46,14 @@ const isMissingColumnError = (error) => {
   const message = String(error?.message || '').toLowerCase()
   return error?.code === '42703' || message.includes('column') || message.includes('schema cache')
 }
+
+const isNotFoundError = (error) => {
+  const message = String(error?.message || '').toLowerCase()
+  return error?.code === 'PGRST116' || message.includes('no rows') || message.includes('0 rows')
+}
+
+const isUuid = (value) =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(cleanText(value))
 
 const isStorageRlsError = (error) => {
   const message = String(error?.message || '').toLowerCase()
@@ -153,6 +163,28 @@ const mapTeamMembersRow = (row, index) =>
     },
     index,
   )
+
+const toNameKey = (value) => cleanText(value).toLowerCase()
+
+const mergeSeedWithSupabaseMembers = ({ seedMembers, storedMembers, supabaseMembers }) => {
+  const baseMembers = mergeSeedAndStoredMembers(seedMembers, storedMembers)
+  const supabaseByName = new Map()
+
+  supabaseMembers.forEach((member) => {
+    const key = toNameKey(member.fullName)
+    if (key) supabaseByName.set(key, member)
+  })
+
+  const merged = baseMembers.map((member) => {
+    const key = toNameKey(member.fullName)
+    if (!key || !supabaseByName.has(key)) return member
+    const fromSupabase = supabaseByName.get(key)
+    supabaseByName.delete(key)
+    return fromSupabase
+  })
+
+  return [...merged, ...Array.from(supabaseByName.values())]
+}
 
 const fetchFromPortfolioView = async () => {
   const { data, error } = await supabase
@@ -351,6 +383,51 @@ const insertIntoTeamMembersTable = async (draft) => {
   return mapTeamMembersRow(data, 0)
 }
 
+const draftFromMember = (member) => ({
+  fullName: cleanText(member?.fullName),
+  role: cleanText(member?.role),
+  location: cleanText(member?.location),
+  summary: cleanText(member?.summary),
+  portfolio: cleanText(member?.portfolio),
+  focusAreas: toList(member?.focusAreas).join(', '),
+  highlights: toList(member?.highlights).join('\n'),
+  education: cleanText(member?.education),
+  email: cleanText(member?.contact?.email),
+  phone: cleanText(member?.contact?.phone),
+  photoUrl: cleanText(member?.photoUrl),
+  cvUrl: cleanText(member?.cvUrl),
+  isVisible: member?.isVisible !== false,
+  cvStatus: cleanText(member?.cvUrl) ? 'available' : 'pending',
+})
+
+const ensureTeamMemberRecord = async (member) => {
+  const memberId = cleanText(member?.id)
+
+  if (isUuid(memberId)) {
+    const { data, error } = await supabase.from('team_members').select('*').eq('id', memberId).limit(1).maybeSingle()
+    if (!error && data) {
+      return mapTeamMembersRow(data, 0)
+    }
+  }
+
+  const fullName = cleanText(member?.fullName)
+  if (fullName) {
+    const { data, error } = await supabase
+      .from('team_members')
+      .select('*')
+      .eq('full_name', fullName)
+      .order('submitted_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (!error && data) {
+      return mapTeamMembersRow(data, 0)
+    }
+  }
+
+  return insertIntoTeamMembersTable(draftFromMember(member))
+}
+
 const uploadCvFile = async (file) => {
   if (!file) return ''
 
@@ -366,7 +443,7 @@ const uploadCvFile = async (file) => {
 
   if (uploadError) {
     if (isStorageRlsError(uploadError)) {
-      return fileToDataUrl(file)
+      throw new Error('Storage upload blocked for team-cvs. Add Supabase Storage insert/select policies for anon.')
     }
     throw new Error(`Could not upload CV file: ${uploadError.message}`)
   }
@@ -390,7 +467,7 @@ const uploadPhotoFile = async (file) => {
 
   if (uploadError) {
     if (isStorageRlsError(uploadError)) {
-      return fileToDataUrl(file)
+      throw new Error('Storage upload blocked for team-photos. Add Supabase Storage insert/select policies for anon.')
     }
     throw new Error(`Could not upload photo file: ${uploadError.message}`)
   }
@@ -597,7 +674,16 @@ export const fetchShowcaseMembers = async ({ seedMembers, storedMembers }) => {
     try {
       const result = await loader()
       // If Supabase returned actual rows, use them; otherwise try next source
-      if (result.members.length > 0) return result
+      if (result.members.length > 0) {
+        return {
+          source: result.source,
+          members: mergeSeedWithSupabaseMembers({
+            seedMembers,
+            storedMembers,
+            supabaseMembers: result.members,
+          }),
+        }
+      }
     } catch (error) {
       if (isMissingRelationError(error)) {
         continue
@@ -616,8 +702,15 @@ export const fetchShowcaseMembers = async ({ seedMembers, storedMembers }) => {
 }
 
 export const addShowcaseMember = async (draft, source) => {
-  if (!isSupabaseConfigured || !supabase || source === SHOWCASE_DATA_SOURCES.LOCAL_SEED) {
+  if (!isSupabaseConfigured || !supabase) {
+    if (!allowClientStorageFallback()) {
+      throw new Error(SUPABASE_CONFIG_ERROR)
+    }
     return createMemberFromDraft(draft)
+  }
+
+  if (source === SHOWCASE_DATA_SOURCES.LOCAL_SEED) {
+    return insertIntoTeamMembersTable(draft)
   }
 
   if (source === SHOWCASE_DATA_SOURCES.SUPABASE_TEAM_MEMBERS) {
@@ -639,7 +732,10 @@ export const updateShowcaseMemberProfile = async ({ member, draft, source }) => 
   const focusAreas = parseFocusAreas(draft.focusAreas)
   const highlights = toList(draft.highlights)
 
-  if (!isSupabaseConfigured || !supabase || source === SHOWCASE_DATA_SOURCES.LOCAL_SEED) {
+  if (!isSupabaseConfigured || !supabase) {
+    if (!allowClientStorageFallback()) {
+      throw new Error(SUPABASE_CONFIG_ERROR)
+    }
     return normalizeMember({
       ...member,
       fullName: cleanText(draft.fullName),
@@ -657,11 +753,21 @@ export const updateShowcaseMemberProfile = async ({ member, draft, source }) => 
     })
   }
 
+  if (source === SHOWCASE_DATA_SOURCES.LOCAL_SEED) {
+    const persistedMember = await ensureTeamMemberRecord(member)
+    return updateProfileInTeamMembersTable({ member: persistedMember, draft })
+  }
+
   if (source === SHOWCASE_DATA_SOURCES.SUPABASE_TEAM_MEMBERS) {
-    return updateProfileInTeamMembersTable({ member, draft })
+    const persistedMember = isUuid(member?.id) ? member : await ensureTeamMemberRecord(member)
+    return updateProfileInTeamMembersTable({ member: persistedMember, draft })
   }
 
   if (source === SHOWCASE_DATA_SOURCES.SUPABASE_MEMBERS || source === SHOWCASE_DATA_SOURCES.SUPABASE_VIEW) {
+    if (!isUuid(member?.id)) {
+      const persistedMember = await ensureTeamMemberRecord(member)
+      return updateProfileInTeamMembersTable({ member: persistedMember, draft })
+    }
     return updateProfileInMembersSchema({ member, draft })
   }
 
@@ -681,7 +787,10 @@ export const updateShowcaseMemberCuration = async ({ member, cvUrl, photoUrl, is
     throw new Error('Select a valid team member first.')
   }
 
-  if (!isSupabaseConfigured || !supabase || source === SHOWCASE_DATA_SOURCES.LOCAL_SEED) {
+  if (!isSupabaseConfigured || !supabase) {
+    if (!allowClientStorageFallback()) {
+      throw new Error(SUPABASE_CONFIG_ERROR)
+    }
     return normalizeMember({
       ...member,
       cvUrl: finalCvUrl,
@@ -691,16 +800,46 @@ export const updateShowcaseMemberCuration = async ({ member, cvUrl, photoUrl, is
     })
   }
 
-  if (source === SHOWCASE_DATA_SOURCES.SUPABASE_TEAM_MEMBERS) {
+  if (source === SHOWCASE_DATA_SOURCES.LOCAL_SEED) {
+    const persistedMember = await ensureTeamMemberRecord(member)
     return updateInTeamMembersTable({
-      memberId: member.id,
+      memberId: persistedMember.id,
       cvUrl: finalCvUrl,
       photoUrl: finalPhotoUrl,
       isVisible: nextVisibility,
     })
   }
 
+  if (source === SHOWCASE_DATA_SOURCES.SUPABASE_TEAM_MEMBERS) {
+    try {
+      return updateInTeamMembersTable({
+        memberId: member.id,
+        cvUrl: finalCvUrl,
+        photoUrl: finalPhotoUrl,
+        isVisible: nextVisibility,
+      })
+    } catch (error) {
+      if (!isNotFoundError(error)) throw error
+      const persistedMember = await ensureTeamMemberRecord(member)
+      return updateInTeamMembersTable({
+        memberId: persistedMember.id,
+        cvUrl: finalCvUrl,
+        photoUrl: finalPhotoUrl,
+        isVisible: nextVisibility,
+      })
+    }
+  }
+
   if (source === SHOWCASE_DATA_SOURCES.SUPABASE_MEMBERS || source === SHOWCASE_DATA_SOURCES.SUPABASE_VIEW) {
+    if (!isUuid(member?.id)) {
+      const persistedMember = await ensureTeamMemberRecord(member)
+      return updateInTeamMembersTable({
+        memberId: persistedMember.id,
+        cvUrl: finalCvUrl,
+        photoUrl: finalPhotoUrl,
+        isVisible: nextVisibility,
+      })
+    }
     return updateInMembersSchema({
       memberId: member.id,
       cvUrl: finalCvUrl,

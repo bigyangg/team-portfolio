@@ -165,6 +165,8 @@ export const saveMembersToStorage = (members) => {
 
 export const mergeSeedAndStoredMembers = (seedMembers, storedMembers) => {
   const mergedMap = new Map()
+  const normalizedName = (member) => toText(member?.fullName).toLowerCase()
+
   seedMembers.map((item, index) => normalizeMember(item, index)).forEach((member) => {
     mergedMap.set(member.id, member)
   })
@@ -178,6 +180,26 @@ export const mergeSeedAndStoredMembers = (seedMembers, storedMembers) => {
         ...normalized,
         contact: {
           ...existing?.contact,
+          ...normalized.contact,
+        },
+      })
+      return
+    }
+
+    const matchedByName = Array.from(mergedMap.entries()).find(([, existingMember]) => {
+      const existingName = normalizedName(existingMember)
+      const incomingName = normalizedName(normalized)
+      return Boolean(existingName) && existingName === incomingName
+    })
+
+    if (matchedByName) {
+      const [existingId, existingMember] = matchedByName
+      mergedMap.delete(existingId)
+      mergedMap.set(normalized.id, {
+        ...existingMember,
+        ...normalized,
+        contact: {
+          ...existingMember?.contact,
           ...normalized.contact,
         },
       })

@@ -318,9 +318,24 @@ function GovShowcasePage() {
   const hasUploadedCv = Boolean(targetMember?.cvUrl)
   const manageLockMessage = 'Manage/Edit is stopped. Enter your PIN to enable it.'
 
-  const updateMemberInState = (updatedMember) => {
+  const updateMemberInState = (updatedMember, previousMemberId) => {
     if (!updatedMember?.id) return
-    setMembers((prev) => prev.map((member) => (member.id === updatedMember.id ? updatedMember : member)))
+    setMembers((prev) => {
+      let replaced = false
+      const nextMembers = prev.map((member) => {
+        if (member.id === updatedMember.id || (previousMemberId && member.id === previousMemberId)) {
+          replaced = true
+          return updatedMember
+        }
+        return member
+      })
+      if (!replaced) return [...nextMembers, updatedMember]
+      return nextMembers
+    })
+    if (previousMemberId && previousMemberId !== updatedMember.id) {
+      setSelectedMemberId(updatedMember.id)
+      setPhotoTargetMemberId(updatedMember.id)
+    }
   }
 
   const handleMediaTargetChange = (memberId) => {
@@ -500,7 +515,7 @@ function GovShowcasePage() {
         },
         source: dataSource,
       })
-      updateMemberInState(updatedMember)
+      updateMemberInState(updatedMember, activeMember.id)
       setSelectedMemberId(updatedMember.id)
       setEditStatusMessage(`Updated ${updatedMember.fullName}.`)
       setIsEditProfileOpen(false)
@@ -658,7 +673,7 @@ function GovShowcasePage() {
         photoFile: selectedFile,
         source: dataSource,
       })
-      updateMemberInState(updatedMember)
+      updateMemberInState(updatedMember, targetMember.id)
       setPhotoUpdateMessage(`Photo updated for ${updatedMember?.fullName || 'selected member'}.`)
     } catch (error) {
       setPhotoUpdateMessage(error instanceof Error ? error.message : 'Could not update this photo.')
@@ -689,7 +704,7 @@ function GovShowcasePage() {
         cvFile: selectedFile,
         source: dataSource,
       })
-      updateMemberInState(updatedMember)
+      updateMemberInState(updatedMember, targetMember.id)
       setPhotoUpdateMessage(`CV uploaded for ${updatedMember?.fullName || 'selected member'}.`)
     } catch (error) {
       setPhotoUpdateMessage(error instanceof Error ? error.message : 'Could not upload this CV file.')
@@ -1505,11 +1520,11 @@ function GovShowcasePage() {
                 </button>
               </div>
             </div>
-            <div className="h-full min-h-0 w-full overflow-y-auto rounded-b-2xl bg-[var(--background)]">
+            <div className="h-full min-h-0 w-full overflow-y-scroll rounded-b-2xl bg-[var(--background)]">
               <object
                 data={`${cvViewerUrl}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
                 type="application/pdf"
-                className="min-h-[105vh] w-full rounded-b-2xl md:h-full md:min-h-0"
+                className="h-[140vh] w-full rounded-b-2xl sm:h-[150vh] lg:h-[165vh]"
                 aria-label={cvViewerTitle || 'CV Viewer'}
               >
                 <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
