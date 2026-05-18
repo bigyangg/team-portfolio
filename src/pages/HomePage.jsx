@@ -65,7 +65,7 @@ function HomePage() {
             <Link
               key={q.to}
               to={q.to}
-              className="group relative overflow-hidden rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:shadow-[0_20px_44px_-12px_rgba(16,185,129,0.28)]"
+              className="group relative overflow-hidden rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 backdrop-blur-2xl transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:shadow-[0_20px_44px_-12px_rgba(16,185,129,0.28)] active:translate-y-0 active:scale-[0.99]"
             >
               <span
                 aria-hidden="true"

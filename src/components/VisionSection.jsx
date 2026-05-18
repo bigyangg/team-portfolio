@@ -17,13 +17,13 @@ const PILLARS = [
     icon: Flame,
     title: 'Decarbonised industry',
     body:
-      'Brick kilns, cement, and heavy transport switched to hydrogen — Nepal\'s biggest emitters retooled, not retired.',
+      'Brick kilns, cement, and heavy transport switched to hydrogen. Nepal\'s biggest emitters retooled, not retired.',
   },
   {
     icon: Mountain,
     title: 'Mountain to grid',
     body:
-      'A new energy export economy: green hydrogen, ammonia, and ammonium pellets shipped across SAARC.',
+      'A new energy export economy. Green hydrogen, ammonia, and ammonium pellets shipped across SAARC.',
   },
 ]
 

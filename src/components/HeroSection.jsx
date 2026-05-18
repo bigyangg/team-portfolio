@@ -63,7 +63,7 @@ function HeroSection() {
           </h1>
 
           <p className="mt-7 max-w-2xl text-[15.5px] leading-[1.6] text-[var(--text)]/80 md:text-[17px]">
-            We're a team of 27 — chemists, engineers, AI builders, lawyers and policy people — quietly
+            We're a team of 27. Chemists, engineers, AI builders, lawyers and policy people, quietly
             organising the institution that turns Nepal's monsoon hydropower into a hydrogen economy.
           </p>
 

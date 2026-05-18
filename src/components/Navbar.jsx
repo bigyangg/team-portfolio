@@ -27,10 +27,10 @@ const getInitialTheme = () => {
 function NepalFlagMark() {
   return (
     <svg viewBox="0 0 64 64" className="h-9 w-9 drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]" aria-label="Nepal flag">
-      <path d="M14 5V59" stroke="#FFFFFF" strokeWidth="2.5" />
+      <path d="M14 5V59" stroke="#F4F9F6" strokeWidth="2.5" />
       <path d="M16 7L16 57L50 39L31 31L50 20L16 7Z" fill="#DC143C" stroke="#003893" strokeWidth="3" strokeLinejoin="round" />
-      <circle cx="31" cy="22" r="4" fill="#FFFFFF" />
-      <circle cx="31" cy="41" r="4.8" fill="#FFFFFF" />
+      <circle cx="31" cy="22" r="4" fill="#F4F9F6" />
+      <circle cx="31" cy="41" r="4.8" fill="#F4F9F6" />
     </svg>
   )
 }
@@ -67,7 +67,7 @@ function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 border-b border-[var(--surface-rule)] bg-[var(--aurora-base)]/95 backdrop-blur-2xl ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[box-shadow] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] border-b border-[var(--surface-rule)] bg-[var(--aurora-base)]/95 backdrop-blur-2xl ${
         scrolled ? 'shadow-[0_4px_24px_-8px_rgba(5,46,44,0.18)]' : ''
       }`}
     >

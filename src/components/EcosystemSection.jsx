@@ -5,7 +5,7 @@ const USE_CASES = [
     n: '01',
     icon: Wheat,
     title: 'Agricultural Mechanization',
-    body: 'Hydrogen tractor retrofit kits replace diesel across the Terai region — cleaner air, lower input costs for farmers.',
+    body: 'Hydrogen tractor retrofit kits replace diesel across the Terai region. Cleaner air, lower input costs for farmers.',
     accent: 'rgba(16,185,129,0.22)',
   },
   {
@@ -26,7 +26,7 @@ const USE_CASES = [
     n: '04',
     icon: Flame,
     title: 'Industrial Heat',
-    body: 'Hydrogen combustion replaces coal in Nepal\'s notoriously polluting brick kilns and cement plants.',
+    body: 'Hydrogen combustion replaces coal in Nepal\'s polluting brick kilns and cement plants.',
     accent: 'rgba(20,184,166,0.22)',
   },
   {
@@ -69,7 +69,7 @@ function EcosystemSection() {
             return (
               <article
                 key={u.n}
-                className={`group relative overflow-hidden rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 shadow-[0_6px_20px_rgba(5,46,44,0.05)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_18px_36px_-12px_rgba(16,185,129,0.28)] md:p-6 ${lgSpan}`}
+                className={`group relative overflow-hidden rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 shadow-[0_6px_20px_rgba(5,46,44,0.05)] backdrop-blur-2xl transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_18px_36px_-12px_rgba(16,185,129,0.28)] md:p-6 ${lgSpan}`}
               >
                 <span
                   aria-hidden="true"
