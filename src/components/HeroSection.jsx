@@ -54,10 +54,10 @@ function HeroSection() {
             </span>
           </div>
 
-          <h1 className="font-display text-[48px] font-medium leading-[0.98] tracking-[-0.02em] text-[var(--text)] sm:text-[72px] md:text-[96px] lg:text-[112px]">
+          <h1 className="font-display text-[44px] font-extrabold leading-[1.02] tracking-[-0.025em] text-[var(--text)] sm:text-[68px] md:text-[88px] lg:text-[100px]">
             Building Nepal's
             <br />
-            <span className="glow-text italic font-semibold">green hydrogen</span>
+            <span className="glow-text">green hydrogen</span>
             <br />
             future, together.
           </h1>
