@@ -1,22 +1,45 @@
+import { BrowserRouter, Routes, Route, ScrollRestoration } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import HeroSection from './components/HeroSection'
-import VisionSection from './components/VisionSection'
-import EcosystemSection from './components/EcosystemSection'
 import FooterSection from './components/FooterSection'
-import GovShowcasePage from './pages/GovShowcasePage'
+import HomePage from './pages/HomePage'
+import AboutPage from './pages/AboutPage'
+import ApplicationsPage from './pages/ApplicationsPage'
+import TeamPage from './pages/TeamPage'
+import SubmissionPage from './pages/SubmissionPage'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
-function App() {
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+  return null
+}
+
+function AppShell() {
   return (
     <div className="min-h-screen overflow-x-clip bg-brand-bg text-[var(--text)]">
       <Navbar />
-      <HeroSection />
-      <VisionSection />
-      <EcosystemSection />
-      <main className="mx-auto w-full max-w-[1240px] overflow-x-clip px-5 pb-12 pt-12 md:px-10 md:pt-20">
-        <GovShowcasePage />
-      </main>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/applications" element={<ApplicationsPage />} />
+        <Route path="/team" element={<TeamPage />} />
+        <Route path="/submission" element={<SubmissionPage />} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
       <FooterSection />
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
+    </BrowserRouter>
   )
 }
 

@@ -739,39 +739,24 @@ function GovShowcasePage() {
 
   return (
     <>
-      {/* In-page section header — "The Team" */}
-      <section className="anim-rise relative">
-        <p className="eyebrow">— The Team</p>
-        <h2 className="font-display mt-3 text-[36px] font-bold leading-[1.05] tracking-[-0.025em] text-[var(--text)] sm:text-[44px] md:text-[56px]">
-          27 people, one{' '}
-          <span className="glow-text">signed brief</span>.
-        </h2>
-        <p className="mt-4 max-w-2xl text-[15.5px] leading-[1.65] text-[var(--text)]/70 md:text-[16.5px]">
-          Every profile below is sourced from a verified CV submitted to the Ministry of Energy.
-          Click any card to read the full capability brief and download the original document.
-        </p>
-
-        {/* Stat strip (compact) */}
-        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
-          <div className="flex items-baseline gap-2">
-            <span className="font-display tab-num text-[28px] font-extrabold leading-none text-[var(--text)]">{members.length}</span>
-            <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--muted)]">Members</span>
-          </div>
-          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
-          <div className="flex items-baseline gap-2">
-            <span className="font-display tab-num text-[28px] font-extrabold leading-none text-[var(--text)]">{capabilities.length}</span>
-            <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--muted)]">Capability areas</span>
-          </div>
-          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
-          <div className="flex items-center gap-2">
-            <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-            <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]">
-              Live · 2082/83
-            </span>
-          </div>
+      {/* Compact stats strip */}
+      <section className="anim-rise mb-2 flex flex-wrap items-center gap-x-8 gap-y-3 pt-2">
+        <div className="flex items-baseline gap-2">
+          <span className="font-display tab-num text-[28px] font-extrabold leading-none text-[var(--text)]">{members.length}</span>
+          <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--muted)]">Members</span>
         </div>
-
-        <div className="brand-stroke mt-8 w-24" aria-hidden="true" />
+        <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
+        <div className="flex items-baseline gap-2">
+          <span className="font-display tab-num text-[28px] font-extrabold leading-none text-[var(--text)]">{capabilities.length}</span>
+          <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--muted)]">Capability areas</span>
+        </div>
+        <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
+        <div className="flex items-center gap-2">
+          <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
+          <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]">
+            Live · 2082/83
+          </span>
+        </div>
       </section>
 
       <section id="team" className="mt-10 md:mt-14">

@@ -16,7 +16,7 @@ function HeroSection() {
   }
 
   return (
-    <section className="relative -mt-[2px] h-[88vh] min-h-[640px] w-full overflow-hidden">
+    <section className="relative h-[92vh] min-h-[640px] w-full overflow-hidden">
       {/* Full-bleed Himalaya photograph */}
       <img
         src="/hero/himalaya-haze.png"
