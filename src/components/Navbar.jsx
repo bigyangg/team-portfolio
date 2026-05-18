@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import { BadgeCheck, Lock, Menu, MoonStar, Sun, Unlock, X } from 'lucide-react'
 import {
   MANAGE_LOCK_STATE_CHANGED_EVENT,
@@ -122,9 +123,20 @@ function Navbar() {
             type="button"
             onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
             aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="grid h-10 w-10 place-items-center rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)]"
+            className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)]"
           >
-            {isDarkMode ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={isDarkMode ? 'sun' : 'moon'}
+                initial={{ opacity: 0, rotate: -90, scale: 0.85 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: 90, scale: 0.85 }}
+                transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                className="absolute inset-0 grid place-items-center"
+              >
+                {isDarkMode ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
+              </motion.span>
+            </AnimatePresence>
           </button>
 
           {/* Submitted badge — desktop only */}

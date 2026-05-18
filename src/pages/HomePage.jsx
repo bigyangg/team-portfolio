@@ -104,7 +104,7 @@ function HomePage() {
                     </p>
                   </div>
                   <ArrowUpRight
-                    className="h-4 w-4 shrink-0 -translate-x-1 translate-y-1 text-[var(--muted-foreground)] opacity-60 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:text-[var(--primary)] group-hover:opacity-100"
+                    className="h-4 w-4 shrink-0 -translate-x-1 translate-y-1 text-[var(--muted-foreground)] opacity-60 transition-[transform,color,opacity] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:text-[var(--primary)] group-hover:opacity-100"
                     aria-hidden="true"
                   />
                 </div>

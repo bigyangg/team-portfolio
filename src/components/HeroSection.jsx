@@ -31,7 +31,7 @@ function HeroSection() {
         alt=""
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover"
-        style={{ y: bgY, scale: bgScale }}
+        style={{ y: bgY, scale: bgScale, willChange: 'transform' }}
       />
 
       {/* Gradient washes for legibility + cinematic mood */}

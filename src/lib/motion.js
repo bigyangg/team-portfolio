@@ -69,3 +69,10 @@ export const pageVariants = {
 export const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
+// True only for devices that have a fine-pointer hover (mouse, trackpad).
+// Touch devices report `hover: none` and trigger mouseenter on tap, which makes
+// magnetic / tilt / spotlight effects glitchy. Gate them behind this.
+export const hasFineHover = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(hover: hover) and (pointer: fine)').matches

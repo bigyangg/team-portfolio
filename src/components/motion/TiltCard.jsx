@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { prefersReducedMotion } from '../../lib/motion'
+import { hasFineHover, prefersReducedMotion } from '../../lib/motion'
 
 // 3D tilt: rotates card based on cursor position (perspective).
 // Subtle by default (max 6deg) so it feels premium, not gimmicky.
@@ -15,7 +15,7 @@ function TiltCard({ children, className = '', max = 6, ...rest }) {
   const rotateY = useTransform(sx, (v) => v)
 
   const handleMove = (e) => {
-    if (prefersReducedMotion()) return
+    if (prefersReducedMotion() || !hasFineHover()) return
     const node = ref.current
     if (!node) return
     const rect = node.getBoundingClientRect()

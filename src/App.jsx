@@ -38,10 +38,18 @@ function AnimatedRoutes() {
 function AppShell() {
   return (
     <div className="min-h-screen overflow-x-clip bg-brand-bg text-[var(--text)]">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-[var(--primary)] focus:px-4 focus:py-2 focus:text-[var(--primary-foreground)] focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
       <PageLoader />
       <Navbar />
       <ScrollToTop />
-      <AnimatedRoutes />
+      <main id="main">
+        <AnimatedRoutes />
+      </main>
       <FooterSection />
     </div>
   )

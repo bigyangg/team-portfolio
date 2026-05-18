@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react'
-import { motion, useMotionValue, useMotionTemplate } from 'framer-motion'
-import { prefersReducedMotion } from '../../lib/motion'
+import { motion, useMotionValue, useMotionTemplate, useSpring } from 'framer-motion'
+import { hasFineHover, prefersReducedMotion } from '../../lib/motion'
 
 // Framer-motion v12 prefers motion.create() over motion(). Fall back if older.
 const toMotion = (Comp) => (motion.create ? motion.create(Comp) : motion(Comp))
@@ -21,10 +21,13 @@ function SpotlightCard({
   const ref = useRef(null)
   const mx = useMotionValue(-1000)
   const my = useMotionValue(-1000)
-  const background = useMotionTemplate`radial-gradient(${glowSize}px circle at ${mx}px ${my}px, ${glowColor}, transparent 70%)`
+  // Spring-damp the glow so it doesn't snap to the cursor. Subtle, but feels alive.
+  const sx = useSpring(mx, { stiffness: 200, damping: 30, mass: 0.4 })
+  const sy = useSpring(my, { stiffness: 200, damping: 30, mass: 0.4 })
+  const background = useMotionTemplate`radial-gradient(${glowSize}px circle at ${sx}px ${sy}px, ${glowColor}, transparent 70%)`
 
   const handleMove = (e) => {
-    if (prefersReducedMotion()) return
+    if (prefersReducedMotion() || !hasFineHover()) return
     const rect = ref.current?.getBoundingClientRect()
     if (!rect) return
     mx.set(e.clientX - rect.left)

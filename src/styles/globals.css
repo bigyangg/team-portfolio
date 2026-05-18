@@ -500,7 +500,7 @@ textarea {
   outline: none;
   border-color: var(--accent);
   background: var(--glass-bg);
-  box-shadow: 0 0 0 3px var(--accent-ring);
+  box-shadow: 0 0 0 4px var(--accent-ring);
 }
 
 .field-select {
@@ -527,7 +527,7 @@ textarea {
   outline: none;
   border-color: var(--accent);
   background-color: var(--glass-bg);
-  box-shadow: 0 0 0 3px var(--accent-ring);
+  box-shadow: 0 0 0 4px var(--accent-ring);
 }
 
 /* Buttons */

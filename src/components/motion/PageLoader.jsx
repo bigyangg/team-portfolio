@@ -8,7 +8,7 @@ function PageLoader() {
 
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    const delay = reduced ? 0 : 700
+    const delay = reduced ? 0 : 420
     const t = setTimeout(() => setDone(true), delay)
     return () => clearTimeout(t)
   }, [])

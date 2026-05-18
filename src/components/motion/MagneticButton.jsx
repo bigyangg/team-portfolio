@@ -1,23 +1,26 @@
 import { useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { prefersReducedMotion } from '../../lib/motion'
+import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion'
+import { hasFineHover, prefersReducedMotion } from '../../lib/motion'
 
 // Magnetic button: subtle pull toward cursor when hovered.
-// Uses motion values (no React state) per Taste skill rule.
-// Strength: 18px max pull, decays at ~110px from center.
+// Uses motion values (no React state). Touch devices are excluded.
+// Transform is composed via useMotionTemplate to keep the GPU-accelerated
+// translate3d path instead of framer-motion's x/y shorthand.
 
 const STRENGTH = 18
 const REACH = 110
+const SPRING = { stiffness: 220, damping: 18, mass: 0.4 }
 
 function MagneticButton({ as: Comp = motion.button, children, className = '', onClick, ...rest }) {
   const ref = useRef(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const springX = useSpring(x, { stiffness: 220, damping: 18, mass: 0.4 })
-  const springY = useSpring(y, { stiffness: 220, damping: 18, mass: 0.4 })
+  const springX = useSpring(x, SPRING)
+  const springY = useSpring(y, SPRING)
+  const transform = useMotionTemplate`translate3d(${springX}px, ${springY}px, 0)`
 
   const handleMove = (e) => {
-    if (prefersReducedMotion()) return
+    if (prefersReducedMotion() || !hasFineHover()) return
     const node = ref.current
     if (!node) return
     const rect = node.getBoundingClientRect()
@@ -34,7 +37,6 @@ function MagneticButton({ as: Comp = motion.button, children, className = '', on
     y.set(0)
   }
 
-  // If Comp is a non-motion element (like an <a>), wrap children in a motion.span for the pull.
   if (Comp === motion.button) {
     return (
       <motion.button
@@ -42,8 +44,9 @@ function MagneticButton({ as: Comp = motion.button, children, className = '', on
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         onClick={onClick}
+        whileTap={{ scale: 0.97 }}
         className={className}
-        style={{ x: springX, y: springY }}
+        style={{ transform, willChange: 'transform' }}
         {...rest}
       >
         {children}
@@ -51,7 +54,8 @@ function MagneticButton({ as: Comp = motion.button, children, className = '', on
     )
   }
 
-  // For non-button (Link, a), wrap to keep semantics correct.
+  // Non-button (e.g. Link or <a>): wrap inner span so the underlying element
+  // can keep its semantics, while the span carries the spring-driven transform.
   return (
     <Comp
       ref={ref}
@@ -61,7 +65,11 @@ function MagneticButton({ as: Comp = motion.button, children, className = '', on
       className={className}
       {...rest}
     >
-      <motion.span className="inline-flex items-center gap-[inherit]" style={{ x: springX, y: springY }}>
+      <motion.span
+        className="inline-flex items-center gap-[inherit]"
+        style={{ transform, willChange: 'transform' }}
+        whileTap={{ scale: 0.97 }}
+      >
         {children}
       </motion.span>
     </Comp>
