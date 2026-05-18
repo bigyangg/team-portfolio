@@ -1,6 +1,9 @@
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { motion, useMotionValue, useMotionTemplate } from 'framer-motion'
 import { prefersReducedMotion } from '../../lib/motion'
+
+// Framer-motion v12 prefers motion.create() over motion(). Fall back if older.
+const toMotion = (Comp) => (motion.create ? motion.create(Comp) : motion(Comp))
 
 // Card with cursor-aware radial glow. Glow follows mouse via motion values
 // (no React state, no re-renders).
@@ -33,7 +36,7 @@ function SpotlightCard({
     my.set(-1000)
   }
 
-  const MotionComp = motion(Comp)
+  const MotionComp = useMemo(() => toMotion(Comp), [Comp])
 
   return (
     <MotionComp
