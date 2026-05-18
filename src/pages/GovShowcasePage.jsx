@@ -124,6 +124,15 @@ const getCvDownloadName = (cvUrl, fullName) => {
   return `${toSlug(fullName) || 'member'}-cv.pdf`
 }
 
+const getErrorMessage = (error, fallbackMessage) => {
+  if (error instanceof Error && error.message) return error.message
+  if (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+    const message = error.message.trim()
+    if (message) return message
+  }
+  return fallbackMessage
+}
+
 const buildEditForm = (member) => ({
   fullName: member?.fullName || '',
   role: member?.role || '',
@@ -216,7 +225,7 @@ function GovShowcasePage() {
       } catch (error) {
         if (!isActive) return
         setIsManageLocked(true)
-        setStatusMessage(error instanceof Error ? error.message : 'Could not verify manage lock state.')
+        setStatusMessage(getErrorMessage(error, 'Could not verify manage lock state.'))
       }
     }
 
@@ -252,7 +261,7 @@ function GovShowcasePage() {
         )
       } catch (error) {
         if (!isActive) return
-        setStatusMessage(error instanceof Error ? error.message : 'Could not load members from database.')
+        setStatusMessage(getErrorMessage(error, 'Could not load members from database.'))
       }
     }
 
@@ -413,7 +422,7 @@ function GovShowcasePage() {
 
       closeManageAuthDialog()
     } catch (error) {
-      setManageAuthError(error instanceof Error ? error.message : 'Incorrect PIN.')
+      setManageAuthError(getErrorMessage(error, 'Incorrect PIN.'))
     }
   }
 
@@ -520,7 +529,7 @@ function GovShowcasePage() {
       setEditStatusMessage(`Updated ${updatedMember.fullName}.`)
       setIsEditProfileOpen(false)
     } catch (error) {
-      setEditStatusMessage(error instanceof Error ? error.message : 'Could not update this profile right now.')
+      setEditStatusMessage(getErrorMessage(error, 'Could not update this profile right now.'))
     }
   }
 
@@ -646,7 +655,7 @@ function GovShowcasePage() {
       setFormErrors({})
       setStatusMessage(`${nextMember.fullName} added successfully.`)
     } catch (error) {
-      setStatusMessage(error instanceof Error ? error.message : 'Could not add member right now.')
+      setStatusMessage(getErrorMessage(error, 'Could not add member right now.'))
     } finally {
       setIsAddingMember(false)
     }
@@ -676,7 +685,7 @@ function GovShowcasePage() {
       updateMemberInState(updatedMember, targetMember.id)
       setPhotoUpdateMessage(`Photo updated for ${updatedMember?.fullName || 'selected member'}.`)
     } catch (error) {
-      setPhotoUpdateMessage(error instanceof Error ? error.message : 'Could not update this photo.')
+      setPhotoUpdateMessage(getErrorMessage(error, 'Could not update this photo.'))
     } finally {
       event.target.value = ''
     }
@@ -707,7 +716,7 @@ function GovShowcasePage() {
       updateMemberInState(updatedMember, targetMember.id)
       setPhotoUpdateMessage(`CV uploaded for ${updatedMember?.fullName || 'selected member'}.`)
     } catch (error) {
-      setPhotoUpdateMessage(error instanceof Error ? error.message : 'Could not upload this CV file.')
+      setPhotoUpdateMessage(getErrorMessage(error, 'Could not upload this CV file.'))
     } finally {
       event.target.value = ''
     }
