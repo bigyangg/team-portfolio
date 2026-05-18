@@ -60,16 +60,16 @@ function PageHero({ eyebrow, title, intro, breadcrumb = [], image, accent = '#10
         )}
 
         <p className="eyebrow">{eyebrow}</p>
-        <h1 className="font-display mt-3 text-[40px] font-extrabold leading-[1.02] tracking-[-0.025em] text-[var(--text)] sm:text-[58px] md:text-[80px]">
+        <h1 className="font-display mt-3 text-[34px] font-extrabold leading-[1.06] tracking-[-0.022em] text-[var(--text)] sm:text-[44px] md:text-[60px]">
           {title}
         </h1>
         {intro && (
-          <p className="mt-6 max-w-2xl text-[15.5px] leading-[1.7] text-[var(--text)]/75 md:text-[17.5px]">
+          <p className="mt-5 max-w-2xl text-[14.5px] leading-[1.65] text-[var(--text)]/75 md:text-[16px]">
             {intro}
           </p>
         )}
 
-        <div className="brand-stroke mt-10 w-28" aria-hidden="true" />
+        <div className="brand-stroke mt-8 w-24" aria-hidden="true" />
       </div>
     </section>
   )

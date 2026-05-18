@@ -59,27 +59,27 @@ function VisionSection() {
 
         {/* Text side */}
         <div className="flex flex-col justify-center">
-          <p className="eyebrow">— The Mission</p>
-          <h2 className="font-display mt-3 text-[36px] font-bold leading-[1.05] tracking-[-0.025em] text-[var(--text)] sm:text-[44px] md:text-[52px]">
+          <p className="eyebrow">The Mission</p>
+          <h2 className="font-display mt-2 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] text-[var(--text)] sm:text-[36px] md:text-[42px]">
             From{' '}
             <span className="glow-text">monsoon water</span> to molecular fuel.
           </h2>
-          <p className="mt-5 max-w-xl text-[15.5px] leading-[1.7] text-[var(--text)]/75 md:text-[17px]">
+          <p className="mt-4 max-w-xl text-[14.5px] leading-[1.65] text-[var(--text)]/75 md:text-[15.5px]">
             NGHTT is a 27-person think tank convened to give Nepal a green hydrogen strategy
             that is built, not borrowed. We map the chemistry, the policy, the capital stack,
             and the people, then submit it as a single, signed brief.
           </p>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
             {PILLARS.map((p) => (
               <div key={p.title} className="group">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 group-hover:-translate-y-0.5">
-                  <p.icon className="h-5 w-5" aria-hidden="true" />
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 group-hover:-translate-y-0.5">
+                  <p.icon className="h-[16px] w-[16px]" aria-hidden="true" />
                 </span>
-                <h3 className="font-display mt-3 text-[16.5px] font-bold leading-tight text-[var(--text)]">
+                <h3 className="font-display mt-2.5 text-[15px] font-bold leading-tight text-[var(--text)]">
                   {p.title}
                 </h3>
-                <p className="mt-1.5 text-[13.5px] leading-[1.55] text-[var(--text)]/65">
+                <p className="mt-1 text-[12.5px] leading-[1.55] text-[var(--text)]/65">
                   {p.body}
                 </p>
               </div>

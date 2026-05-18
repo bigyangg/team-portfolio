@@ -44,11 +44,11 @@ function EcosystemSection() {
       <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
         <div className="mx-auto max-w-3xl text-center">
           <p className="eyebrow">Green H₂ ecosystem</p>
-          <h2 className="font-display mt-4 text-[38px] font-bold leading-[1.06] tracking-[-0.022em] text-[var(--text)] sm:text-[50px] md:text-[60px]">
+          <h2 className="font-display mt-3 text-[30px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--text)] sm:text-[38px] md:text-[46px]">
             Five places hydrogen{' '}
             <span className="glow-text">moves the needle</span> for Nepal.
           </h2>
-          <p className="mt-6 text-[17px] leading-[1.6] text-[var(--text)]/75 md:text-[18.5px]">
+          <p className="mt-4 text-[14.5px] leading-[1.6] text-[var(--text)]/75 md:text-[16px]">
             Not theoretical. Each use case is mapped to specific industries, existing infrastructure,
             and people on this team who can deliver it.
           </p>
@@ -69,7 +69,7 @@ function EcosystemSection() {
             return (
               <article
                 key={u.n}
-                className={`group relative overflow-hidden rounded-[22px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-7 shadow-[0_8px_28px_rgba(5,46,44,0.06)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_24px_48px_-12px_rgba(16,185,129,0.30)] md:p-8 ${lgSpan}`}
+                className={`group relative overflow-hidden rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 shadow-[0_6px_20px_rgba(5,46,44,0.05)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_18px_36px_-12px_rgba(16,185,129,0.28)] md:p-6 ${lgSpan}`}
               >
                 <span
                   aria-hidden="true"
@@ -78,17 +78,17 @@ function EcosystemSection() {
                 />
                 <div className="relative">
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] text-[var(--primary)] backdrop-blur-xl">
-                      <u.icon className="h-6 w-6" aria-hidden="true" />
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] text-[var(--primary)] backdrop-blur-xl">
+                      <u.icon className="h-[18px] w-[18px]" aria-hidden="true" />
                     </span>
-                    <span className="font-mono tab-num text-[13px] font-medium text-[var(--muted-foreground)]">
+                    <span className="font-mono tab-num text-[11px] font-medium text-[var(--muted-foreground)]">
                       № {u.n}
                     </span>
                   </div>
-                  <h3 className="font-display mt-6 text-[24px] font-bold leading-[1.2] tracking-[-0.015em] text-[var(--text)] md:text-[26px]">
+                  <h3 className="font-display mt-4 text-[17px] font-bold leading-[1.25] tracking-[-0.012em] text-[var(--text)] md:text-[19px]">
                     {u.title}
                   </h3>
-                  <p className="mt-3 text-[15.5px] leading-[1.6] text-[var(--text)]/70 md:text-[16px]">
+                  <p className="mt-2 text-[13.5px] leading-[1.55] text-[var(--text)]/70 md:text-[14px]">
                     {u.body}
                   </p>
                 </div>

@@ -54,7 +54,7 @@ function HeroSection() {
             </span>
           </div>
 
-          <h1 className="font-display text-[40px] font-extrabold leading-[1.06] tracking-[-0.024em] text-[var(--text)] [text-wrap:balance] sm:text-[56px] md:text-[72px] lg:text-[88px] xl:text-[96px]">
+          <h1 className="font-display text-[36px] font-extrabold leading-[1.08] tracking-[-0.022em] text-[var(--text)] [text-wrap:balance] sm:text-[48px] md:text-[60px] lg:text-[72px] xl:text-[80px]">
             Building Nepal's
             <br />
             <span className="glow-text">green hydrogen</span>
@@ -62,7 +62,7 @@ function HeroSection() {
             future, together.
           </h1>
 
-          <p className="mt-9 max-w-2xl text-[18px] leading-[1.6] text-[var(--text)]/80 md:text-[21px]">
+          <p className="mt-7 max-w-2xl text-[15.5px] leading-[1.6] text-[var(--text)]/80 md:text-[17px]">
             We're a team of 27 — chemists, engineers, AI builders, lawyers and policy people — quietly
             organising the institution that turns Nepal's monsoon hydropower into a hydrogen economy.
           </p>
