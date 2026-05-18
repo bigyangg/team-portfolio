@@ -81,7 +81,7 @@ function Navbar() {
             <span className="font-display text-[15px] font-bold leading-tight tracking-[-0.012em] text-[var(--text)]">
               NGHTT
             </span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
+            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]/70">
               Green Hydrogen Think Tank
             </span>
           </div>
@@ -98,7 +98,7 @@ function Navbar() {
                 `relative rounded-full px-4 py-2 text-[13px] font-semibold transition-colors duration-200 ${
                   isActive
                     ? 'text-[var(--primary)]'
-                    : 'text-[var(--text)]/70 hover:text-[var(--text)]'
+                    : 'text-[var(--text)] hover:text-[var(--primary)]'
                 }`
               }
             >
@@ -130,7 +130,7 @@ function Navbar() {
           </button>
 
           {/* Submitted badge — desktop only */}
-          <span className="hidden items-center gap-1.5 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]/75 backdrop-blur-md md:inline-flex">
+          <span className="hidden items-center gap-1.5 rounded-full border border-[var(--primary)]/30 bg-[var(--primary-soft)] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--primary)] backdrop-blur-md md:inline-flex">
             <BadgeCheck className="h-3.5 w-3.5 text-[var(--primary)]" aria-hidden="true" />
             2082-83
           </span>
@@ -139,7 +139,7 @@ function Navbar() {
           <button
             type="button"
             onClick={requestManageLockToggle}
-            className="hidden h-10 items-center gap-1.5 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--text)]/75 backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)] md:inline-flex"
+            className="hidden h-10 items-center gap-1.5 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-3 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)] md:inline-flex"
           >
             {isManageLocked ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
             {isManageLocked ? 'Manage off' : 'Manage on'}
