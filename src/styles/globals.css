@@ -609,6 +609,31 @@ textarea {
   100% { background-position: 200% 0; }
 }
 
+/* Drifting aurora — large soft gradients that slowly translate across the page.
+   Sits on a fixed pseudo so it's behind all content. Pauses for reduced-motion. */
+@keyframes aurora-drift {
+  0%   { transform: translate3d(0%, 0%, 0)   scale(1);   }
+  33%  { transform: translate3d(2%, -3%, 0)  scale(1.05); }
+  66%  { transform: translate3d(-3%, 2%, 0)  scale(1.02); }
+  100% { transform: translate3d(0%, 0%, 0)   scale(1);   }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 40% at 18% 22%, var(--aurora-1), transparent 65%),
+    radial-gradient(45% 35% at 82% 18%, var(--aurora-2), transparent 65%),
+    radial-gradient(40% 35% at 35% 82%, var(--aurora-3), transparent 65%),
+    radial-gradient(45% 40% at 78% 78%, var(--aurora-4), transparent 65%);
+  opacity: 0.55;
+  animation: aurora-drift 22s ease-in-out infinite;
+  will-change: transform;
+}
+
 .anim-fade   { animation: fade-in var(--duration-base) var(--ease-out-quart) both; }
 .anim-rise   { animation: rise-in var(--duration-slow) var(--ease-out-quart) both; }
 .pulse-dot   { animation: pulse-dot 2.2s ease-in-out infinite; }

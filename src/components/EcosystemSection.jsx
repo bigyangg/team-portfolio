@@ -1,4 +1,7 @@
+import { motion } from 'framer-motion'
 import { Truck, Wheat, Flame, Battery, Sprout } from 'lucide-react'
+import { riseItem, staggerContainer } from '../lib/motion'
+import SpotlightCard from './motion/SpotlightCard'
 
 const USE_CASES = [
   {
@@ -40,9 +43,15 @@ const USE_CASES = [
 
 function EcosystemSection() {
   return (
-    <section className="relative w-full py-20 md:py-28">
+    <motion.section
+      className="relative w-full py-20 md:py-28"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: '-10% 0px' }}
+      variants={staggerContainer}
+    >
       <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
-        <div className="mx-auto max-w-3xl text-center">
+        <motion.div variants={riseItem} className="mx-auto max-w-3xl text-center">
           <p className="eyebrow">Green H₂ ecosystem</p>
           <h2 className="font-display mt-3 text-[30px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--text)] sm:text-[38px] md:text-[46px]">
             Five places hydrogen{' '}
@@ -52,33 +61,26 @@ function EcosystemSection() {
             Not theoretical. Each use case is mapped to specific industries, existing infrastructure,
             and people on this team who can deliver it.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Clean grid — 5 in a 3+2 layout on lg, 2 cols on tablet, 1 col on mobile.
-            Last row centered for visual balance. */}
-        <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6">
+        <motion.div
+          variants={staggerContainer}
+          className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6"
+        >
           {USE_CASES.map((u, i) => {
-            // On lg (6-col grid), positions:
-            //   row 1: cards 1-3 each span 2 cols (cols 1-2, 3-4, 5-6)
-            //   row 2: cards 4-5 each span 2 cols, starting at col 2 and col 4 (centered)
             const lgSpan = i < 3
               ? 'lg:col-span-2'
               : i === 3
                 ? 'lg:col-span-2 lg:col-start-2'
                 : 'lg:col-span-2 lg:col-start-4'
             return (
-              <article
-                key={u.n}
-                className={`group relative overflow-hidden rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 shadow-[0_6px_20px_rgba(5,46,44,0.05)] backdrop-blur-2xl transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_18px_36px_-12px_rgba(16,185,129,0.28)] md:p-6 ${lgSpan}`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                  style={{ background: `radial-gradient(80% 80% at 0% 0%, ${u.accent}, transparent 60%)` }}
-                />
-                <div className="relative">
+              <motion.div key={u.n} variants={riseItem} className={lgSpan}>
+                <SpotlightCard
+                  glowColor={u.accent}
+                  className="group h-full rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 shadow-[0_6px_20px_rgba(5,46,44,0.05)] backdrop-blur-2xl transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_18px_36px_-12px_rgba(16,185,129,0.28)] md:p-6"
+                >
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] text-[var(--primary)] backdrop-blur-xl">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110 group-hover:rotate-[-4deg]">
                       <u.icon className="h-[18px] w-[18px]" aria-hidden="true" />
                     </span>
                     <span className="font-mono tab-num text-[11px] font-medium text-[var(--muted-foreground)]">
@@ -91,13 +93,13 @@ function EcosystemSection() {
                   <p className="mt-2 text-[13.5px] leading-[1.55] text-[var(--text)]/70 md:text-[14px]">
                     {u.body}
                   </p>
-                </div>
-              </article>
+                </SpotlightCard>
+              </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   )
 }
 
