@@ -1,5 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { CheckCircle2, ChevronRight } from 'lucide-react'
+import {
+  CheckCircle2,
+  ChevronRight,
+  Search,
+  ListFilter,
+  ArrowUpDown,
+  Sparkles,
+  MapPin,
+  GraduationCap,
+  Mail,
+  Phone,
+  FileText,
+  ArrowUpRight,
+  Users,
+  Tags,
+} from 'lucide-react'
 import initialTeamMembers from '../data/teamMembers'
 import {
   loadMembersFromStorage,
@@ -724,167 +739,240 @@ function GovShowcasePage() {
 
   return (
     <>
-      <section className="glass-card-strong rounded-2xl p-5 sm:p-6 md:p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">
-          NGHTT · National Green Hydrogen Think Tank
+      <section className="anim-rise pt-2 md:pt-6">
+        <p className="eyebrow">NGHTT · National Green Hydrogen Think Tank</p>
+        <h2 className="font-display mt-3 text-[40px] font-bold leading-[1.02] tracking-[-0.022em] text-[var(--text)] sm:text-[52px] md:text-[64px]">
+          Team Portfolio{' '}
+          <span className="tab-num text-[var(--accent)]">2082<span className="text-[var(--muted)]">/</span>83</span>
+        </h2>
+        <p className="mt-4 max-w-2xl text-[15px] leading-7 text-[var(--muted)] md:text-[16px]">
+          {filteredMembers.length === members.length ? 'Twenty-seven' : `${filteredMembers.length} of ${members.length}`} experts
+          across AI, chemistry, energy systems and policy. Browse profiles, capabilities, and verified CVs submitted to the Ministry of Energy.
         </p>
-        <h2 className="mt-2 text-2xl font-semibold text-[var(--text)] sm:text-3xl md:text-4xl">Team Portfolio 2082-83</h2>
-        <p className="mt-2 max-w-3xl text-sm text-[var(--muted)]">
-          Clean team directory focused on people. Select any member to view full profile details.
-        </p>
+
+        {/* Stat strip */}
+        <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 md:mt-8">
+          <div className="flex items-center gap-2.5">
+            <Users className="h-4 w-4 text-[var(--accent)]" aria-hidden="true" />
+            <span className="tab-num font-display text-2xl font-bold text-[var(--text)]">{members.length}</span>
+            <span className="eyebrow">Members</span>
+          </div>
+          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
+          <div className="flex items-center gap-2.5">
+            <Tags className="h-4 w-4 text-[var(--accent)]" aria-hidden="true" />
+            <span className="tab-num font-display text-2xl font-bold text-[var(--text)]">{capabilities.length}</span>
+            <span className="eyebrow">Capability areas</span>
+          </div>
+          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
+          <div className="flex items-center gap-2">
+            <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden="true" />
+            <span className="eyebrow text-[var(--text)]">Live · 2082/83 BS · 2025/26 AD</span>
+          </div>
+        </div>
+
+        <div className="brand-stroke mt-8 w-24" aria-hidden="true" />
       </section>
 
-      <section id="team" className="mt-4">
-        <div className="glass-card mx-1 rounded-2xl p-3 sm:mx-0 sm:p-4">
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">Search and filter team</p>
-            <div className="w-full sm:w-auto">
-              <div className="glass-pill grid w-full grid-cols-2 gap-1 rounded-xl border border-[var(--border)] p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] sm:w-auto">
-                <button
-                  type="button"
-                  onClick={handleShowTeam}
-                  aria-pressed={!isMediaManagerOpen}
-                  className={`inline-flex min-h-10 items-center justify-center rounded-md border px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-w-[96px] sm:text-xs ${
-                    !isMediaManagerOpen
-                      ? 'border-[var(--navy)] bg-[var(--navy)] text-[var(--white)] shadow-sm'
-                      : 'border-[var(--border)] bg-[var(--card)] text-[var(--text)] hover:bg-[var(--background)]'
-                  }`}
+      <section id="team" className="mt-10 md:mt-14">
+        {/* Sticky filter bar */}
+        <div className="filter-bar -mx-4 px-4 py-4 sm:-mx-0 sm:px-0 sm:py-5">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center">
+            <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,220px)_minmax(0,180px)]">
+              {/* Search */}
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" aria-hidden="true" />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search name, role, expertise…"
+                  className="field"
+                  aria-label="Search members"
+                />
+              </div>
+              {/* Focus area */}
+              <div className="relative">
+                <ListFilter className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" aria-hidden="true" />
+                <select
+                  value={capabilityFilter}
+                  onChange={(event) => setCapabilityFilter(event.target.value)}
+                  className="field-select pl-10"
+                  aria-label="Filter by focus area"
                 >
-                  Team
-                </button>
-                <button
-                  type="button"
-                  onClick={openMediaManager}
-                  disabled={isManageLocked}
-                  aria-pressed={isMediaManagerOpen}
-                  className={`inline-flex min-h-10 items-center justify-center rounded-md border px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-w-[96px] sm:text-xs ${
-                    isManageLocked
-                      ? 'cursor-not-allowed border-[var(--border)] bg-[var(--input)] text-[var(--muted)] opacity-80'
-                      : isMediaManagerOpen
-                        ? 'border-[var(--navy)] bg-[var(--navy)] text-[var(--white)] shadow-sm'
-                        : 'border-[var(--border)] bg-[var(--card)] text-[var(--text)] hover:bg-[var(--background)]'
-                  }`}
+                  <option value="All">All focus areas</option>
+                  {capabilities.map((area) => (
+                    <option key={area} value={area}>{area}</option>
+                  ))}
+                </select>
+              </div>
+              {/* Sort */}
+              <div className="relative">
+                <ArrowUpDown className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" aria-hidden="true" />
+                <select
+                  value={sortBy}
+                  onChange={(event) => setSortBy(event.target.value)}
+                  className="field-select pl-10"
+                  aria-label="Sort members"
                 >
-                  Manage
-                </button>
+                  <option value="name">Name · A → Z</option>
+                </select>
               </div>
             </div>
-          </div>
-          <div className="mt-2 grid gap-1.5 md:mt-3 md:gap-3 md:grid-cols-3">
-            <label className="space-y-1 text-sm font-medium text-[var(--text)]">
-              <span>Search</span>
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="name, role, expertise"
-                className="h-10 w-full rounded-md border border-transparent bg-[var(--muted-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:border-[var(--border)] sm:bg-[var(--input)]"
-              />
-            </label>
-            <label className="space-y-1 text-sm font-medium text-[var(--text)]">
-              <span>Focus Area</span>
-              <select
-                value={capabilityFilter}
-                onChange={(event) => setCapabilityFilter(event.target.value)}
-                className="h-10 w-full rounded-md border border-transparent bg-[var(--muted-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:border-[var(--border)] sm:bg-[var(--input)]"
+
+            {/* Team / Manage toggle */}
+            <div className="inline-flex h-[42px] shrink-0 rounded-[10px] border border-[var(--surface-rule)] bg-[var(--card)] p-1">
+              <button
+                type="button"
+                onClick={handleShowTeam}
+                aria-pressed={!isMediaManagerOpen}
+                className={`inline-flex items-center justify-center rounded-md px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                  !isMediaManagerOpen
+                    ? 'bg-[var(--accent)] text-white shadow-sm'
+                    : 'text-[var(--muted-foreground)] hover:text-[var(--text)]'
+                }`}
               >
-                <option value="All">All</option>
-                {capabilities.map((area) => (
-                  <option key={area} value={area}>
-                    {area}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="space-y-1 text-sm font-medium text-[var(--text)]">
-              <span>Sort</span>
-              <select
-                value={sortBy}
-                onChange={(event) => setSortBy(event.target.value)}
-                className="h-10 w-full rounded-md border border-transparent bg-[var(--muted-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:border-[var(--border)] sm:bg-[var(--input)]"
+                Team
+              </button>
+              <button
+                type="button"
+                onClick={openMediaManager}
+                disabled={isManageLocked}
+                aria-pressed={isMediaManagerOpen}
+                className={`inline-flex items-center justify-center rounded-md px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                  isManageLocked
+                    ? 'cursor-not-allowed text-[var(--muted-foreground)]/60'
+                    : isMediaManagerOpen
+                      ? 'bg-[var(--accent)] text-white shadow-sm'
+                      : 'text-[var(--muted-foreground)] hover:text-[var(--text)]'
+                }`}
               >
-                <option value="name">Name A-Z</option>
-              </select>
-            </label>
+                Manage
+              </button>
+            </div>
           </div>
         </div>
         {!filteredMembers.length ? (
-          <div className="glass-card mt-4 rounded-2xl p-8 text-center">
-            <p className="text-base font-medium text-[var(--navy)]">No team members found.</p>
-            <p className="mt-1 text-sm text-[var(--muted)]">Try changing filters or add a member.</p>
+          <div className="mt-8 rounded-2xl border border-dashed border-[var(--surface-rule)] bg-[var(--card)] p-12 text-center">
+            <Search className="mx-auto h-8 w-8 text-[var(--muted-foreground)]/60" aria-hidden="true" />
+            <p className="mt-4 font-display text-lg font-semibold text-[var(--text)]">No members match those filters.</p>
+            <p className="mt-1.5 text-sm text-[var(--muted-foreground)]">Try a broader search, or clear the focus area filter.</p>
           </div>
         ) : (
-          <div className="mx-1 mt-3 grid gap-3 sm:mx-0 lg:mt-4 lg:gap-4 lg:grid-cols-[minmax(0,1fr)_460px] xl:grid-cols-[minmax(0,1fr)_520px]">
-            <div className="space-y-2 px-0.5 sm:px-0">
-              <p className="text-[11px] font-medium text-[var(--muted)] lg:hidden">
-                Tap any member to view full details below.
-              </p>
-              {filteredMembers.map((member) => {
-                const isActive = activeMember?.id === member.id
-                return (
-                  <button
-                    key={member.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedMemberId(member.id)
-                      setIsEditProfileOpen(false)
-                      setEditErrors({})
-                      setEditStatusMessage('')
-                      focusMemberDetailsOnMobile()
-                    }}
-                    className={`glass-hover w-full rounded-xl border p-3 text-left backdrop-blur-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:rounded-2xl sm:p-4 ${
-                      isActive
-                        ? 'border-[var(--ring)]/45 bg-[var(--glass-bg-strong)] shadow-[0_10px_24px_rgba(16,37,68,0.14)]'
-                        : 'border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_6px_16px_rgba(16,37,68,0.10)] hover:border-[var(--ring)]/30'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-2">
+          <div className="mt-6 grid gap-6 lg:mt-8 lg:gap-8 lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px]">
+            {/* Editorial member index */}
+            <div className="anim-fade">
+              <div className="mb-3 flex items-baseline justify-between">
+                <p className="eyebrow">
+                  {filteredMembers.length} {filteredMembers.length === 1 ? 'member' : 'members'}
+                  {capabilityFilter !== 'All' && <span className="text-[var(--accent)]"> · {capabilityFilter}</span>}
+                </p>
+                <p className="font-mono text-[11px] tracking-wider text-[var(--muted-foreground)] lg:hidden">
+                  Tap to view profile →
+                </p>
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border border-[var(--surface-rule)] bg-[var(--card)]">
+                {filteredMembers.map((member, index) => {
+                  const isActive = activeMember?.id === member.id
+                  return (
+                    <button
+                      key={member.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedMemberId(member.id)
+                        setIsEditProfileOpen(false)
+                        setEditErrors({})
+                        setEditStatusMessage('')
+                        focusMemberDetailsOnMobile()
+                      }}
+                      aria-pressed={isActive}
+                      className={`member-row ${index !== 0 ? 'border-t border-[var(--surface-rule-soft)]' : ''}`}
+                    >
+                      <span className="num-mark tab-num pl-3 text-right">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
                       <div className="min-w-0">
-                        <h3 className="truncate text-lg font-semibold leading-tight text-[var(--text)] sm:text-xl">{member.fullName}</h3>
-                        <p className="mt-0.5 line-clamp-1 text-[13px] font-medium leading-5 text-[var(--text)] sm:line-clamp-2 sm:text-sm">
-                          {member.role}
-                        </p>
-                        <p className="mt-0.5 hidden text-xs text-[var(--muted)] sm:block">{member.location}</p>
+                        <h3 className="truncate font-display text-[17px] font-semibold leading-tight text-[var(--text)] sm:text-[18px]">
+                          {member.fullName}
+                        </h3>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] leading-5 text-[var(--muted-foreground)]">
+                          <span className="font-medium text-[var(--text)]/80">{member.role}</span>
+                          {member.location && (
+                            <>
+                              <span className="text-[var(--muted-foreground)]/40">·</span>
+                              <span>{member.location}</span>
+                            </>
+                          )}
+                        </div>
+                        {member.focusAreas?.length > 0 && (
+                          <div className="mt-2 hidden items-center gap-1.5 sm:flex">
+                            {member.focusAreas.slice(0, 3).map((tag, ti) => (
+                              <span key={tag} className="flex items-center">
+                                {ti > 0 && <span className="mr-1.5 text-[var(--muted-foreground)]/30">·</span>}
+                                <span className="font-mono text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--accent)]/85">
+                                  {tag}
+                                </span>
+                              </span>
+                            ))}
+                            {member.focusAreas.length > 3 && (
+                              <span className="ml-1 font-mono text-[10px] text-[var(--muted-foreground)]/70">
+                                +{member.focusAreas.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
-                      <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--muted)]/80" aria-hidden="true" />
-                    </div>
-                    <p className="mt-2 line-clamp-1 text-[13px] leading-5 text-[var(--muted)] sm:mt-3 sm:line-clamp-2 sm:text-sm">
-                      {member.summary}
-                    </p>
-                  </button>
-                )
-              })}
+                      <ChevronRight
+                        className={`h-4 w-4 shrink-0 pr-1 transition-transform duration-200 ${
+                          isActive ? 'translate-x-0.5 text-[var(--accent)]' : 'text-[var(--muted-foreground)]/40'
+                        }`}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
             <aside
               ref={profileDetailRef}
               id="member-details"
-              className="glass-card-strong rounded-2xl p-4 sm:rounded-3xl sm:p-6 md:p-7 lg:sticky lg:top-24 lg:h-fit"
+              className="anim-fade overflow-hidden rounded-2xl border border-[var(--surface-rule)] bg-[var(--card)] lg:sticky lg:top-24 lg:h-fit"
             >
               {activeMember ? (
                 <>
-                 <div className="flex items-start justify-between gap-4">
-                   <div className="flex min-w-0 items-start gap-4">
-                    <MemberAvatar member={activeMember} sizeClass="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24" textSizeClass="text-lg" />
-                     <div className="min-w-0">
-                       <h3 className="text-xl font-semibold leading-tight text-[var(--text)] sm:text-3xl">{activeMember.fullName}</h3>
-                       <p className="mt-1 text-sm font-medium leading-5 text-[var(--text)] sm:text-lg sm:leading-7">{activeMember.role}</p>
-                       <p className="mt-1 text-sm text-[var(--muted)]">{activeMember.location}</p>
+                 {/* Header with avatar + name + edit button */}
+                 <div className="border-b border-[var(--surface-rule-soft)] bg-gradient-to-br from-[var(--accent-soft)] to-transparent p-5 sm:p-7">
+                   <div className="flex items-start justify-between gap-4">
+                     <div className="flex min-w-0 items-start gap-4">
+                       <MemberAvatar member={activeMember} sizeClass="h-16 w-16 sm:h-20 sm:w-20" textSizeClass="text-xl" />
+                       <div className="min-w-0">
+                         <p className="eyebrow">{activeMember.role}</p>
+                         <h3 className="font-display mt-1.5 text-2xl font-bold leading-[1.1] tracking-[-0.018em] text-[var(--text)] sm:text-[28px]">
+                           {activeMember.fullName}
+                         </h3>
+                         {activeMember.location && (
+                           <p className="mt-2 inline-flex items-center gap-1.5 text-[13px] text-[var(--muted-foreground)]">
+                             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                             {activeMember.location}
+                           </p>
+                         )}
+                       </div>
                      </div>
+                     {!isEditProfileOpen && !isManageLocked ? (
+                       <button
+                         type="button"
+                         onClick={handleStartEditProfile}
+                         className="btn btn-ghost shrink-0"
+                       >
+                         Edit
+                       </button>
+                     ) : null}
                    </div>
-                   {!isEditProfileOpen && !isManageLocked ? (
-                     <button
-                       type="button"
-                       onClick={handleStartEditProfile}
-                       className="inline-flex min-h-11 shrink-0 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
-                     >
-                       Edit
-                     </button>
-                   ) : null}
                  </div>
 
                  {editStatusMessage ? (
-                   <p className="mt-3 inline-flex rounded-md border border-[var(--border)] bg-[var(--card)] px-3 py-1.5 text-xs text-[var(--muted)]">
+                   <p className="mx-5 mt-4 inline-flex rounded-md border border-[var(--surface-rule)] bg-[var(--muted-surface)] px-3 py-1.5 text-xs text-[var(--muted-foreground)] sm:mx-7">
                      {editStatusMessage}
                    </p>
                  ) : null}
@@ -1017,18 +1105,21 @@ function GovShowcasePage() {
                      </form>
                    </section>
                  ) : (
-                   <>
-                     <p className="mt-4 text-[14px] leading-6 text-[var(--text)] sm:mt-5 sm:text-[15px] sm:leading-7">{activeMember.summary}</p>
+                   <div className="p-5 sm:p-7">
+                     {/* Summary */}
+                     <p className="text-[15px] leading-[1.7] text-[var(--text)]/85">{activeMember.summary}</p>
 
+                     {/* Focus areas */}
                      {activeMember.focusAreas.length > 0 ? (
-                       <div className="mt-4 pt-3 sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
-                         <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Focus Areas</p>
-                         <div className="mt-2 flex flex-wrap gap-2 sm:mt-3 sm:gap-2.5">
+                       <div className="mt-6">
+                         <p className="eyebrow flex items-center gap-1.5">
+                           <Sparkles className="h-3 w-3" aria-hidden="true" />
+                           Focus areas
+                         </p>
+                         <div className="mt-3 flex flex-wrap gap-2">
                            {activeMember.focusAreas.map((item) => (
-                             <span
-                               key={item}
-                               className="inline-flex items-center rounded-lg border border-transparent bg-[var(--muted-surface)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text)] sm:border-[var(--border)] sm:bg-[var(--input)] sm:px-3 sm:py-1.5 sm:text-xs"
-                             >
+                             <span key={item} className="cap-chip">
+                               <Sparkles aria-hidden="true" />
                                {item}
                              </span>
                            ))}
@@ -1036,47 +1127,69 @@ function GovShowcasePage() {
                        </div>
                      ) : null}
 
+                     {/* Highlights */}
                      {activeMember.highlights.length > 0 ? (
-                       <div className="mt-4 pt-3 sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
-                         <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Highlights</p>
-                         <ul className="mt-2 list-disc space-y-1.5 pl-4 text-[14px] leading-6 text-[var(--text)] sm:mt-3 sm:space-y-2 sm:pl-5 sm:text-[15px] sm:leading-7">
+                       <div className="mt-6 border-t border-[var(--surface-rule-soft)] pt-5">
+                         <p className="eyebrow">Highlights</p>
+                         <ul className="mt-3 space-y-2.5">
                            {activeMember.highlights.map((item) => (
-                             <li key={item}>{item}</li>
+                             <li key={item} className="flex items-start gap-2.5 text-[14.5px] leading-[1.55] text-[var(--text)]/85">
+                               <CheckCircle2 className="mt-[3px] h-4 w-4 shrink-0 text-[var(--accent)]" aria-hidden="true" />
+                               <span>{item}</span>
+                             </li>
                            ))}
                          </ul>
                        </div>
                      ) : null}
 
-                     <div className="mt-4 pt-3 text-sm text-[var(--muted)] sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
-                       <p className="leading-5">
-                         <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Education:</span>{' '}
-                         {activeMember.education}
-                       </p>
-                       {activeMember.cvUrl ? (
-                         <div className="mt-2 flex flex-wrap gap-2">
-                           <button
-                             type="button"
-                             onClick={() => handleOpenCvViewer(activeMember)}
-                             className="inline-flex min-h-10 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                     {/* Education */}
+                     {activeMember.education && (
+                       <div className="mt-6 border-t border-[var(--surface-rule-soft)] pt-5">
+                         <p className="eyebrow flex items-center gap-1.5">
+                           <GraduationCap className="h-3 w-3" aria-hidden="true" />
+                           Education
+                         </p>
+                         <p className="mt-2 text-[14px] leading-6 text-[var(--text)]/85">{activeMember.education}</p>
+                       </div>
+                     )}
+
+                     {/* Contact + CV */}
+                     <div className="mt-6 border-t border-[var(--surface-rule-soft)] pt-5">
+                       <p className="eyebrow">Contact</p>
+                       <div className="mt-3 space-y-2">
+                         {activeMember.contact.email && (
+                           <a
+                             href={`mailto:${activeMember.contact.email}`}
+                             className="group flex items-center gap-2.5 text-[14px] text-[var(--text)]/85 transition-colors duration-150 hover:text-[var(--accent)]"
                            >
-                             View CV
-                           </button>
-                         </div>
-                       ) : null}
-                       {activeMember.contact.email ? (
-                         <p className="mt-2 leading-5">
-                           <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Email:</span>{' '}
-                           {activeMember.contact.email}
-                         </p>
-                       ) : null}
-                       {activeMember.contact.phone ? (
-                         <p className="mt-1 leading-5">
-                           <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Phone:</span>{' '}
-                           {activeMember.contact.phone}
-                         </p>
+                             <Mail className="h-4 w-4 text-[var(--accent)]/70 transition-colors group-hover:text-[var(--accent)]" aria-hidden="true" />
+                             <span>{activeMember.contact.email}</span>
+                             <ArrowUpRight className="ml-auto h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" aria-hidden="true" />
+                           </a>
+                         )}
+                         {activeMember.contact.phone && (
+                           <a
+                             href={`tel:${activeMember.contact.phone.replace(/\s/g, '')}`}
+                             className="group flex items-center gap-2.5 text-[14px] text-[var(--text)]/85 transition-colors duration-150 hover:text-[var(--accent)]"
+                           >
+                             <Phone className="h-4 w-4 text-[var(--accent)]/70 transition-colors group-hover:text-[var(--accent)]" aria-hidden="true" />
+                             <span className="tab-num">{activeMember.contact.phone}</span>
+                           </a>
+                         )}
+                       </div>
+                       {activeMember.cvUrl ? (
+                         <button
+                           type="button"
+                           onClick={() => handleOpenCvViewer(activeMember)}
+                           className="btn btn-primary mt-4"
+                         >
+                           <FileText className="h-3.5 w-3.5" aria-hidden="true" />
+                           View CV
+                           <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                         </button>
                        ) : null}
                      </div>
-                   </>
+                   </div>
                  )}
                </>
              ) : null}

@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="min-h-screen overflow-x-clip bg-brand-bg text-[var(--text)]">
       <Navbar />
-      <main className="mx-auto w-full max-w-7xl overflow-x-clip px-4 pb-8 pt-6 md:px-8 md:pt-8">
+      <main className="mx-auto w-full max-w-[1240px] overflow-x-clip px-5 pb-20 pt-8 md:px-10 md:pt-12">
         <GovShowcasePage />
       </main>
     </div>
