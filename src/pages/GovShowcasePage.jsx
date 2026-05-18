@@ -739,236 +739,322 @@ function GovShowcasePage() {
 
   return (
     <>
-      <section className="anim-rise pt-2 md:pt-6">
-        <p className="eyebrow">NGHTT · National Green Hydrogen Think Tank</p>
-        <h2 className="font-display mt-3 text-[40px] font-bold leading-[1.02] tracking-[-0.022em] text-[var(--text)] sm:text-[52px] md:text-[64px]">
-          Team Portfolio{' '}
-          <span className="tab-num text-[var(--accent)]">2082<span className="text-[var(--muted)]">/</span>83</span>
-        </h2>
-        <p className="mt-4 max-w-2xl text-[15px] leading-7 text-[var(--muted)] md:text-[16px]">
-          {filteredMembers.length === members.length ? 'Twenty-seven' : `${filteredMembers.length} of ${members.length}`} experts
-          across AI, chemistry, energy systems and policy. Browse profiles, capabilities, and verified CVs submitted to the Ministry of Energy.
-        </p>
+      {/* ═══════════════ HERO ═══════════════ */}
+      <section className="anim-rise relative pt-4 md:pt-10">
+        {/* Floating H₂ molecule decoration */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute right-0 top-0 hidden h-[420px] w-[420px] opacity-40 md:block lg:right-4 lg:opacity-55"
+          viewBox="0 0 400 400"
+        >
+          <defs>
+            <radialGradient id="atomA" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#6EE7B7" stopOpacity="0.95" />
+              <stop offset="60%" stopColor="#10B981" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#0D9488" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="atomB" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#A7F3D0" stopOpacity="0.95" />
+              <stop offset="60%" stopColor="#34D399" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
+            </radialGradient>
+            <linearGradient id="bond" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10B981" stopOpacity="0" />
+              <stop offset="50%" stopColor="#10B981" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <g className="hero-molecule">
+            <line x1="140" y1="200" x2="260" y2="200" stroke="url(#bond)" strokeWidth="3" />
+            <circle cx="140" cy="200" r="74" fill="url(#atomA)" />
+            <circle cx="260" cy="200" r="68" fill="url(#atomB)" />
+            <text x="140" y="208" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="46" fill="#047857" opacity="0.55">H</text>
+            <text x="260" y="208" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="46" fill="#047857" opacity="0.55">H</text>
+          </g>
+        </svg>
 
-        {/* Stat strip */}
-        <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 md:mt-8">
-          <div className="flex items-center gap-2.5">
-            <Users className="h-4 w-4 text-[var(--accent)]" aria-hidden="true" />
-            <span className="tab-num font-display text-2xl font-bold text-[var(--text)]">{members.length}</span>
-            <span className="eyebrow">Members</span>
+        <div className="relative max-w-3xl">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-3.5 py-1.5 backdrop-blur-xl">
+            <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--primary)]" aria-hidden="true" />
+            <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+              NGHTT · National Green Hydrogen Think Tank
+            </span>
           </div>
-          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
-          <div className="flex items-center gap-2.5">
-            <Tags className="h-4 w-4 text-[var(--accent)]" aria-hidden="true" />
-            <span className="tab-num font-display text-2xl font-bold text-[var(--text)]">{capabilities.length}</span>
-            <span className="eyebrow">Capability areas</span>
+
+          <h2 className="font-display text-[44px] font-extrabold leading-[0.96] tracking-[-0.03em] text-[var(--text)] sm:text-[64px] md:text-[80px] lg:text-[92px]">
+            Team
+            <br />
+            Portfolio{' '}
+            <span className="glow-text inline-block tab-num">
+              2082<span className="opacity-50">/</span>83
+            </span>
+          </h2>
+
+          <p className="mt-6 max-w-xl text-[15px] leading-[1.7] text-[var(--text)]/75 md:text-[17px]">
+            <span className="tab-num font-semibold text-[var(--text)]">{members.length}</span> experts mapped across AI, chemistry,
+            hydrogen technology, energy systems and policy. Verified CVs submitted to the{' '}
+            <span className="font-semibold text-[var(--text)]">Ministry of Energy, Water Resources &amp; Irrigation</span>.
+          </p>
+        </div>
+
+        {/* Floating stat cards (liquid glass) */}
+        <div className="relative mt-10 grid gap-3 sm:grid-cols-3 sm:gap-4 md:mt-14">
+          <div className="glass-card p-5">
+            <Users className="h-5 w-5 text-[var(--primary)]" aria-hidden="true" />
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="font-display tab-num text-[42px] font-extrabold leading-none text-[var(--text)]">{members.length}</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">Members</span>
+            </div>
+            <p className="mt-1.5 text-[12.5px] leading-5 text-[var(--muted)]">
+              Mapped, ranked, and ready for project deployment.
+            </p>
           </div>
-          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
-          <div className="flex items-center gap-2">
-            <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden="true" />
-            <span className="eyebrow text-[var(--text)]">Live · 2082/83 BS · 2025/26 AD</span>
+          <div className="glass-card p-5">
+            <Tags className="h-5 w-5 text-[var(--primary)]" aria-hidden="true" />
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="font-display tab-num text-[42px] font-extrabold leading-none text-[var(--text)]">{capabilities.length}</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">Capability areas</span>
+            </div>
+            <p className="mt-1.5 text-[12.5px] leading-5 text-[var(--muted)]">
+              From electrolyser chemistry to AI orchestration.
+            </p>
+          </div>
+          <div className="glass-card p-5">
+            <Sparkles className="h-5 w-5 text-[var(--primary)]" aria-hidden="true" />
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="font-display tab-num text-[42px] font-extrabold leading-none text-[var(--text)]">100%</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">Source-traced</span>
+            </div>
+            <p className="mt-1.5 text-[12.5px] leading-5 text-[var(--muted)]">
+              Every profile linked to its underlying CV or document.
+            </p>
           </div>
         </div>
 
-        <div className="brand-stroke mt-8 w-24" aria-hidden="true" />
+        <div className="brand-stroke mt-12 w-32" aria-hidden="true" />
       </section>
 
       <section id="team" className="mt-10 md:mt-14">
-        {/* Sticky filter bar */}
-        <div className="filter-bar -mx-4 px-4 py-4 sm:-mx-0 sm:px-0 sm:py-5">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center">
-            <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,220px)_minmax(0,180px)]">
-              {/* Search */}
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" aria-hidden="true" />
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder="Search name, role, expertise…"
-                  className="field"
-                  aria-label="Search members"
-                />
-              </div>
-              {/* Focus area */}
-              <div className="relative">
-                <ListFilter className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" aria-hidden="true" />
-                <select
-                  value={capabilityFilter}
-                  onChange={(event) => setCapabilityFilter(event.target.value)}
-                  className="field-select pl-10"
-                  aria-label="Filter by focus area"
-                >
-                  <option value="All">All focus areas</option>
-                  {capabilities.map((area) => (
-                    <option key={area} value={area}>{area}</option>
-                  ))}
-                </select>
-              </div>
-              {/* Sort */}
-              <div className="relative">
-                <ArrowUpDown className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" aria-hidden="true" />
-                <select
-                  value={sortBy}
-                  onChange={(event) => setSortBy(event.target.value)}
-                  className="field-select pl-10"
-                  aria-label="Sort members"
-                >
-                  <option value="name">Name · A → Z</option>
-                </select>
-              </div>
-            </div>
+        {/* Search bar (focus area moved to galaxy above) */}
+        <div className="filter-bar -mx-2 flex flex-col gap-3 px-4 py-3 sm:mx-0 sm:flex-row sm:items-center sm:px-5">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" aria-hidden="true" />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search by name, role, or expertise…"
+              className="field"
+              aria-label="Search members"
+            />
+          </div>
 
-            {/* Team / Manage toggle */}
-            <div className="inline-flex h-[42px] shrink-0 rounded-[10px] border border-[var(--surface-rule)] bg-[var(--card)] p-1">
-              <button
-                type="button"
-                onClick={handleShowTeam}
-                aria-pressed={!isMediaManagerOpen}
-                className={`inline-flex items-center justify-center rounded-md px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
-                  !isMediaManagerOpen
-                    ? 'bg-[var(--accent)] text-white shadow-sm'
+          {/* Team / Manage toggle */}
+          <div className="inline-flex h-[44px] shrink-0 rounded-[12px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-1 backdrop-blur-md">
+            <button
+              type="button"
+              onClick={handleShowTeam}
+              aria-pressed={!isMediaManagerOpen}
+              className={`inline-flex items-center justify-center rounded-md px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                !isMediaManagerOpen
+                  ? 'bg-[var(--primary)] text-white shadow-[0_4px_12px_rgba(16,185,129,0.30)]'
+                  : 'text-[var(--muted-foreground)] hover:text-[var(--text)]'
+              }`}
+            >
+              Team
+            </button>
+            <button
+              type="button"
+              onClick={openMediaManager}
+              disabled={isManageLocked}
+              aria-pressed={isMediaManagerOpen}
+              className={`inline-flex items-center justify-center rounded-md px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                isManageLocked
+                  ? 'cursor-not-allowed text-[var(--muted-foreground)]/50'
+                  : isMediaManagerOpen
+                    ? 'bg-[var(--primary)] text-white shadow-[0_4px_12px_rgba(16,185,129,0.30)]'
                     : 'text-[var(--muted-foreground)] hover:text-[var(--text)]'
-                }`}
-              >
-                Team
-              </button>
-              <button
-                type="button"
-                onClick={openMediaManager}
-                disabled={isManageLocked}
-                aria-pressed={isMediaManagerOpen}
-                className={`inline-flex items-center justify-center rounded-md px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
-                  isManageLocked
-                    ? 'cursor-not-allowed text-[var(--muted-foreground)]/60'
-                    : isMediaManagerOpen
-                      ? 'bg-[var(--accent)] text-white shadow-sm'
-                      : 'text-[var(--muted-foreground)] hover:text-[var(--text)]'
-                }`}
-              >
-                Manage
-              </button>
-            </div>
+              }`}
+            >
+              Manage
+            </button>
           </div>
         </div>
         {!filteredMembers.length ? (
-          <div className="mt-8 rounded-2xl border border-dashed border-[var(--surface-rule)] bg-[var(--card)] p-12 text-center">
+          <div className="glass-card mt-8 p-12 text-center">
             <Search className="mx-auto h-8 w-8 text-[var(--muted-foreground)]/60" aria-hidden="true" />
             <p className="mt-4 font-display text-lg font-semibold text-[var(--text)]">No members match those filters.</p>
-            <p className="mt-1.5 text-sm text-[var(--muted-foreground)]">Try a broader search, or clear the focus area filter.</p>
+            <p className="mt-1.5 text-sm text-[var(--muted-foreground)]">Try a broader search, or pick a different capability.</p>
           </div>
         ) : (
-          <div className="mt-6 grid gap-6 lg:mt-8 lg:gap-8 lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px]">
-            {/* Editorial member index */}
-            <div className="anim-fade">
-              <div className="mb-3 flex items-baseline justify-between">
-                <p className="eyebrow">
-                  {filteredMembers.length} {filteredMembers.length === 1 ? 'member' : 'members'}
-                  {capabilityFilter !== 'All' && <span className="text-[var(--accent)]"> · {capabilityFilter}</span>}
-                </p>
-                <p className="font-mono text-[11px] tracking-wider text-[var(--muted-foreground)] lg:hidden">
-                  Tap to view profile →
-                </p>
-              </div>
+          <>
+            {/* Members count strip */}
+            <div className="mt-8 flex items-baseline justify-between">
+              <p className="eyebrow">
+                {filteredMembers.length} {filteredMembers.length === 1 ? 'member' : 'members'}
+                {capabilityFilter !== 'All' && (
+                  <span className="ml-1 text-[var(--primary)]">· {capabilityFilter}</span>
+                )}
+              </p>
+              <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
+                Tap any card to spotlight →
+              </p>
+            </div>
 
-              <div className="overflow-hidden rounded-2xl border border-[var(--surface-rule)] bg-[var(--card)]">
-                {filteredMembers.map((member, index) => {
-                  const isActive = activeMember?.id === member.id
-                  return (
-                    <button
-                      key={member.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedMemberId(member.id)
-                        setIsEditProfileOpen(false)
-                        setEditErrors({})
-                        setEditStatusMessage('')
-                        focusMemberDetailsOnMobile()
-                      }}
-                      aria-pressed={isActive}
-                      className={`member-row ${index !== 0 ? 'border-t border-[var(--surface-rule-soft)]' : ''}`}
-                    >
-                      <span className="num-mark tab-num pl-3 text-right">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <div className="min-w-0">
-                        <h3 className="truncate font-display text-[17px] font-semibold leading-tight text-[var(--text)] sm:text-[18px]">
+            {/* ═════ PHOTO CARD GRID ═════ */}
+            <div className="anim-fade mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredMembers.map((member, index) => {
+                const isActive = activeMember?.id === member.id
+                return (
+                  <button
+                    key={member.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedMemberId(member.id)
+                      setIsEditProfileOpen(false)
+                      setEditErrors({})
+                      setEditStatusMessage('')
+                      focusMemberDetailsOnMobile()
+                    }}
+                    aria-pressed={isActive}
+                    className={`group relative overflow-hidden rounded-[22px] border p-5 text-left backdrop-blur-2xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:ring-[var(--accent-ring)] ${
+                      isActive
+                        ? 'border-[var(--primary)] bg-gradient-to-br from-[var(--glass-bg-strong)] to-[var(--glass-bg)] shadow-[0_20px_56px_-12px_rgba(16,185,129,0.45),0_0_0_1px_rgba(16,185,129,0.30)]'
+                        : 'border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_8px_28px_rgba(5,46,44,0.06)] hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:bg-[var(--glass-bg-strong)] hover:shadow-[0_20px_48px_-8px_rgba(16,185,129,0.30)]'
+                    }`}
+                    style={{ animationDelay: `${Math.min(index * 30, 360)}ms` }}
+                  >
+                    {/* Number tag */}
+                    <span className="absolute right-4 top-4 font-mono tab-num text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--muted-foreground)]/70">
+                      № {String(index + 1).padStart(2, '0')}
+                    </span>
+
+                    {/* Active glow */}
+                    {isActive && (
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 rounded-[22px] opacity-100"
+                        style={{
+                          background:
+                            'radial-gradient(60% 50% at 50% 0%, rgba(16,185,129,0.18), transparent 70%)',
+                        }}
+                      />
+                    )}
+
+                    <div className="relative flex items-start gap-4">
+                      <MemberAvatar
+                        member={member}
+                        sizeClass={`h-16 w-16 ring-2 transition-all duration-300 ${
+                          isActive
+                            ? 'ring-[var(--primary)] ring-offset-2 ring-offset-transparent'
+                            : 'ring-transparent group-hover:ring-[var(--primary)]/40'
+                        }`}
+                        textSizeClass="text-base"
+                      />
+                      <div className="min-w-0 flex-1 pr-6">
+                        <h3 className="font-display text-[17px] font-bold leading-tight tracking-[-0.015em] text-[var(--text)]">
                           {member.fullName}
                         </h3>
-                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] leading-5 text-[var(--muted-foreground)]">
-                          <span className="font-medium text-[var(--text)]/80">{member.role}</span>
-                          {member.location && (
-                            <>
-                              <span className="text-[var(--muted-foreground)]/40">·</span>
-                              <span>{member.location}</span>
-                            </>
-                          )}
-                        </div>
-                        {member.focusAreas?.length > 0 && (
-                          <div className="mt-2 hidden items-center gap-1.5 sm:flex">
-                            {member.focusAreas.slice(0, 3).map((tag, ti) => (
-                              <span key={tag} className="flex items-center">
-                                {ti > 0 && <span className="mr-1.5 text-[var(--muted-foreground)]/30">·</span>}
-                                <span className="font-mono text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--accent)]/85">
-                                  {tag}
-                                </span>
-                              </span>
-                            ))}
-                            {member.focusAreas.length > 3 && (
-                              <span className="ml-1 font-mono text-[10px] text-[var(--muted-foreground)]/70">
-                                +{member.focusAreas.length - 3}
-                              </span>
-                            )}
-                          </div>
+                        <p className="mt-1 line-clamp-2 text-[12.5px] leading-[1.45] text-[var(--text)]/75">
+                          {member.role}
+                        </p>
+                        {member.location && (
+                          <p className="mt-1.5 flex items-center gap-1 text-[11px] text-[var(--muted-foreground)]">
+                            <MapPin className="h-3 w-3" aria-hidden="true" />
+                            {member.location}
+                          </p>
                         )}
                       </div>
+                    </div>
+
+                    {member.focusAreas?.length > 0 && (
+                      <div className="relative mt-4 flex flex-wrap gap-1.5">
+                        {member.focusAreas.slice(0, 2).map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center rounded-full border border-[var(--highlight)]/22 bg-[var(--highlight-soft)] px-2 py-0.5 font-mono text-[9.5px] font-semibold uppercase tracking-[0.08em] text-[var(--primary)]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {member.focusAreas.length > 2 && (
+                          <span className="inline-flex items-center px-1 font-mono text-[10px] text-[var(--muted-foreground)]/70">
+                            +{member.focusAreas.length - 2}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="relative mt-4 flex items-center justify-between border-t border-[var(--surface-rule-soft)] pt-3">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+                        {isActive ? 'In spotlight' : 'View profile'}
+                      </span>
                       <ChevronRight
-                        className={`h-4 w-4 shrink-0 pr-1 transition-transform duration-200 ${
-                          isActive ? 'translate-x-0.5 text-[var(--accent)]' : 'text-[var(--muted-foreground)]/40'
+                        className={`h-4 w-4 transition-transform duration-300 ${
+                          isActive ? 'translate-x-1 text-[var(--primary)]' : 'text-[var(--muted-foreground)]/40 group-hover:translate-x-1 group-hover:text-[var(--primary)]'
                         }`}
                         aria-hidden="true"
                       />
-                    </button>
-                  )
-                })}
-              </div>
+                    </div>
+                  </button>
+                )
+              })}
             </div>
 
+            {/* ═════ SPOTLIGHT — feature panel for the selected member ═════ */}
+            {activeMember && (
+              <div className="mt-12 md:mt-16">
+                <div className="mb-4 flex items-center gap-3">
+                  <Sparkles className="h-4 w-4 text-[var(--primary)]" aria-hidden="true" />
+                  <p className="eyebrow">Spotlight</p>
+                  <span className="h-px flex-1 bg-gradient-to-r from-[var(--primary)]/30 to-transparent" />
+                </div>
+              </div>
+            )}
             <aside
               ref={profileDetailRef}
               id="member-details"
-              className="anim-fade overflow-hidden rounded-2xl border border-[var(--surface-rule)] bg-[var(--card)] lg:sticky lg:top-24 lg:h-fit"
+              className={`relative overflow-hidden ${activeMember ? 'anim-rise glass-card-strong' : 'hidden'}`}
             >
               {activeMember ? (
                 <>
-                 {/* Header with avatar + name + edit button */}
-                 <div className="border-b border-[var(--surface-rule-soft)] bg-gradient-to-br from-[var(--accent-soft)] to-transparent p-5 sm:p-7">
-                   <div className="flex items-start justify-between gap-4">
-                     <div className="flex min-w-0 items-start gap-4">
-                       <MemberAvatar member={activeMember} sizeClass="h-16 w-16 sm:h-20 sm:w-20" textSizeClass="text-xl" />
-                       <div className="min-w-0">
-                         <p className="eyebrow">{activeMember.role}</p>
-                         <h3 className="font-display mt-1.5 text-2xl font-bold leading-[1.1] tracking-[-0.018em] text-[var(--text)] sm:text-[28px]">
-                           {activeMember.fullName}
-                         </h3>
-                         {activeMember.location && (
-                           <p className="mt-2 inline-flex items-center gap-1.5 text-[13px] text-[var(--muted-foreground)]">
-                             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-                             {activeMember.location}
-                           </p>
-                         )}
-                       </div>
-                     </div>
-                     {!isEditProfileOpen && !isManageLocked ? (
-                       <button
-                         type="button"
-                         onClick={handleStartEditProfile}
-                         className="btn btn-ghost shrink-0"
-                       >
-                         Edit
-                       </button>
-                     ) : null}
+                 {/* Spotlight header — 2-column on desktop */}
+                 <div className="relative grid gap-6 border-b border-[var(--surface-rule-soft)] p-6 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:p-8">
+                   {/* Aurora wash specific to the spotlight */}
+                   <span
+                     aria-hidden="true"
+                     className="pointer-events-none absolute inset-0"
+                     style={{
+                       background:
+                         'radial-gradient(50% 80% at 20% 0%, rgba(110,231,183,0.22), transparent 60%), radial-gradient(50% 80% at 90% 100%, rgba(45,212,191,0.18), transparent 65%)',
+                     }}
+                   />
+                   <MemberAvatar
+                     member={activeMember}
+                     sizeClass="relative h-24 w-24 ring-4 ring-white/60 sm:h-28 sm:w-28"
+                     textSizeClass="text-2xl"
+                   />
+                   <div className="relative min-w-0">
+                     <p className="eyebrow">{activeMember.role}</p>
+                     <h3 className="font-display mt-2 text-[28px] font-extrabold leading-[1.02] tracking-[-0.022em] text-[var(--text)] sm:text-[36px] md:text-[40px]">
+                       {activeMember.fullName}
+                     </h3>
+                     {activeMember.location && (
+                       <p className="mt-2.5 inline-flex items-center gap-1.5 text-[13px] text-[var(--muted-foreground)]">
+                         <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                         {activeMember.location}
+                       </p>
+                     )}
                    </div>
+                   {!isEditProfileOpen && !isManageLocked ? (
+                     <button
+                       type="button"
+                       onClick={handleStartEditProfile}
+                       className="btn btn-ghost relative shrink-0"
+                     >
+                       Edit profile
+                     </button>
+                   ) : null}
                  </div>
 
                  {editStatusMessage ? (
@@ -1194,7 +1280,7 @@ function GovShowcasePage() {
                </>
              ) : null}
             </aside>
-          </div>
+          </>
         )}
       </section>
 
