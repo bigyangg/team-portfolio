@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * Animated number counter that triggers when scrolled into view.
- * Props:
- *   to:         final number
- *   from:       start number (default 0)
- *   duration:   ms (default 1400)
- *   format:     fn(n) => string (default tabular integer)
+ * Animated number counter that triggers once the element enters viewport.
+ * Falls back to the final value immediately on browsers without IntersectionObserver,
+ * or after a short delay if observed but never marked intersecting (e.g. above the fold).
  */
 function easeOutQuart(t) {
   return 1 - Math.pow(1 - t, 4)
@@ -18,28 +15,41 @@ function Counter({ to, from = 0, duration = 1400, format = (n) => Math.round(n).
   const startedRef = useRef(false)
 
   useEffect(() => {
-    if (!ref.current) return
-    if (typeof IntersectionObserver === 'undefined') {
-      setValue(to)
+    const start = () => {
+      if (startedRef.current) return
+      startedRef.current = true
+      const t0 = performance.now()
+      const tick = (now) => {
+        const t = Math.min((now - t0) / duration, 1)
+        setValue(from + (to - from) * easeOutQuart(t))
+        if (t < 1) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+    }
+
+    if (!ref.current || typeof IntersectionObserver === 'undefined') {
+      start()
       return
     }
+
+    // Check if already in viewport when mounted (above the fold counters)
+    const rect = ref.current.getBoundingClientRect()
+    const inView = rect.top < window.innerHeight && rect.bottom > 0
+    if (inView) {
+      start()
+      return
+    }
+
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting && !startedRef.current) {
-            startedRef.current = true
-            const start = performance.now()
-            const tick = (now) => {
-              const t = Math.min((now - start) / duration, 1)
-              setValue(from + (to - from) * easeOutQuart(t))
-              if (t < 1) requestAnimationFrame(tick)
-            }
-            requestAnimationFrame(tick)
+          if (e.isIntersecting) {
+            start()
             obs.disconnect()
           }
         })
       },
-      { threshold: 0.3 }
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
     )
     obs.observe(ref.current)
     return () => obs.disconnect()
