@@ -35,8 +35,9 @@ const toLineList = (value) => {
   }
   if (typeof value === 'string') {
     return value
-      .split(/\r?\n/)
-      .map((item) => item.trim())
+      .split(/\r?\n+/)
+      .flatMap((line) => line.split(/(?<=[.!?])\s+/))
+      .map((item) => item.trim().replace(/\s+/g, ' '))
       .filter(Boolean)
   }
   return []

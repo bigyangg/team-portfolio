@@ -57,6 +57,7 @@ const SORT_OPTIONS = {
 }
 
 const CUSTOM_ROLE_VALUE = '__custom__'
+const MAX_VISIBLE_EDUCATION_ENTRIES = 3
 
 const ROLE_OPTIONS = [
   'Principal Investigator',
@@ -343,6 +344,8 @@ function GovShowcasePage() {
   )
   const hasActiveMemberContactInfo = Boolean(activeMember?.contact?.email || activeMember?.contact?.phone)
   const activeMemberEducationEntries = parseEducationEntries(activeMember?.education)
+  const visibleEducationEntries = activeMemberEducationEntries.slice(0, MAX_VISIBLE_EDUCATION_ENTRIES)
+  const hiddenEducationCount = Math.max(0, activeMemberEducationEntries.length - visibleEducationEntries.length)
   const resolvedPhotoTargetMemberId =
     photoTargetMemberId && members.some((member) => member.id === photoTargetMemberId)
       ? photoTargetMemberId
@@ -984,13 +987,13 @@ function GovShowcasePage() {
                          />
                        </label>
 
-                       <label className="text-sm font-medium text-[var(--text)]">
+                       <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
                          Education
-                         <input
-                           type="text"
+                         <textarea
+                           rows={2}
                            value={editData.education}
                            onChange={(event) => handleEditChange('education', event.target.value)}
-                           className="mt-1 h-10 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                           className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                          />
                        </label>
 
@@ -1016,11 +1019,12 @@ function GovShowcasePage() {
                        </label>
 
                        <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
-                         Highlights (one per line)
+                         Highlights (separate with "." or new line)
                          <textarea
+                           rows={4}
                            value={editData.highlights}
                            onChange={(event) => handleEditChange('highlights', event.target.value)}
-                           className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                           className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm leading-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                          />
                        </label>
 
@@ -1118,16 +1122,21 @@ function GovShowcasePage() {
                          <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Education</p>
                          <div className="mt-2 rounded-lg border border-[var(--border)] bg-[var(--input)] p-2.5">
                            {activeMemberEducationEntries.length > 0 ? (
-                             <ul className="space-y-2">
-                               {activeMemberEducationEntries.map((entry, index) => (
-                                 <li key={`${entry}-${index}`} className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2.5 py-2">
-                                   <div className="flex items-start gap-2">
-                                     <GraduationCap className="mt-0.5 h-4 w-4 shrink-0 text-[var(--navy)]" aria-hidden="true" />
-                                     <span className="text-sm leading-6 text-[var(--text)]">{entry}</span>
-                                   </div>
-                                 </li>
-                               ))}
-                             </ul>
+                             <>
+                               <ul className="space-y-1.5">
+                                 {visibleEducationEntries.map((entry, index) => (
+                                   <li key={`${entry}-${index}`} className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2.5 py-1.5">
+                                     <div className="flex items-start gap-2">
+                                       <GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--navy)]" aria-hidden="true" />
+                                       <span className="line-clamp-2 text-[13px] leading-5 text-[var(--text)] sm:text-sm">{entry}</span>
+                                     </div>
+                                   </li>
+                                 ))}
+                               </ul>
+                               {hiddenEducationCount > 0 ? (
+                                 <p className="mt-2 text-xs text-[var(--muted)]">+{hiddenEducationCount} more education entries</p>
+                               ) : null}
+                             </>
                            ) : (
                              <div className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2.5 py-2">
                                <p className="text-sm leading-6 text-[var(--muted)]">Education details not added yet.</p>
@@ -1391,13 +1400,13 @@ function GovShowcasePage() {
                       />
                     </label>
 
-                    <label className="text-sm font-medium text-[var(--text)]">
+                    <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
                       Education
-                      <input
-                        type="text"
+                      <textarea
+                        rows={2}
                         value={formData.education}
                         onChange={(event) => handleChange('education', event.target.value)}
-                        className="mt-1 h-10 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                        className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                       />
                     </label>
 
@@ -1470,7 +1479,7 @@ function GovShowcasePage() {
                     </fieldset>
 
                     <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
-                      Highlights (one per line)
+                      Highlights (separate with "." or new line)
                       <textarea
                         value={formData.highlights}
                         onChange={(event) => handleChange('highlights', event.target.value)}

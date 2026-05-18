@@ -147,8 +147,8 @@ function LandingPage() {
     ? 'relative flex w-full max-w-[22rem] flex-col items-start text-left'
     : 'relative flex w-full max-w-4xl flex-col items-center justify-center text-center'
   const headingClass = isMobile
-    ? 'landing-word font-heading text-[clamp(44px,14vw,62px)] font-bold leading-[1.06] tracking-tight text-white drop-shadow-[0_10px_42px_rgba(0,0,0,0.72)]'
-    : 'landing-word font-heading text-[clamp(42px,7vw,84px)] font-bold leading-[1.12] tracking-tight text-white drop-shadow-[0_10px_42px_rgba(0,0,0,0.72)]'
+    ? 'landing-word font-display text-[clamp(44px,14vw,62px)] font-normal leading-[1.06] tracking-tight text-white drop-shadow-[0_10px_42px_rgba(0,0,0,0.72)]'
+    : 'landing-word font-display text-[clamp(42px,7vw,84px)] font-normal leading-[1.12] tracking-tight text-white drop-shadow-[0_10px_42px_rgba(0,0,0,0.72)]'
   const descriptionClass = isMobile
     ? 'mt-5 max-w-[20.5rem] text-[clamp(17px,4.9vw,22px)] font-light text-white/86 drop-shadow-[0_4px_22px_rgba(0,0,0,0.62)]'
     : 'mt-6 text-[clamp(18px,3vw,26px)] font-light text-white/86 drop-shadow-[0_4px_22px_rgba(0,0,0,0.62)]'
