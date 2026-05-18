@@ -51,7 +51,7 @@ function VisionSection() {
     <motion.section
       ref={sectionRef}
       id="vision"
-      className="relative w-full overflow-hidden py-24 md:py-32"
+      className="surface-forest grain relative w-full overflow-hidden py-24 md:py-32"
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: '-10% 0px' }}
@@ -60,11 +60,14 @@ function VisionSection() {
       {/* Floating molecule behind the section, parallax-driven */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute right-[4%] top-[8%] hidden text-[var(--primary)]/[0.18] lg:block"
+        className="pointer-events-none absolute right-[4%] top-[8%] hidden text-[#6EE7B7]/[0.12] lg:block"
         style={{ y: moleculeY, rotate: moleculeRotate }}
       >
         <H2Molecule size={220} />
       </motion.div>
+
+      {/* Top accent strip */}
+      <div aria-hidden="true" className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#6EE7B7]/40 to-transparent" />
 
       <div className="mx-auto grid w-full max-w-[1240px] gap-12 px-5 md:px-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
         {/* Image side — tilt + parallax */}
@@ -102,14 +105,14 @@ function VisionSection() {
           <motion.p variants={riseItem} className="eyebrow">The Mission</motion.p>
           <motion.h2
             variants={riseItem}
-            className="font-display mt-2 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] text-[var(--text)] sm:text-[36px] md:text-[42px]"
+            className="font-display mt-2 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] text-[#E6F4EF] sm:text-[36px] md:text-[42px]"
           >
             From{' '}
             <span className="glow-text">monsoon water</span> to molecular fuel.
           </motion.h2>
           <motion.p
             variants={riseItem}
-            className="mt-4 max-w-xl text-[14.5px] leading-[1.65] text-[var(--text)]/75 md:text-[15.5px]"
+            className="mt-4 max-w-xl text-[14.5px] leading-[1.65] text-[#E6F4EF]/75 md:text-[15.5px]"
           >
             NGHTT is a 27-person think tank convened to give Nepal a green hydrogen strategy
             that is built, not borrowed. We map the chemistry, the policy, the capital stack,
@@ -122,10 +125,10 @@ function VisionSection() {
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-0.5 group-hover:scale-110">
                   <p.icon className="h-[16px] w-[16px]" aria-hidden="true" />
                 </span>
-                <h3 className="font-display mt-2.5 text-[15px] font-bold leading-tight text-[var(--text)]">
+                <h3 className="font-display mt-2.5 text-[15px] font-bold leading-tight text-[#E6F4EF]">
                   {p.title}
                 </h3>
-                <p className="mt-1 text-[12.5px] leading-[1.55] text-[var(--text)]/65">
+                <p className="mt-1 text-[12.5px] leading-[1.55] text-[#E6F4EF]/65">
                   {p.body}
                 </p>
                 {/* Hover glyph: electrolysis cell that bubbles on hover */}

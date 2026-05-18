@@ -99,6 +99,14 @@
   --gradient-accent: linear-gradient(120deg, #6EE7B7 0%, #10B981 50%, #0D9488 100%);
   --gradient-glow: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.20), transparent 60%);
 
+  /* Section surfaces — three discrete bands to break the all-mint monotony */
+  --surface-mint: #EEF8F4;       /* default page bg, light mint paper */
+  --surface-cream: #F4EDDF;      /* warm contrast — sand/parchment, evokes Himalayan rock */
+  --surface-forest: #052E2C;     /* deep forest-teal — institutional gravity */
+  --surface-forest-soft: #0A3F3B;
+  --surface-on-forest: #E6F4EF;
+  --surface-on-cream: #2A1F0F;
+
   /* Motion */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
@@ -665,3 +673,56 @@ body::before {
   color: var(--primary);
   font-weight: 800;
 }
+
+/* Section surface utilities — alternate page bands.
+   Each pairs a background with a default text color and updates --primary
+   contrast so glow-text still reads. */
+.surface-mint {
+  background: var(--surface-mint);
+  color: var(--text);
+}
+
+.surface-cream {
+  background: var(--surface-cream);
+  color: var(--surface-on-cream);
+  --surface-rule: rgba(42, 31, 15, 0.10);
+}
+.surface-cream .eyebrow { color: rgba(42, 31, 15, 0.55); }
+.surface-cream .glow-text { color: #B8542A; }  /* warm rust accent on cream */
+
+.surface-forest {
+  background: var(--surface-forest);
+  color: var(--surface-on-forest);
+  --surface-rule: rgba(110, 231, 183, 0.18);
+  --glass-border: rgba(110, 231, 183, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-strong: rgba(255, 255, 255, 0.07);
+}
+.surface-forest .eyebrow { color: #6EE7B7; }
+.surface-forest .glow-text { color: #6EE7B7; }
+
+/* Saturated accent strip — divides sections with a deliberate emerald pulse */
+.accent-strip {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--primary) 40%, var(--primary) 60%, transparent);
+  opacity: 0.65;
+}
+
+/* Global grain overlay — adds tactile depth without color shift.
+   Fixed pseudo-element, GPU-cheap, scoped via :root and respects reduced motion. */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  z-index: 0;
+}
+.grain > * { position: relative; z-index: 1; }

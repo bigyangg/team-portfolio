@@ -123,18 +123,19 @@ function HomePage() {
         <EcosystemSection />
       </div>
 
-      {/* Year-Five counters */}
+      {/* Year-Five counters — forest band for contrast */}
       <motion.section
-        className="snap-start relative w-full py-24 md:py-32"
+        className="surface-forest grain snap-start relative w-full overflow-hidden py-24 md:py-32"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: '-10% 0px' }}
         variants={staggerContainer}
       >
-        <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
+        <div aria-hidden="true" className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#6EE7B7]/40 to-transparent" />
+        <div className="relative mx-auto w-full max-w-[1240px] px-5 md:px-10">
           <motion.div variants={riseItem} className="text-center">
             <p className="eyebrow">Year-Five Targets</p>
-            <h2 className="font-display mx-auto mt-3 max-w-3xl text-[28px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--text)] md:text-[42px]">
+            <h2 className="font-display mx-auto mt-3 max-w-3xl text-[28px] font-bold leading-[1.08] tracking-[-0.02em] text-[#E6F4EF] md:text-[42px]">
               What we are accountable for by{' '}
               <span className="glow-text">2087 BS</span>.
             </h2>
@@ -148,14 +149,14 @@ function HomePage() {
               <motion.div
                 key={s.label}
                 variants={riseItem}
-                className="rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 text-center backdrop-blur-2xl md:p-7"
+                className="rounded-[18px] border border-[#6EE7B7]/15 bg-white/[0.04] p-5 text-center backdrop-blur-2xl md:p-7"
               >
                 <AnimatedCounter
                   value={s.v}
                   suffix={s.suffix}
-                  className="font-display tab-num inline-block text-[44px] font-extrabold leading-none tracking-[-0.025em] text-[var(--primary)] md:text-[56px]"
+                  className="font-display tab-num inline-block text-[44px] font-extrabold leading-none tracking-[-0.025em] text-[#6EE7B7] md:text-[56px]"
                 />
-                <p className="mt-3 text-[12.5px] font-semibold text-[var(--text)]/80 md:text-[13.5px]">
+                <p className="mt-3 text-[12.5px] font-semibold text-[#E6F4EF]/80 md:text-[13.5px]">
                   {s.label}
                 </p>
               </motion.div>

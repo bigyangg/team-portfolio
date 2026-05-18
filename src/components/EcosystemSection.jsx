@@ -64,7 +64,7 @@ function HoverGlyph({ kind }) {
 function EcosystemSection() {
   return (
     <motion.section
-      className="relative w-full py-20 md:py-28"
+      className="surface-cream grain relative w-full py-20 md:py-28"
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: '-10% 0px' }}
@@ -73,11 +73,11 @@ function EcosystemSection() {
       <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
         <motion.div variants={riseItem} className="mx-auto max-w-3xl text-center">
           <p className="eyebrow">Green H₂ ecosystem</p>
-          <h2 className="font-display mt-3 text-[30px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--text)] sm:text-[38px] md:text-[46px]">
+          <h2 className="font-display mt-3 text-[30px] font-bold leading-[1.08] tracking-[-0.02em] text-[#2A1F0F] sm:text-[38px] md:text-[46px]">
             Five places hydrogen{' '}
             <span className="glow-text">moves the needle</span> for Nepal.
           </h2>
-          <p className="mt-4 text-[14.5px] leading-[1.6] text-[var(--text)]/75 md:text-[16px]">
+          <p className="mt-4 text-[14.5px] leading-[1.6] text-[#2A1F0F]/70 md:text-[16px]">
             Not theoretical. Each use case is mapped to specific industries, existing infrastructure,
             and people on this team who can deliver it.
           </p>
