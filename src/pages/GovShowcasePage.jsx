@@ -739,99 +739,39 @@ function GovShowcasePage() {
 
   return (
     <>
-      {/* ═══════════════ HERO ═══════════════ */}
-      <section className="anim-rise relative pt-4 md:pt-10">
-        {/* Floating H₂ molecule decoration */}
-        <svg
-          aria-hidden="true"
-          className="pointer-events-none absolute right-0 top-0 hidden h-[420px] w-[420px] opacity-40 md:block lg:right-4 lg:opacity-55"
-          viewBox="0 0 400 400"
-        >
-          <defs>
-            <radialGradient id="atomA" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#6EE7B7" stopOpacity="0.95" />
-              <stop offset="60%" stopColor="#10B981" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#0D9488" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="atomB" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#A7F3D0" stopOpacity="0.95" />
-              <stop offset="60%" stopColor="#34D399" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
-            </radialGradient>
-            <linearGradient id="bond" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#10B981" stopOpacity="0" />
-              <stop offset="50%" stopColor="#10B981" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <g className="hero-molecule">
-            <line x1="140" y1="200" x2="260" y2="200" stroke="url(#bond)" strokeWidth="3" />
-            <circle cx="140" cy="200" r="74" fill="url(#atomA)" />
-            <circle cx="260" cy="200" r="68" fill="url(#atomB)" />
-            <text x="140" y="208" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="46" fill="#047857" opacity="0.55">H</text>
-            <text x="260" y="208" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="46" fill="#047857" opacity="0.55">H</text>
-          </g>
-        </svg>
+      {/* In-page section header — "The Team" */}
+      <section className="anim-rise relative">
+        <p className="eyebrow">— The Team</p>
+        <h2 className="font-display mt-3 text-[36px] font-bold leading-[1.05] tracking-[-0.025em] text-[var(--text)] sm:text-[44px] md:text-[56px]">
+          27 people, one{' '}
+          <span className="glow-text">signed brief</span>.
+        </h2>
+        <p className="mt-4 max-w-2xl text-[15.5px] leading-[1.65] text-[var(--text)]/70 md:text-[16.5px]">
+          Every profile below is sourced from a verified CV submitted to the Ministry of Energy.
+          Click any card to read the full capability brief and download the original document.
+        </p>
 
-        <div className="relative max-w-3xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-3.5 py-1.5 backdrop-blur-xl">
-            <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-            <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              NGHTT · National Green Hydrogen Think Tank
+        {/* Stat strip (compact) */}
+        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+          <div className="flex items-baseline gap-2">
+            <span className="font-display tab-num text-[28px] font-extrabold leading-none text-[var(--text)]">{members.length}</span>
+            <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--muted)]">Members</span>
+          </div>
+          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
+          <div className="flex items-baseline gap-2">
+            <span className="font-display tab-num text-[28px] font-extrabold leading-none text-[var(--text)]">{capabilities.length}</span>
+            <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--muted)]">Capability areas</span>
+          </div>
+          <div className="h-6 w-px bg-[var(--surface-rule)]" aria-hidden="true" />
+          <div className="flex items-center gap-2">
+            <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
+            <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]">
+              Live · 2082/83
             </span>
-          </div>
-
-          <h2 className="font-display text-[44px] font-extrabold leading-[0.96] tracking-[-0.03em] text-[var(--text)] sm:text-[64px] md:text-[80px] lg:text-[92px]">
-            Team
-            <br />
-            Portfolio{' '}
-            <span className="glow-text inline-block tab-num">
-              2082<span className="opacity-50">/</span>83
-            </span>
-          </h2>
-
-          <p className="mt-6 max-w-xl text-[15px] leading-[1.7] text-[var(--text)]/75 md:text-[17px]">
-            <span className="tab-num font-semibold text-[var(--text)]">{members.length}</span> experts mapped across AI, chemistry,
-            hydrogen technology, energy systems and policy. Verified CVs submitted to the{' '}
-            <span className="font-semibold text-[var(--text)]">Ministry of Energy, Water Resources &amp; Irrigation</span>.
-          </p>
-        </div>
-
-        {/* Floating stat cards (liquid glass) */}
-        <div className="relative mt-10 grid gap-3 sm:grid-cols-3 sm:gap-4 md:mt-14">
-          <div className="glass-card p-5">
-            <Users className="h-5 w-5 text-[var(--primary)]" aria-hidden="true" />
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="font-display tab-num text-[42px] font-extrabold leading-none text-[var(--text)]">{members.length}</span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">Members</span>
-            </div>
-            <p className="mt-1.5 text-[12.5px] leading-5 text-[var(--muted)]">
-              Mapped, ranked, and ready for project deployment.
-            </p>
-          </div>
-          <div className="glass-card p-5">
-            <Tags className="h-5 w-5 text-[var(--primary)]" aria-hidden="true" />
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="font-display tab-num text-[42px] font-extrabold leading-none text-[var(--text)]">{capabilities.length}</span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">Capability areas</span>
-            </div>
-            <p className="mt-1.5 text-[12.5px] leading-5 text-[var(--muted)]">
-              From electrolyser chemistry to AI orchestration.
-            </p>
-          </div>
-          <div className="glass-card p-5">
-            <Sparkles className="h-5 w-5 text-[var(--primary)]" aria-hidden="true" />
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="font-display tab-num text-[42px] font-extrabold leading-none text-[var(--text)]">100%</span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">Source-traced</span>
-            </div>
-            <p className="mt-1.5 text-[12.5px] leading-5 text-[var(--muted)]">
-              Every profile linked to its underlying CV or document.
-            </p>
           </div>
         </div>
 
-        <div className="brand-stroke mt-12 w-32" aria-hidden="true" />
+        <div className="brand-stroke mt-8 w-24" aria-hidden="true" />
       </section>
 
       <section id="team" className="mt-10 md:mt-14">
