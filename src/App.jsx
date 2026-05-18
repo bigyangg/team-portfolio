@@ -8,6 +8,7 @@ import ApplicationsPage from './pages/ApplicationsPage'
 import TeamPage from './pages/TeamPage'
 import SubmissionPage from './pages/SubmissionPage'
 import PageTransition from './components/motion/PageTransition'
+import PageLoader from './components/motion/PageLoader'
 import { useEffect } from 'react'
 
 function ScrollToTop() {
@@ -37,6 +38,7 @@ function AnimatedRoutes() {
 function AppShell() {
   return (
     <div className="min-h-screen overflow-x-clip bg-brand-bg text-[var(--text)]">
+      <PageLoader />
       <Navbar />
       <ScrollToTop />
       <AnimatedRoutes />

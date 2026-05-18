@@ -5,6 +5,7 @@ import HeroSection from '../components/HeroSection'
 import VisionSection from '../components/VisionSection'
 import EcosystemSection from '../components/EcosystemSection'
 import SpotlightCard from '../components/motion/SpotlightCard'
+import TiltCard from '../components/motion/TiltCard'
 import AnimatedCounter from '../components/motion/AnimatedCounter'
 import MagneticButton from '../components/motion/MagneticButton'
 import { riseItem, staggerContainer } from '../lib/motion'
@@ -82,11 +83,12 @@ function HomePage() {
         <motion.div variants={staggerContainer} className="grid gap-4 sm:grid-cols-2 lg:gap-5">
           {QUICK_LINKS.map((q) => (
             <motion.div key={q.to} variants={riseItem}>
+              <TiltCard max={5}>
               <SpotlightCard
                 as={Link}
                 to={q.to}
                 glowColor={q.accent}
-                className="group block rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 backdrop-blur-2xl transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:shadow-[0_20px_44px_-12px_rgba(16,185,129,0.28)] active:translate-y-0 active:scale-[0.99]"
+                className="group block rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 backdrop-blur-2xl transition-[box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:border-[var(--primary)]/60 hover:shadow-[0_20px_44px_-12px_rgba(16,185,129,0.28)] active:scale-[0.99]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
@@ -107,6 +109,7 @@ function HomePage() {
                   />
                 </div>
               </SpotlightCard>
+              </TiltCard>
             </motion.div>
           ))}
         </motion.div>

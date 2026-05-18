@@ -1,6 +1,10 @@
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
 import { Mountain, Wind, Droplets, Flame } from 'lucide-react'
 import { riseItem, staggerContainer } from '../lib/motion'
+import H2Molecule from './motion/H2Molecule'
+import TiltCard from './motion/TiltCard'
+import ElectrolysisGlyph from './motion/ElectrolysisGlyph'
 
 const PILLARS = [
   {
@@ -8,44 +12,44 @@ const PILLARS = [
     title: 'Electrolysis at altitude',
     body:
       'Pilot plants in the high Himalayas convert monsoon hydroelectric surplus into storable, transportable green H₂.',
+    glyph: 'electrolysis',
   },
   {
     icon: Wind,
     title: 'Energy sovereignty',
     body:
       'Replace imported fertiliser, diesel, and coal with home-produced green ammonia, hydrogen fuel cells, and heat.',
+    glyph: null,
   },
   {
     icon: Flame,
     title: 'Decarbonised industry',
     body:
       'Brick kilns, cement, and heavy transport switched to hydrogen. Nepal\'s biggest emitters retooled, not retired.',
+    glyph: null,
   },
   {
     icon: Mountain,
     title: 'Mountain to grid',
     body:
       'A new energy export economy. Green hydrogen, ammonia, and ammonium pellets shipped across SAARC.',
+    glyph: null,
   },
 ]
 
-// Floating H₂ mark — sits behind the section, drifts slowly.
-function FloatingH2() {
-  return (
-    <motion.div
-      aria-hidden="true"
-      className="pointer-events-none absolute right-[6%] top-[14%] hidden font-display text-[200px] font-extrabold leading-none tracking-[-0.04em] text-[var(--primary)]/[0.04] lg:block xl:text-[260px]"
-      animate={{ y: [0, -14, 0], rotate: [0, 1.5, 0] }}
-      transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
-    >
-      H<span className="text-[0.55em] align-baseline">2</span>
-    </motion.div>
-  )
-}
-
 function VisionSection() {
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+  const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
+  const moleculeY = useTransform(scrollYProgress, [0, 1], ['10%', '-10%'])
+  const moleculeRotate = useTransform(scrollYProgress, [0, 1], [0, 30])
+
   return (
     <motion.section
+      ref={sectionRef}
       id="vision"
       className="relative w-full overflow-hidden py-24 md:py-32"
       initial="hidden"
@@ -53,34 +57,44 @@ function VisionSection() {
       viewport={{ once: true, margin: '-10% 0px' }}
       variants={staggerContainer}
     >
-      <FloatingH2 />
+      {/* Floating molecule behind the section, parallax-driven */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[4%] top-[8%] hidden text-[var(--primary)]/[0.18] lg:block"
+        style={{ y: moleculeY, rotate: moleculeRotate }}
+      >
+        <H2Molecule size={220} />
+      </motion.div>
 
       <div className="mx-auto grid w-full max-w-[1240px] gap-12 px-5 md:px-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-        {/* Image side */}
-        <motion.div
-          variants={riseItem}
-          className="relative overflow-hidden rounded-[28px] border border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_30px_80px_-20px_rgba(5,46,44,0.18)] backdrop-blur-2xl"
-        >
-          <img
-            src="/hero/hydrogen-plant.png"
-            alt="Green hydrogen plant in the Nepali Himalayas at dawn"
-            className="block h-full w-full object-cover"
-            loading="lazy"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(165deg, transparent 55%, rgba(16, 185, 129, 0.12) 100%)',
-            }}
-          />
-          <div className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/55 px-3 py-1.5 backdrop-blur-xl">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--primary)] pulse-dot" aria-hidden="true" />
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]/80">
-              Concept · NGHTT 2082
-            </span>
-          </div>
+        {/* Image side — tilt + parallax */}
+        <motion.div variants={riseItem}>
+          <TiltCard
+            max={5}
+            className="relative overflow-hidden rounded-[28px] border border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_30px_80px_-20px_rgba(5,46,44,0.18)] backdrop-blur-2xl"
+          >
+            <motion.img
+              src="/hero/hydrogen-plant.png"
+              alt="Green hydrogen plant in the Nepali Himalayas at dawn"
+              className="block h-full w-full object-cover"
+              loading="lazy"
+              style={{ y: imageY, scale: 1.08 }}
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(165deg, transparent 55%, rgba(16, 185, 129, 0.12) 100%)',
+              }}
+            />
+            <div className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/55 px-3 py-1.5 backdrop-blur-xl">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--primary)] pulse-dot" aria-hidden="true" />
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]/80">
+                Concept · NGHTT 2082
+              </span>
+            </div>
+          </TiltCard>
         </motion.div>
 
         {/* Text side */}
@@ -104,8 +118,8 @@ function VisionSection() {
 
           <motion.div variants={staggerContainer} className="mt-8 grid gap-5 sm:grid-cols-2">
             {PILLARS.map((p) => (
-              <motion.div key={p.title} variants={riseItem} className="group">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-0.5">
+              <motion.div key={p.title} variants={riseItem} className="group relative">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-0.5 group-hover:scale-110">
                   <p.icon className="h-[16px] w-[16px]" aria-hidden="true" />
                 </span>
                 <h3 className="font-display mt-2.5 text-[15px] font-bold leading-tight text-[var(--text)]">
@@ -114,6 +128,15 @@ function VisionSection() {
                 <p className="mt-1 text-[12.5px] leading-[1.55] text-[var(--text)]/65">
                   {p.body}
                 </p>
+                {/* Hover glyph: electrolysis cell that bubbles on hover */}
+                {p.glyph === 'electrolysis' && (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-0 top-0 text-[var(--primary)] opacity-0 transition-opacity duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:opacity-90"
+                  >
+                    <ElectrolysisGlyph size={42} />
+                  </div>
+                )}
               </motion.div>
             ))}
           </motion.div>

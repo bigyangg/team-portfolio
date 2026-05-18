@@ -2,6 +2,9 @@ import { motion } from 'framer-motion'
 import { Truck, Wheat, Flame, Battery, Sprout } from 'lucide-react'
 import { riseItem, staggerContainer } from '../lib/motion'
 import SpotlightCard from './motion/SpotlightCard'
+import TiltCard from './motion/TiltCard'
+import ElectrolysisGlyph from './motion/ElectrolysisGlyph'
+import H2Molecule from './motion/H2Molecule'
 
 const USE_CASES = [
   {
@@ -10,6 +13,7 @@ const USE_CASES = [
     title: 'Agricultural Mechanization',
     body: 'Hydrogen tractor retrofit kits replace diesel across the Terai region. Cleaner air, lower input costs for farmers.',
     accent: 'rgba(16,185,129,0.22)',
+    hoverGlyph: 'h2',
   },
   {
     n: '02',
@@ -17,6 +21,7 @@ const USE_CASES = [
     title: 'Fertilizer Sovereignty',
     body: 'Green ammonia for urea production ends Nepal\'s import dependency and stabilises prices for farmers.',
     accent: 'rgba(45,212,191,0.22)',
+    hoverGlyph: 'electrolysis',
   },
   {
     n: '03',
@@ -24,6 +29,7 @@ const USE_CASES = [
     title: 'Heavy Transport',
     body: 'Fuel cells power long-haul trucks and cross-border SAARC freight, replacing imported diesel.',
     accent: 'rgba(110,231,183,0.22)',
+    hoverGlyph: 'h2',
   },
   {
     n: '04',
@@ -31,6 +37,7 @@ const USE_CASES = [
     title: 'Industrial Heat',
     body: 'Hydrogen combustion replaces coal in Nepal\'s polluting brick kilns and cement plants.',
     accent: 'rgba(20,184,166,0.22)',
+    hoverGlyph: 'h2',
   },
   {
     n: '05',
@@ -38,8 +45,21 @@ const USE_CASES = [
     title: 'Energy Storage',
     body: 'Electrolysis stores monsoon hydropower surplus, releasing it as hydrogen during the dry season.',
     accent: 'rgba(52,211,153,0.22)',
+    hoverGlyph: 'electrolysis',
   },
 ]
+
+function HoverGlyph({ kind }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute right-5 top-5 text-[var(--primary)] opacity-0 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:opacity-90"
+      style={{ transform: 'translateZ(40px)' }}
+    >
+      {kind === 'h2' ? <H2Molecule size={48} /> : <ElectrolysisGlyph size={46} />}
+    </div>
+  )
+}
 
 function EcosystemSection() {
   return (
@@ -75,25 +95,28 @@ function EcosystemSection() {
                 : 'lg:col-span-2 lg:col-start-4'
             return (
               <motion.div key={u.n} variants={riseItem} className={lgSpan}>
-                <SpotlightCard
-                  glowColor={u.accent}
-                  className="group h-full rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 shadow-[0_6px_20px_rgba(5,46,44,0.05)] backdrop-blur-2xl transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_18px_36px_-12px_rgba(16,185,129,0.28)] md:p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110 group-hover:rotate-[-4deg]">
-                      <u.icon className="h-[18px] w-[18px]" aria-hidden="true" />
-                    </span>
-                    <span className="font-mono tab-num text-[11px] font-medium text-[var(--muted-foreground)]">
-                      № {u.n}
-                    </span>
-                  </div>
-                  <h3 className="font-display mt-4 text-[17px] font-bold leading-[1.25] tracking-[-0.012em] text-[var(--text)] md:text-[19px]">
-                    {u.title}
-                  </h3>
-                  <p className="mt-2 text-[13.5px] leading-[1.55] text-[var(--text)]/70 md:text-[14px]">
-                    {u.body}
-                  </p>
-                </SpotlightCard>
+                <TiltCard max={4} className="h-full">
+                  <SpotlightCard
+                    glowColor={u.accent}
+                    className="group h-full rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 shadow-[0_6px_20px_rgba(5,46,44,0.05)] backdrop-blur-2xl transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] hover:border-[var(--primary)]/50 hover:shadow-[0_18px_36px_-12px_rgba(16,185,129,0.28)] md:p-6"
+                  >
+                    <HoverGlyph kind={u.hoverGlyph} />
+                    <div className="flex items-center justify-between">
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] text-[var(--primary)] backdrop-blur-xl transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110 group-hover:rotate-[-4deg]">
+                        <u.icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                      </span>
+                      <span className="font-mono tab-num text-[11px] font-medium text-[var(--muted-foreground)]">
+                        № {u.n}
+                      </span>
+                    </div>
+                    <h3 className="font-display mt-4 text-[17px] font-bold leading-[1.25] tracking-[-0.012em] text-[var(--text)] md:text-[19px]">
+                      {u.title}
+                    </h3>
+                    <p className="mt-2 text-[13.5px] leading-[1.55] text-[var(--text)]/70 md:text-[14px]">
+                      {u.body}
+                    </p>
+                  </SpotlightCard>
+                </TiltCard>
               </motion.div>
             )
           })}

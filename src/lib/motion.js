@@ -22,13 +22,15 @@ export const staggerContainer = {
   },
 }
 
-// Single item rising in
+// Single item rising in with a subtle blur, so it feels resolved into focus
+// rather than just sliding up. 24px translate + 6px blur => 0/0 over 460ms.
 export const riseItem = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: duration.slow, ease: ease.out },
+    filter: 'blur(0px)',
+    transition: { duration: 0.46, ease: ease.outQuint },
   },
 }
 
