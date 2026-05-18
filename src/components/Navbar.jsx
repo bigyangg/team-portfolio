@@ -69,8 +69,8 @@ function Navbar() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'border-b border-[var(--glass-border)] bg-[var(--glass-bg-strong)] backdrop-blur-2xl'
-          : 'bg-transparent'
+          ? 'border-b border-[var(--glass-border)] bg-[var(--glass-bg-strong)] shadow-[0_4px_24px_-8px_rgba(5,46,44,0.10)] backdrop-blur-2xl'
+          : 'border-b border-[var(--glass-border)]/40 bg-[var(--glass-bg)] backdrop-blur-xl'
       }`}
     >
       <div className="mx-auto flex w-full max-w-[1240px] items-center justify-between px-4 py-3 md:px-10 md:py-4">
