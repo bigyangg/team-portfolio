@@ -67,10 +67,8 @@ function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'border-b border-[var(--glass-border)] bg-[var(--glass-bg-strong)] shadow-[0_4px_24px_-8px_rgba(5,46,44,0.10)] backdrop-blur-2xl'
-          : 'border-b border-[var(--glass-border)]/40 bg-[var(--glass-bg)] backdrop-blur-xl'
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 border-b border-[var(--surface-rule)] bg-[var(--aurora-base)]/95 backdrop-blur-2xl ${
+        scrolled ? 'shadow-[0_4px_24px_-8px_rgba(5,46,44,0.18)]' : ''
       }`}
     >
       <div className="mx-auto flex w-full max-w-[1240px] items-center justify-between px-4 py-3 md:px-10 md:py-4">
@@ -78,10 +76,10 @@ function Navbar() {
         <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
           <NepalFlagMark />
           <div className="hidden flex-col sm:flex">
-            <span className="font-display text-[15px] font-bold leading-tight tracking-[-0.012em] text-[var(--text)]">
+            <span className="font-display text-[15px] font-extrabold leading-tight tracking-[-0.012em] text-[#052E2C]">
               NGHTT
             </span>
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]/70">
+            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] text-[#0D9488]">
               Green Hydrogen Think Tank
             </span>
           </div>
@@ -95,10 +93,10 @@ function Navbar() {
               to={link.to}
               end={link.to === '/'}
               className={({ isActive }) =>
-                `relative rounded-full px-4 py-2 text-[13px] font-semibold transition-colors duration-200 ${
+                `relative rounded-full px-4 py-2 text-[13px] font-bold transition-colors duration-200 ${
                   isActive
                     ? 'text-[var(--primary)]'
-                    : 'text-[var(--text)] hover:text-[var(--primary)]'
+                    : 'text-[#052E2C] hover:text-[var(--primary)]'
                 }`
               }
             >
