@@ -99,36 +99,35 @@ function HomePage() {
       <EcosystemSection />
 
       {/* Big counters strip — measurable goals */}
-      <section className="relative w-full py-20 md:py-28">
+      <section className="relative w-full py-24 md:py-32">
         <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
           <div className="text-center">
-            <p className="eyebrow">— Year-Five Targets</p>
-            <h2 className="font-display mx-auto mt-3 max-w-3xl text-[32px] font-bold leading-[1.06] tracking-[-0.022em] text-[var(--text)] md:text-[48px]">
+            <p className="eyebrow">Year-Five Targets</p>
+            <h2 className="font-display mx-auto mt-4 max-w-3xl text-[36px] font-bold leading-[1.08] tracking-[-0.022em] text-[var(--text)] md:text-[56px]">
               What we are accountable for by{' '}
               <span className="glow-text">2087 BS</span>.
             </h2>
           </div>
 
-          <div className="mt-14 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+          <div className="mt-16 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 md:gap-7">
             {[
               { v: 27, label: 'Research positions', suffix: '+' },
               { v: 5, label: 'Field-tested machines' },
               { v: 50, label: 'NPR crore in grants', suffix: '+' },
               { v: 10, label: 'Peer-reviewed papers', suffix: '+' },
             ].map((s) => (
-              <div key={s.label} className="rounded-[22px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-6 text-center backdrop-blur-2xl md:p-8">
-                <div className="font-display text-[44px] font-extrabold leading-none tracking-[-0.02em] text-[var(--primary)] md:text-[64px]">
-                  <Counter to={s.v} />
-                  {s.suffix && <span>{s.suffix}</span>}
+              <div key={s.label} className="rounded-[24px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-7 text-center backdrop-blur-2xl md:p-10">
+                <div className="font-display tab-num text-[64px] font-extrabold leading-none tracking-[-0.025em] text-[var(--primary)] md:text-[88px]">
+                  {s.v}{s.suffix && <span>{s.suffix}</span>}
                 </div>
-                <p className="mt-3 font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--muted-foreground)] md:text-[11px]">
+                <p className="mt-5 text-[14px] font-semibold text-[var(--text)]/85 md:text-[15px]">
                   {s.label}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="mt-12 flex flex-wrap justify-center gap-3">
+          <div className="mt-14 flex flex-wrap justify-center gap-3">
             <Link to="/about" className="btn btn-primary">
               Read the full mission <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </Link>

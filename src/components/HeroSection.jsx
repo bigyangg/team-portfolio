@@ -45,16 +45,16 @@ function HeroSection() {
       />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1240px] flex-col justify-end px-5 pb-16 md:px-10 md:pb-24">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1240px] flex-col justify-end px-5 pb-16 pt-24 md:px-10 md:pb-24 md:pt-32">
         <div className="anim-rise max-w-3xl">
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/45 px-4 py-1.5 backdrop-blur-xl">
-            <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-            <span className="font-mono text-[10.5px] font-medium uppercase tracking-[0.18em] text-[var(--text)]/80">
+          <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/50 bg-white/55 px-5 py-2 backdrop-blur-xl">
+            <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
+            <span className="text-[12.5px] font-semibold text-[var(--text)]/85">
               A proposal to the Ministry of Energy
             </span>
           </div>
 
-          <h1 className="font-display text-[44px] font-extrabold leading-[1.02] tracking-[-0.025em] text-[var(--text)] sm:text-[68px] md:text-[88px] lg:text-[100px]">
+          <h1 className="font-display text-[52px] font-extrabold leading-[1.04] tracking-[-0.028em] text-[var(--text)] sm:text-[80px] md:text-[104px] lg:text-[120px]">
             Building Nepal's
             <br />
             <span className="glow-text">green hydrogen</span>
@@ -62,7 +62,7 @@ function HeroSection() {
             future, together.
           </h1>
 
-          <p className="mt-8 max-w-xl text-[16.5px] leading-[1.65] text-[var(--text)]/75 md:text-[19px]">
+          <p className="mt-9 max-w-2xl text-[18px] leading-[1.6] text-[var(--text)]/80 md:text-[21px]">
             We're a team of 27 — chemists, engineers, AI builders, lawyers and policy people — quietly
             organising the institution that turns Nepal's monsoon hydropower into a hydrogen economy.
           </p>
