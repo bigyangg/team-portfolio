@@ -47,27 +47,24 @@ function HeroSection() {
       {/* Content */}
       <div className="relative z-10 mx-auto flex h-full w-full max-w-[1240px] flex-col justify-end px-5 pb-16 md:px-10 md:pb-24">
         <div className="anim-rise max-w-3xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/40 px-4 py-1.5 backdrop-blur-xl">
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/45 px-4 py-1.5 backdrop-blur-xl">
             <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-            <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]/80">
-              NGHTT · Submitted to Ministry of Energy
+            <span className="font-mono text-[10.5px] font-medium uppercase tracking-[0.18em] text-[var(--text)]/80">
+              A proposal to the Ministry of Energy
             </span>
           </div>
 
-          <h1 className="font-display text-[44px] font-extrabold leading-[0.95] tracking-[-0.03em] text-[var(--text)] sm:text-[64px] md:text-[88px] lg:text-[104px]">
-            Nepal's National
+          <h1 className="font-display text-[48px] font-medium leading-[0.98] tracking-[-0.02em] text-[var(--text)] sm:text-[72px] md:text-[96px] lg:text-[112px]">
+            Building Nepal's
             <br />
-            <span className="glow-text inline-block">
-              Green Hydrogen
-            </span>
+            <span className="glow-text italic font-semibold">green hydrogen</span>
             <br />
-            Think Tank.
+            future, together.
           </h1>
 
-          <p className="mt-7 max-w-xl text-[15.5px] leading-[1.7] text-[var(--text)]/75 md:text-[18px]">
-            27 experts across AI, chemistry, energy systems and policy — convened to architect
-            Nepal's green hydrogen future. Verified CVs submitted for ministry review,{' '}
-            <span className="font-semibold text-[var(--text)]">2082 / 83 BS</span>.
+          <p className="mt-8 max-w-xl text-[16.5px] leading-[1.65] text-[var(--text)]/75 md:text-[19px]">
+            We're a team of 27 — chemists, engineers, AI builders, lawyers and policy people — quietly
+            organising the institution that turns Nepal's monsoon hydropower into a hydrogen economy.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">

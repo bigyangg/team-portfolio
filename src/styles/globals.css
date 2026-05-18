@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,500;1,9..144,600&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 @import 'tailwindcss';
 
 /* ===============================================================
@@ -11,9 +11,9 @@
    =============================================================== */
 
 :root {
-  /* Type */
-  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-display: 'Inter', 'IBM Plex Sans', system-ui, sans-serif;
+  /* Type — Fraunces (warm editorial serif) for display + Manrope (humanist sans) for body */
+  --font-sans: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Fraunces', 'Manrope', Georgia, serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Aurora background colours (the canvas) */
@@ -206,9 +206,11 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   color: var(--text);
-  line-height: 1.55;
+  line-height: 1.62;
+  font-size: 16px;
+  letter-spacing: -0.003em;
   overflow-x: hidden;
-  font-feature-settings: 'ss01', 'cv11', 'kern';
+  font-feature-settings: 'kern', 'ss01';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: color 240ms var(--ease-out-quart);
@@ -256,9 +258,11 @@ body::after {
 
 .font-heading, h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.022em;
-  line-height: 1.04;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.06;
+  font-optical-sizing: auto;
+  font-variation-settings: 'opsz' 144, 'SOFT' 60, 'WONK' 0;
 }
 
 input::placeholder, textarea::placeholder {
@@ -340,14 +344,21 @@ textarea {
   border-radius: 999px;
 }
 
-/* Editorial eyebrow label */
+/* Editorial eyebrow label — softer (no all-caps tyranny) */
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-transform: none;
   color: var(--muted-foreground);
+}
+
+/* Italic Fraunces accent — for soft emphasis */
+.script {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
 }
 
 .num-mark {

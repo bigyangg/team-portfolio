@@ -1,6 +1,6 @@
 import { getMemberIdentityKeys } from '../lib/memberIdentity'
 
-const MEMBER_STORAGE_KEY = 'gov-team-members-v1'
+const MEMBER_STORAGE_KEY = 'gov-team-members-v2'
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const toText = (value) => (typeof value === 'string' ? value.trim() : '')
