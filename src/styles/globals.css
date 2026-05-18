@@ -152,6 +152,64 @@ textarea {
   -webkit-backdrop-filter: blur(12px);
 }
 
+.landing-dark {
+  --landing-bg: #030208;
+  --landing-glow-1: #4f46e5;
+  --landing-glow-2: #7c3aed;
+  --landing-glow-3: #06b6d4;
+  --landing-accent: #a78bfa;
+  --landing-white: #f0eeff;
+  position: relative;
+  isolation: isolate;
+  background: var(--landing-bg);
+  color: var(--landing-white);
+}
+
+.landing-word {
+  mix-blend-mode: screen;
+  text-shadow:
+    0 0 12px rgba(124, 58, 237, 0.3),
+    0 0 38px rgba(79, 70, 229, 0.28);
+  transition: opacity 200ms ease-out, transform 220ms ease-out;
+}
+
+.film-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image:
+    radial-gradient(circle at 25% 20%, rgba(255, 255, 255, 0.55) 0.6px, transparent 1px),
+    radial-gradient(circle at 70% 65%, rgba(255, 255, 255, 0.4) 0.55px, transparent 1px);
+  background-size: 3px 3px, 4px 4px;
+}
+
+.vignette::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 44%, rgba(3, 2, 8, 0.76) 100%);
+}
+
+.cta-magnetic {
+  transition:
+    transform 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 180ms ease-out,
+    filter 180ms ease-out;
+}
+
+.cta-magnetic:hover {
+  filter: brightness(1.06);
+  box-shadow:
+    0 0 0 1px rgba(167, 139, 250, 0.5),
+    0 20px 42px rgba(124, 58, 237, 0.45),
+    0 0 36px rgba(99, 102, 241, 0.36);
+}
+
 @media (max-width: 640px) {
   .glass-card,
   .glass-card-strong,

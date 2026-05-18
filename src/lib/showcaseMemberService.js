@@ -16,7 +16,7 @@ const SUPABASE_CONFIG_ERROR =
 
 const cleanText = (value) => (typeof value === 'string' ? value.trim() : '')
 
-const toList = (value) => {
+const toDelimitedList = (value) => {
   if (Array.isArray(value)) {
     return value.map((item) => cleanText(item)).filter(Boolean)
   }
@@ -29,14 +29,27 @@ const toList = (value) => {
   return []
 }
 
-const parseFocusAreas = (focusAreas) => {
-  if (Array.isArray(focusAreas)) {
-    return toList(focusAreas)
+const toLineList = (value) => {
+  if (Array.isArray(value)) {
+    return value.map((item) => cleanText(item)).filter(Boolean)
   }
-  return toList(cleanText(focusAreas))
+  if (typeof value === 'string') {
+    return value
+      .split(/\r?\n/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+  return []
 }
 
-const mergeUnique = (...lists) => Array.from(new Set(lists.flatMap((list) => toList(list)).filter(Boolean)))
+const parseFocusAreas = (focusAreas) => {
+  if (Array.isArray(focusAreas)) {
+    return toDelimitedList(focusAreas)
+  }
+  return toDelimitedList(cleanText(focusAreas))
+}
+
+const mergeUnique = (...lists) => Array.from(new Set(lists.flatMap((list) => toDelimitedList(list)).filter(Boolean)))
 
 const isMissingRelationError = (error) => {
   const message = String(error?.message || '').toLowerCase()
@@ -369,7 +382,7 @@ const insertIntoMembersSchema = async (draft) => {
 const insertIntoTeamMembersTable = async (draft) => {
   const focusAreas = parseFocusAreas(draft.focusAreas)
   const [researchPrimary = '', researchSecondary = ''] = focusAreas
-  const highlights = toList(draft.highlights)
+  const highlights = toLineList(draft.highlights)
   const cvUrl = cleanText(draft.cvUrl)
 
   const { data, error } = await supabase
@@ -436,8 +449,8 @@ const draftFromMember = (member) => ({
   location: cleanText(member?.location),
   summary: cleanText(member?.summary),
   portfolio: cleanText(member?.portfolio),
-  focusAreas: toList(member?.focusAreas).join(', '),
-  highlights: toList(member?.highlights).join('\n'),
+  focusAreas: toDelimitedList(member?.focusAreas).join(', '),
+  highlights: toLineList(member?.highlights).join('\n'),
   education: cleanText(member?.education),
   email: cleanText(member?.contact?.email),
   phone: cleanText(member?.contact?.phone),
@@ -680,7 +693,7 @@ const updateProfileInMembersSchema = async ({ member, draft }) => {
 const updateProfileInTeamMembersTable = async ({ member, draft }) => {
   const focusAreas = parseFocusAreas(draft.focusAreas)
   const [researchPrimary = '', researchSecondary = ''] = focusAreas
-  const highlights = toList(draft.highlights)
+  const highlights = toLineList(draft.highlights)
 
   const { data, error } = await supabase
     .from('team_members')
@@ -792,7 +805,7 @@ export const updateShowcaseMemberProfile = async ({ member, draft, source }) => 
   }
 
   const focusAreas = parseFocusAreas(draft.focusAreas)
-  const highlights = toList(draft.highlights)
+  const highlights = toLineList(draft.highlights)
 
   if (!isSupabaseConfigured || !supabase) {
     if (!allowClientStorageFallback()) {

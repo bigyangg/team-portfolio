@@ -2,16 +2,74 @@ import { getMemberIdentityKeys } from '../lib/memberIdentity'
 
 const MEMBER_STORAGE_KEY = 'gov-team-members-v1'
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const HIGHLIGHT_HARD_ENDING = /[.!?;:]$/
 
 const toText = (value) => (typeof value === 'string' ? value.trim() : '')
+const countWords = (value) => value.split(/\s+/).filter(Boolean).length
+const getFirstToken = (value) => value.split(/\s+/)[0] || ''
+const isLowercaseStart = (value) => /^[a-z]/.test(value)
+const isShortTokenFragment = (value) => {
+  const words = countWords(value)
+  const firstToken = getFirstToken(value)
+  if (words <= 1) return true
+  if (words <= 2) return true
+  if (/^\d[\d\-/:()]*$/.test(firstToken)) return true
+  if (/^[A-Z][a-z0-9-]*$/.test(firstToken) && words <= 2) return true
+  return false
+}
+const isFragmentLike = (value) => isLowercaseStart(value) || isShortTokenFragment(value)
 
-const toList = (value) => {
+const repairCommaFragmentedHighlights = (items) => {
+  if (!Array.isArray(items) || items.length < 4) return items
+
+  const likelyFragmentCount = items.reduce((count, item) => {
+    return isFragmentLike(item) ? count + 1 : count
+  }, 0)
+  const hasLongToFragmentTransition = items.some((item, index) => {
+    if (index === 0) return false
+    const previous = items[index - 1]
+    return countWords(previous) >= 3 && !HIGHLIGHT_HARD_ENDING.test(previous) && isFragmentLike(item)
+  })
+
+  // Repair only when structure clearly looks like a legacy comma-split sentence list.
+  if (likelyFragmentCount < 2 || !hasLongToFragmentTransition) return items
+
+  return items.reduce((acc, item) => {
+    if (!acc.length) return [item]
+
+    const previous = acc[acc.length - 1]
+    const canAppendToPrevious = !HIGHLIGHT_HARD_ENDING.test(previous)
+
+    if (canAppendToPrevious && isFragmentLike(item)) {
+      const merged = `${previous.replace(/[,\s]+$/, '')}, ${item}`
+      return [...acc.slice(0, -1), merged]
+    }
+
+    return [...acc, item]
+  }, [])
+}
+
+const toDelimitedList = (value) => {
   if (Array.isArray(value)) {
     return value.map((item) => toText(item)).filter(Boolean)
   }
   if (typeof value === 'string') {
     return value
       .split(/[\n,]/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+  return []
+}
+
+const toLineList = (value) => {
+  if (Array.isArray(value)) {
+    const lines = value.map((item) => toText(item)).filter(Boolean)
+    return repairCommaFragmentedHighlights(lines)
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(/\r?\n/)
       .map((item) => item.trim())
       .filter(Boolean)
   }
@@ -63,8 +121,8 @@ export const normalizeMember = (rawMember, index = 0) => ({
   location: toText(rawMember?.location) || 'Nepal',
   summary: toText(rawMember?.summary),
   portfolio: toText(rawMember?.portfolio || rawMember?.bio),
-  focusAreas: toList(rawMember?.focusAreas),
-  highlights: toList(rawMember?.highlights),
+  focusAreas: toDelimitedList(rawMember?.focusAreas),
+  highlights: toLineList(rawMember?.highlights),
   education: toText(rawMember?.education) || 'Not added yet',
   contact: {
     email: toText(rawMember?.contact?.email).toLowerCase(),

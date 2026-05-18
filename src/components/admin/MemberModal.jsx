@@ -38,7 +38,7 @@ function MemberModal({ member, onClose, onToast }) {
               <img
                 src={member.photo_url}
                 alt={`${member.full_name} profile`}
-                className="h-24 w-24 rounded-full border border-[var(--gold)] object-cover"
+                className="h-24 w-24 rounded-full border border-[var(--gold)] object-cover object-[center_18%]"
               />
             ) : (
               <div className="flex h-24 w-24 items-center justify-center rounded-full border border-[var(--gold)] bg-[var(--navy)] text-3xl font-bold text-[var(--gold2)]">

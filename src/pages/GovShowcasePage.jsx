@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { CheckCircle2, ChevronRight } from 'lucide-react'
+import { CheckCircle2, ChevronRight, FileText, GraduationCap, Mail, Phone, X } from 'lucide-react'
 import initialTeamMembers from '../data/teamMembers'
 import {
   loadMembersFromStorage,
@@ -133,6 +133,15 @@ const getErrorMessage = (error, fallbackMessage) => {
   return fallbackMessage
 }
 
+const parseEducationEntries = (education) => {
+  const raw = String(education || '').trim()
+  if (!raw || raw.toLowerCase() === 'not added yet') return []
+  return raw
+    .split(/(?:\s*;\s*|\r?\n+)/)
+    .map((item) => item.trim().replace(/[,\s]+$/, ''))
+    .filter(Boolean)
+}
+
 const buildEditForm = (member) => ({
   fullName: member?.fullName || '',
   role: member?.role || '',
@@ -157,7 +166,7 @@ function MemberAvatar({ member, sizeClass = 'h-12 w-12', textSizeClass = 'text-s
         <img
           src={member.photoUrl}
           alt={`${member.fullName} profile`}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover object-[center_18%]"
           loading="lazy"
           onError={() => setHasImageError(true)}
         />
@@ -207,6 +216,7 @@ function GovShowcasePage() {
   const [manageAuthAction, setManageAuthAction] = useState('unlock')
   const [managePin, setManagePin] = useState('')
   const [manageAuthError, setManageAuthError] = useState('')
+  const [isProfileOverlayOpen, setIsProfileOverlayOpen] = useState(false)
   const profileDetailRef = useRef(null)
 
   useEffect(() => {
@@ -272,19 +282,29 @@ function GovShowcasePage() {
   }, [])
 
   useEffect(() => {
-    if (!isMediaManagerOpen && !isCvViewerOpen && !isManageAuthOpen) return
+    if (!isMediaManagerOpen && !isCvViewerOpen && !isManageAuthOpen && !isProfileOverlayOpen) return
     const onEsc = (event) => {
       if (event.key === 'Escape') {
         setIsMediaManagerOpen(false)
         setIsCvViewerOpen(false)
         setIsManageAuthOpen(false)
+        setIsProfileOverlayOpen(false)
         setManageAuthError('')
         setManagePin('')
       }
     }
     window.addEventListener('keydown', onEsc)
     return () => window.removeEventListener('keydown', onEsc)
-  }, [isMediaManagerOpen, isCvViewerOpen, isManageAuthOpen])
+  }, [isMediaManagerOpen, isCvViewerOpen, isManageAuthOpen, isProfileOverlayOpen])
+
+  useEffect(() => {
+    if (!isProfileOverlayOpen) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [isProfileOverlayOpen])
 
   const capabilities = useMemo(() => {
     const set = new Set()
@@ -318,6 +338,11 @@ function GovShowcasePage() {
     if (!filteredMembers.length) return null
     return filteredMembers.find((member) => member.id === selectedMemberId) ?? filteredMembers[0]
   }, [filteredMembers, selectedMemberId])
+  const hasActiveMemberContactDetails = Boolean(
+    activeMember?.cvUrl || activeMember?.contact?.email || activeMember?.contact?.phone,
+  )
+  const hasActiveMemberContactInfo = Boolean(activeMember?.contact?.email || activeMember?.contact?.phone)
+  const activeMemberEducationEntries = parseEducationEntries(activeMember?.education)
   const resolvedPhotoTargetMemberId =
     photoTargetMemberId && members.some((member) => member.id === photoTargetMemberId)
       ? photoTargetMemberId
@@ -353,9 +378,11 @@ function GovShowcasePage() {
 
   const focusMemberDetailsOnMobile = () => {
     if (!window.matchMedia('(max-width: 1023px)').matches) return
-    window.requestAnimationFrame(() => {
-      profileDetailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    })
+    setIsProfileOverlayOpen(true)
+  }
+
+  const closeProfileOverlay = () => {
+    setIsProfileOverlayOpen(false)
   }
 
   const openManageAuthDialog = (action) => {
@@ -815,7 +842,7 @@ function GovShowcasePage() {
           </div>
         ) : (
           <div className="mx-1 mt-3 grid gap-3 sm:mx-0 lg:mt-4 lg:gap-4 lg:grid-cols-[minmax(0,1fr)_460px] xl:grid-cols-[minmax(0,1fr)_520px]">
-            <div className="space-y-2 px-0.5 sm:px-0">
+            <div className="space-y-2.5 px-0.5 sm:px-0">
               <p className="text-[11px] font-medium text-[var(--muted)] lg:hidden">
                 Tap any member to view full details below.
               </p>
@@ -832,43 +859,70 @@ function GovShowcasePage() {
                       setEditStatusMessage('')
                       focusMemberDetailsOnMobile()
                     }}
-                    className={`glass-hover w-full rounded-xl border p-3 text-left backdrop-blur-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:rounded-2xl sm:p-4 ${
-                      isActive
-                        ? 'border-[var(--ring)]/45 bg-[var(--glass-bg-strong)] shadow-[0_10px_24px_rgba(16,37,68,0.14)]'
-                        : 'border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_6px_16px_rgba(16,37,68,0.10)] hover:border-[var(--ring)]/30'
-                    }`}
+                   className={`glass-hover w-full rounded-xl border p-3.5 text-left backdrop-blur-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:rounded-2xl sm:p-4 ${
+                     isActive
+                       ? 'border-[var(--ring)]/45 bg-[var(--glass-bg-strong)] shadow-[0_10px_24px_rgba(16,37,68,0.14)]'
+                       : 'border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_6px_16px_rgba(16,37,68,0.10)] hover:border-[var(--ring)]/30'
+                   }`}
                   >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <h3 className="truncate text-lg font-semibold leading-tight text-[var(--text)] sm:text-xl">{member.fullName}</h3>
-                        <p className="mt-0.5 line-clamp-1 text-[13px] font-medium leading-5 text-[var(--text)] sm:line-clamp-2 sm:text-sm">
-                          {member.role}
-                        </p>
-                        <p className="mt-0.5 hidden text-xs text-[var(--muted)] sm:block">{member.location}</p>
-                      </div>
-                      <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--muted)]/80" aria-hidden="true" />
-                    </div>
-                    <p className="mt-2 line-clamp-1 text-[13px] leading-5 text-[var(--muted)] sm:mt-3 sm:line-clamp-2 sm:text-sm">
-                      {member.summary}
-                    </p>
+                   <div className="flex items-start gap-3">
+                     <MemberAvatar member={member} sizeClass="h-12 w-12 sm:h-12 sm:w-12" textSizeClass="text-xs" />
+                     <div className="min-w-0 flex-1">
+                       <div className="flex items-start justify-between gap-2">
+                         <div className="min-w-0">
+                           <h3 className="truncate text-lg font-semibold leading-tight text-[var(--text)]">{member.fullName}</h3>
+                           <p className="mt-0.5 line-clamp-2 text-[13px] font-medium leading-5 text-[var(--text)] sm:text-sm">{member.role}</p>
+                           <p className="mt-1 text-xs text-[var(--muted)]">{member.location}</p>
+                         </div>
+                         <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--muted)]/80" aria-hidden="true" />
+                       </div>
+                       <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[var(--muted)] sm:text-sm">{member.summary}</p>
+                     </div>
+                   </div>
                   </button>
                 )
               })}
             </div>
 
+            {isProfileOverlayOpen ? (
+              <div
+                className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[1px] lg:hidden"
+                aria-hidden="true"
+                onClick={closeProfileOverlay}
+              />
+            ) : null}
+
             <aside
               ref={profileDetailRef}
               id="member-details"
-              className="glass-card-strong rounded-2xl p-4 sm:rounded-3xl sm:p-6 md:p-7 lg:sticky lg:top-24 lg:h-fit"
+              role={isProfileOverlayOpen ? 'dialog' : undefined}
+              aria-modal={isProfileOverlayOpen ? 'true' : undefined}
+              className={`glass-card-strong rounded-2xl p-4 sm:rounded-3xl sm:p-6 md:p-7 ${
+                isProfileOverlayOpen
+                  ? 'fixed inset-x-3 bottom-3 top-16 z-50 overflow-y-auto lg:static lg:inset-auto lg:z-auto lg:overflow-visible'
+                  : 'hidden'
+              } lg:sticky lg:top-24 lg:block lg:h-fit lg:self-start`}
             >
               {activeMember ? (
                 <>
-                 <div className="flex items-start justify-between gap-4">
-                   <div className="flex min-w-0 items-start gap-4">
-                    <MemberAvatar member={activeMember} sizeClass="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24" textSizeClass="text-lg" />
+                 {isProfileOverlayOpen ? (
+                   <div className="mb-3 flex justify-end lg:hidden">
+                     <button
+                       type="button"
+                       onClick={closeProfileOverlay}
+                       className="inline-flex min-h-10 items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                     >
+                       <X className="h-3.5 w-3.5" aria-hidden="true" />
+                       Close
+                     </button>
+                   </div>
+                 ) : null}
+                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                   <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+                   <MemberAvatar member={activeMember} sizeClass="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24" textSizeClass="text-lg" />
                      <div className="min-w-0">
-                       <h3 className="text-xl font-semibold leading-tight text-[var(--text)] sm:text-3xl">{activeMember.fullName}</h3>
-                       <p className="mt-1 text-sm font-medium leading-5 text-[var(--text)] sm:text-lg sm:leading-7">{activeMember.role}</p>
+                       <h3 className="text-xl font-semibold leading-tight text-[var(--text)] sm:text-2xl lg:text-3xl">{activeMember.fullName}</h3>
+                       <p className="mt-1 text-sm font-medium leading-6 text-[var(--text)] sm:text-base sm:leading-7">{activeMember.role}</p>
                        <p className="mt-1 text-sm text-[var(--muted)]">{activeMember.location}</p>
                      </div>
                    </div>
@@ -876,7 +930,7 @@ function GovShowcasePage() {
                      <button
                        type="button"
                        onClick={handleStartEditProfile}
-                       className="inline-flex min-h-11 shrink-0 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                       className="inline-flex min-h-11 shrink-0 self-start items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                      >
                        Edit
                      </button>
@@ -1018,62 +1072,124 @@ function GovShowcasePage() {
                    </section>
                  ) : (
                    <>
-                     <p className="mt-4 text-[14px] leading-6 text-[var(--text)] sm:mt-5 sm:text-[15px] sm:leading-7">{activeMember.summary}</p>
+                     <p className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--muted-surface)]/40 p-3 text-[14px] leading-6 text-[var(--text)] sm:mt-5 sm:p-4 sm:text-[15px] sm:leading-7">
+                       {activeMember.summary}
+                     </p>
 
                      {activeMember.focusAreas.length > 0 ? (
-                       <div className="mt-4 pt-3 sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
+                       <section className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--muted-surface)]/45 p-3 sm:mt-5 sm:p-4">
                          <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Focus Areas</p>
                          <div className="mt-2 flex flex-wrap gap-2 sm:mt-3 sm:gap-2.5">
                            {activeMember.focusAreas.map((item) => (
                              <span
                                key={item}
-                               className="inline-flex items-center rounded-lg border border-transparent bg-[var(--muted-surface)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text)] sm:border-[var(--border)] sm:bg-[var(--input)] sm:px-3 sm:py-1.5 sm:text-xs"
+                               className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--input)] px-3 py-1.5 text-xs font-semibold text-[var(--text)] sm:text-sm"
                              >
                                {item}
                              </span>
                            ))}
                          </div>
-                       </div>
+                       </section>
                      ) : null}
 
                      {activeMember.highlights.length > 0 ? (
-                       <div className="mt-4 pt-3 sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
+                       <section className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--muted-surface)]/45 p-3 sm:mt-5 sm:p-4">
                          <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Highlights</p>
-                         <ul className="mt-2 list-disc space-y-1.5 pl-4 text-[14px] leading-6 text-[var(--text)] sm:mt-3 sm:space-y-2 sm:pl-5 sm:text-[15px] sm:leading-7">
-                           {activeMember.highlights.map((item) => (
-                             <li key={item}>{item}</li>
+                         <ul className="mt-3 space-y-2.5">
+                           {activeMember.highlights.map((item, index) => (
+                             <li
+                               key={`${item}-${index}`}
+                               className="flex items-start gap-2.5 rounded-lg border border-[var(--border)] bg-[var(--input)] px-3 py-2.5 text-[14px] leading-6 text-[var(--text)] sm:text-[15px] sm:leading-7"
+                             >
+                               <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--navy)]" />
+                               <span className="min-w-0 flex-1">{item}</span>
+                             </li>
                            ))}
                          </ul>
-                       </div>
+                       </section>
                      ) : null}
 
-                     <div className="mt-4 pt-3 text-sm text-[var(--muted)] sm:mt-5 sm:border-t sm:border-[var(--border)] sm:pt-4">
-                       <p className="leading-5">
-                         <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Education:</span>{' '}
-                         {activeMember.education}
-                       </p>
-                       {activeMember.cvUrl ? (
-                         <div className="mt-2 flex flex-wrap gap-2">
-                           <button
-                             type="button"
-                             onClick={() => handleOpenCvViewer(activeMember)}
-                             className="inline-flex min-h-10 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
-                           >
-                             View CV
-                           </button>
+                     <div className="mt-4 grid gap-3 sm:mt-5 md:grid-cols-2">
+                       <section
+                         className={`rounded-xl border border-[var(--border)] bg-[var(--muted-surface)]/45 p-3 sm:p-4 ${
+                           hasActiveMemberContactDetails ? '' : 'sm:col-span-2'
+                         }`}
+                       >
+                         <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Education</p>
+                         <div className="mt-2 rounded-lg border border-[var(--border)] bg-[var(--input)] p-2.5">
+                           {activeMemberEducationEntries.length > 0 ? (
+                             <ul className="space-y-2">
+                               {activeMemberEducationEntries.map((entry, index) => (
+                                 <li key={`${entry}-${index}`} className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2.5 py-2">
+                                   <div className="flex items-start gap-2">
+                                     <GraduationCap className="mt-0.5 h-4 w-4 shrink-0 text-[var(--navy)]" aria-hidden="true" />
+                                     <span className="text-sm leading-6 text-[var(--text)]">{entry}</span>
+                                   </div>
+                                 </li>
+                               ))}
+                             </ul>
+                           ) : (
+                             <div className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2.5 py-2">
+                               <p className="text-sm leading-6 text-[var(--muted)]">Education details not added yet.</p>
+                             </div>
+                           )}
                          </div>
-                       ) : null}
-                       {activeMember.contact.email ? (
-                         <p className="mt-2 leading-5">
-                           <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Email:</span>{' '}
-                           {activeMember.contact.email}
-                         </p>
-                       ) : null}
-                       {activeMember.contact.phone ? (
-                         <p className="mt-1 leading-5">
-                           <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Phone:</span>{' '}
-                           {activeMember.contact.phone}
-                         </p>
+                       </section>
+
+                       {hasActiveMemberContactDetails ? (
+                         <section className="rounded-xl border border-[var(--border)] bg-[var(--muted-surface)]/45 p-3 text-sm text-[var(--muted)] sm:p-4">
+                           <p className="text-xs font-semibold uppercase tracking-[0.06em] text-[var(--muted)]">Contact & Records</p>
+                           {activeMember.cvUrl ? (
+                             <div className="mt-2 rounded-lg border border-[var(--border)] bg-[var(--input)] p-2.5">
+                               <div className="flex flex-wrap gap-2">
+                                 <button
+                                   type="button"
+                                   onClick={() => handleOpenCvViewer(activeMember)}
+                                   className="inline-flex min-h-10 items-center rounded-md border border-[var(--border)] px-3 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                                 >
+                                   <FileText className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+                                   View CV
+                                 </button>
+                               </div>
+                             </div>
+                           ) : null}
+                           {hasActiveMemberContactInfo ? (
+                             <div className="mt-2 rounded-lg border border-[var(--border)] bg-[var(--input)] px-3 py-2.5">
+                               {activeMember.contact.email ? (
+                                 <div className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2.5 py-2">
+                                   <p className="flex items-start gap-2 leading-5">
+                                     <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--navy)]" aria-hidden="true" />
+                                     <span className="min-w-0">
+                                       <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Email:</span>{' '}
+                                       <a
+                                         href={`mailto:${activeMember.contact.email}`}
+                                         className="font-medium break-words text-[var(--text)] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                                       >
+                                         {activeMember.contact.email}
+                                       </a>
+                                     </span>
+                                   </p>
+                                 </div>
+                               ) : null}
+                               {activeMember.contact.phone ? (
+                                 <div className={`${activeMember.contact.email ? 'mt-2' : ''} rounded-md border border-[var(--border)] bg-[var(--card)] px-2.5 py-2`}>
+                                   <p className="flex items-start gap-2 leading-5">
+                                     <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--navy)]" aria-hidden="true" />
+                                     <span className="min-w-0">
+                                       <span className="font-semibold uppercase tracking-[0.06em] text-[var(--text)]">Phone:</span>{' '}
+                                       <a
+                                         href={`tel:${activeMember.contact.phone.replace(/[^\d+]/g, '')}`}
+                                         className="font-medium break-words text-[var(--text)] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                                       >
+                                         {activeMember.contact.phone}
+                                       </a>
+                                     </span>
+                                   </p>
+                                 </div>
+                               ) : null}
+                             </div>
+                           ) : null}
+                         </section>
                        ) : null}
                      </div>
                    </>

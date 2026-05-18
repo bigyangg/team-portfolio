@@ -44,7 +44,7 @@ function Step7Photo({ previewUrl, onFileSelect, getFieldClass, errors }) {
         } ${getFieldClass('photo_url')}`}
       >
         {previewUrl ? (
-          <img src={previewUrl} alt="Profile preview" className="h-56 w-56 rounded-full object-cover" />
+          <img src={previewUrl} alt="Profile preview" className="h-56 w-56 rounded-full object-cover object-[center_18%]" />
         ) : (
           <>
             <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[var(--gold)]/70 text-[var(--gold)]">

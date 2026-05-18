@@ -61,54 +61,59 @@ function Navbar() {
   const controlChromeClass = isDarkMode
     ? 'border-[var(--glass-border)] bg-[var(--input)]/95 text-[var(--foreground)]'
     : 'border-white/35 bg-[var(--navy2)]/80 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]'
+  const chipClass = isDarkMode
+    ? 'border-[var(--glass-border)] bg-[var(--input)]/80'
+    : 'border-white/24 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]'
+  const flagWrapClass = isDarkMode
+    ? 'border-[var(--glass-border)] bg-[var(--input)]/80'
+    : 'border-white/24 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]'
   const badgeTextClass = isDarkMode ? 'text-[var(--foreground)]' : 'text-white/90'
   const toggleThumbClass = isDarkMode ? 'translate-x-10 bg-[var(--accent)]' : 'translate-x-0 bg-[var(--white)]'
 
   return (
     <header className={headerClass}>
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 md:flex-row md:items-start md:justify-between md:px-8">
-        <div className="flex min-w-0 items-start gap-3.5">
-          <div className="mt-0.5 flex h-12 w-10 items-center justify-center">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-3 py-2.5 sm:px-4 md:flex-row md:items-center md:justify-between md:px-8 md:py-3">
+        <div className="flex min-w-0 items-center gap-2.5 md:gap-3.5">
+          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${flagWrapClass}`}>
             <NepalFlagMark />
           </div>
           <div className="min-w-0">
-            <h1 className="font-heading text-xl leading-tight text-[var(--white)] md:text-2xl">
+            <h1 className="font-heading text-2xl leading-tight text-[var(--white)] sm:text-3xl md:text-[34px] md:leading-[1.1]">
               NGHTT Team Portfolio
             </h1>
-            <div className="mt-1 space-y-0.5">
-              <p className="text-[11px] font-semibold uppercase leading-4 tracking-[0.08em] text-white/85">Submitted to</p>
-              <p className="text-[13px] font-semibold leading-4 text-white md:text-[14px]">नेपाल सरकार · ऊर्जा, जलस्रोत तथा सिंचाइ मन्त्रालय</p>
-              <p className="text-[12px] font-medium leading-4 text-white/90">सिंहदरबार, काठमाडौं, नेपाल ।</p>
-            </div>
+            <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-white/80">
+              National Green Hydrogen Think Tank
+            </p>
           </div>
         </div>
 
-        <div className="flex w-full flex-col items-end gap-2 md:w-auto">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
-              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              className={`glass-hover relative inline-flex h-11 w-[82px] items-center rounded-full border p-1 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${controlChromeClass}`}
-            >
-              <span
-                className={`pointer-events-none absolute left-1 top-1 h-9 w-9 rounded-full shadow-sm transition-transform duration-150 ease-out ${toggleThumbClass}`}
-                aria-hidden="true"
-              />
-              <span className="relative z-10 flex w-full items-center justify-between px-1">
-                <Sun className={`h-4 w-4 ${isDarkMode ? 'text-[var(--muted)]' : 'text-[var(--navy)]'}`} aria-hidden="true" />
-                <MoonStar className={`h-4 w-4 ${isDarkMode ? 'text-[var(--white)]' : 'text-white/90'}`} aria-hidden="true" />
-              </span>
-            </button>
-            <span className={`hidden items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] md:inline-flex ${badgeTextClass}`}>
-              <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
-              NGHTT 2082-83
+        <div className="flex w-full flex-wrap items-center gap-1.5 md:w-auto md:justify-end">
+          <button
+            type="button"
+            onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
+            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            className={`glass-hover relative inline-flex h-10 w-[76px] items-center rounded-full border p-1 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${controlChromeClass}`}
+          >
+            <span
+              className={`pointer-events-none absolute left-1 top-1 h-8 w-8 rounded-full shadow-sm transition-transform duration-150 ease-out ${toggleThumbClass}`}
+              aria-hidden="true"
+            />
+            <span className="relative z-10 flex w-full items-center justify-between px-1">
+              <Sun className={`h-4 w-4 ${isDarkMode ? 'text-[var(--muted)]' : 'text-[var(--navy)]'}`} aria-hidden="true" />
+              <MoonStar className={`h-4 w-4 ${isDarkMode ? 'text-[var(--white)]' : 'text-white/90'}`} aria-hidden="true" />
             </span>
-          </div>
+          </button>
+          <span
+            className={`inline-flex min-h-10 items-center gap-1 rounded-md border px-2.5 text-[10px] font-semibold uppercase tracking-[0.08em] ${badgeTextClass} ${chipClass}`}
+          >
+            <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="sm:hidden">2082-83</span>
+            <span className="hidden sm:inline">NGHTT 2082-83</span>
+          </span>
           <button
             type="button"
             onClick={requestManageLockToggle}
-            className={`inline-flex min-h-9 w-auto max-w-full self-end items-center justify-center gap-1.5 rounded-md border px-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] shadow-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:min-h-10 sm:px-3 sm:text-xs ${
+            className={`inline-flex min-h-10 w-auto max-w-full items-center justify-center gap-1.5 rounded-md border px-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] shadow-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:px-3 sm:text-xs ${
               isManageLocked
                 ? 'border-white/22 bg-white/8 text-white/90 hover:bg-white/12'
                 : 'border-white/28 bg-white/16 text-white hover:bg-white/20'

@@ -16,7 +16,7 @@ function MemberCard({ member, onView, onDelete, onCopyProfile, activeCopyCardId 
           <img
             src={member.photo_url}
             alt={`${member.full_name} profile`}
-            className="h-16 w-16 rounded-full border border-[var(--gold)] object-cover"
+            className="h-16 w-16 rounded-full border border-[var(--gold)] object-cover object-[center_18%]"
           />
         ) : (
           <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold)] bg-[var(--navy)] text-lg font-bold text-[var(--gold2)]">
