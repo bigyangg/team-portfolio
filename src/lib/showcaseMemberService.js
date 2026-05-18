@@ -811,9 +811,10 @@ export const updateShowcaseMemberCuration = async ({ member, cvUrl, photoUrl, is
   }
 
   if (source === SHOWCASE_DATA_SOURCES.SUPABASE_TEAM_MEMBERS) {
+    const persistedMember = isUuid(member?.id) ? member : await ensureTeamMemberRecord(member)
     try {
       return updateInTeamMembersTable({
-        memberId: member.id,
+        memberId: persistedMember.id,
         cvUrl: finalCvUrl,
         photoUrl: finalPhotoUrl,
         isVisible: nextVisibility,
