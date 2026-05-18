@@ -1,3 +1,5 @@
+import { getMemberIdentityKeys } from '../lib/memberIdentity'
+
 const MEMBER_STORAGE_KEY = 'gov-team-members-v1'
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -165,7 +167,6 @@ export const saveMembersToStorage = (members) => {
 
 export const mergeSeedAndStoredMembers = (seedMembers, storedMembers) => {
   const mergedMap = new Map()
-  const normalizedName = (member) => toText(member?.fullName).toLowerCase()
 
   seedMembers.map((item, index) => normalizeMember(item, index)).forEach((member) => {
     mergedMap.set(member.id, member)
@@ -186,14 +187,14 @@ export const mergeSeedAndStoredMembers = (seedMembers, storedMembers) => {
       return
     }
 
-    const matchedByName = Array.from(mergedMap.entries()).find(([, existingMember]) => {
-      const existingName = normalizedName(existingMember)
-      const incomingName = normalizedName(normalized)
-      return Boolean(existingName) && existingName === incomingName
+    const incomingIdentityKeys = getMemberIdentityKeys(normalized)
+    const matchedByIdentity = Array.from(mergedMap.entries()).find(([, existingMember]) => {
+      const existingIdentityKeys = getMemberIdentityKeys(existingMember)
+      return existingIdentityKeys.some((key) => incomingIdentityKeys.includes(key))
     })
 
-    if (matchedByName) {
-      const [existingId, existingMember] = matchedByName
+    if (matchedByIdentity) {
+      const [existingId, existingMember] = matchedByIdentity
       mergedMap.delete(existingId)
       mergedMap.set(normalized.id, {
         ...existingMember,

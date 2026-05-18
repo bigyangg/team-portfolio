@@ -1,4 +1,5 @@
 import { createMemberFromDraft, mergeSeedAndStoredMembers, normalizeMember } from '../data/memberSchema'
+import { getMemberIdentityKeys } from './memberIdentity'
 import { allowClientStorageFallback, isSupabaseConfigured, supabase } from './supabase'
 
 export const SHOWCASE_DATA_SOURCES = Object.freeze({
@@ -58,6 +59,49 @@ const isUuid = (value) =>
 const isStorageRlsError = (error) => {
   const message = String(error?.message || '').toLowerCase()
   return error?.code === '42501' || message.includes('row-level security')
+}
+
+const parseTimestamp = (value) => {
+  const time = Date.parse(cleanText(value))
+  return Number.isNaN(time) ? null : time
+}
+
+const dedupeMembersByIdentity = (members) => {
+  const deduped = []
+  const identityIndex = new Map()
+
+  members.forEach((member) => {
+    const identityKeys = getMemberIdentityKeys(member)
+    if (!identityKeys.length) {
+      deduped.push(member)
+      return
+    }
+
+    const existingIndex = identityKeys.map((key) => identityIndex.get(key)).find((index) => Number.isInteger(index))
+
+    if (existingIndex === undefined) {
+      const nextIndex = deduped.length
+      deduped.push(member)
+      identityKeys.forEach((key) => identityIndex.set(key, nextIndex))
+      return
+    }
+
+    const existingMember = deduped[existingIndex]
+    const existingCreatedAt = parseTimestamp(existingMember?.createdAt)
+    const incomingCreatedAt = parseTimestamp(member?.createdAt)
+    const shouldReplace =
+      incomingCreatedAt !== null && (existingCreatedAt === null || incomingCreatedAt >= existingCreatedAt)
+
+    if (shouldReplace) {
+      deduped[existingIndex] = member
+    }
+
+    const resolvedMember = deduped[existingIndex]
+    getMemberIdentityKeys(resolvedMember).forEach((key) => identityIndex.set(key, existingIndex))
+    identityKeys.forEach((key) => identityIndex.set(key, existingIndex))
+  })
+
+  return deduped
 }
 
 const fileToDataUrl = (file) =>
@@ -164,26 +208,29 @@ const mapTeamMembersRow = (row, index) =>
     index,
   )
 
-const toNameKey = (value) => cleanText(value).toLowerCase()
-
 const mergeSeedWithSupabaseMembers = ({ seedMembers, storedMembers, supabaseMembers }) => {
   const baseMembers = mergeSeedAndStoredMembers(seedMembers, storedMembers)
-  const supabaseByName = new Map()
+  const dedupedSupabaseMembers = dedupeMembersByIdentity(supabaseMembers)
+  const supabaseByIdentity = new Map()
 
-  supabaseMembers.forEach((member) => {
-    const key = toNameKey(member.fullName)
-    if (key) supabaseByName.set(key, member)
+  dedupedSupabaseMembers.forEach((member) => {
+    const identityKeys = getMemberIdentityKeys(member)
+    identityKeys.forEach((key) => {
+      supabaseByIdentity.set(key, member)
+    })
   })
 
+  const matchedSupabaseMembers = new Set()
   const merged = baseMembers.map((member) => {
-    const key = toNameKey(member.fullName)
-    if (!key || !supabaseByName.has(key)) return member
-    const fromSupabase = supabaseByName.get(key)
-    supabaseByName.delete(key)
+    const identityKeys = getMemberIdentityKeys(member)
+    const fromSupabase = identityKeys.map((key) => supabaseByIdentity.get(key)).find(Boolean)
+    if (!fromSupabase) return member
+    matchedSupabaseMembers.add(fromSupabase)
     return fromSupabase
   })
 
-  return [...merged, ...Array.from(supabaseByName.values())]
+  const unmatchedSupabaseMembers = dedupedSupabaseMembers.filter((member) => !matchedSupabaseMembers.has(member))
+  return [...merged, ...unmatchedSupabaseMembers]
 }
 
 const fetchFromPortfolioView = async () => {
@@ -410,12 +457,27 @@ const ensureTeamMemberRecord = async (member) => {
     }
   }
 
+  const email = cleanText(member?.contact?.email).toLowerCase()
+  if (email) {
+    const { data, error } = await supabase
+      .from('team_members')
+      .select('*')
+      .ilike('email', email)
+      .order('submitted_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (!error && data) {
+      return mapTeamMembersRow(data, 0)
+    }
+  }
+
   const fullName = cleanText(member?.fullName)
   if (fullName) {
     const { data, error } = await supabase
       .from('team_members')
       .select('*')
-      .eq('full_name', fullName)
+      .ilike('full_name', fullName)
       .order('submitted_at', { ascending: false })
       .limit(1)
       .maybeSingle()
