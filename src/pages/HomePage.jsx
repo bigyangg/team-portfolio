@@ -125,7 +125,7 @@ function HomePage() {
 
       {/* Year-Five counters — forest band for contrast */}
       <motion.section
-        className="surface-forest grain snap-start relative w-full overflow-hidden py-24 md:py-32"
+        className="surface-forest grain snap-start relative w-full overflow-hidden py-16 md:py-20"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: '-10% 0px' }}
