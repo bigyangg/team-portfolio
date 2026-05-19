@@ -1,10 +1,12 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { lazy, Suspense, useRef, useState } from 'react'
 import { Mountain, Wind, Droplets, Flame } from 'lucide-react'
 import { riseItem, staggerContainer } from '../lib/motion'
-import H2Molecule from './motion/H2Molecule'
 import TiltCard from './motion/TiltCard'
 import ElectrolysisGlyph from './motion/ElectrolysisGlyph'
+
+// 3D decoration is lazy-loaded — three.js + r3f stack is heavy (~180KB).
+const Hydrogen3D = lazy(() => import('./motion/Hydrogen3D'))
 
 const PILLARS = [
   {
@@ -46,7 +48,6 @@ function VisionSection() {
   })
   const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
   const moleculeY = useTransform(scrollYProgress, [0, 1], ['10%', '-10%'])
-  const moleculeRotate = useTransform(scrollYProgress, [0, 1], [0, 30])
 
   return (
     <motion.section
@@ -58,13 +59,15 @@ function VisionSection() {
       viewport={{ once: true, margin: '-10% 0px' }}
       variants={staggerContainer}
     >
-      {/* Floating molecule behind the section, parallax-driven */}
+      {/* 3D hydrogen + AI-mesh decoration, parallax-driven */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute right-[4%] top-[8%] hidden text-[#6EE7B7]/[0.12] lg:block"
-        style={{ y: moleculeY, rotate: moleculeRotate }}
+        className="pointer-events-none absolute -right-[6%] top-[4%] hidden h-[520px] w-[520px] lg:block xl:-right-[2%] xl:h-[600px] xl:w-[600px]"
+        style={{ y: moleculeY }}
       >
-        <H2Molecule size={220} />
+        <Suspense fallback={null}>
+          <Hydrogen3D className="h-full w-full" />
+        </Suspense>
       </motion.div>
 
       {/* Top accent strip */}
