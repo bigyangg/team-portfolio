@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Mountain, Wind, Droplets, Flame } from 'lucide-react'
 import { riseItem, staggerContainer } from '../lib/motion'
 import H2Molecule from './motion/H2Molecule'
@@ -39,6 +39,7 @@ const PILLARS = [
 
 function VisionSection() {
   const sectionRef = useRef(null)
+  const [imgLoaded, setImgLoaded] = useState(false)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
@@ -76,12 +77,16 @@ function VisionSection() {
             max={5}
             className="relative overflow-hidden rounded-[28px] border border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_30px_80px_-20px_rgba(5,46,44,0.18)] backdrop-blur-2xl"
           >
+            {!imgLoaded && (
+              <div className="skeleton absolute inset-0" aria-hidden="true" style={{ borderRadius: 'inherit' }} />
+            )}
             <motion.img
               src="/hero/hydrogen-plant.png"
               alt="Green hydrogen plant in the Nepali Himalayas at dawn"
               className="block h-full w-full object-cover"
               loading="lazy"
-              style={{ y: imageY, scale: 1.08 }}
+              onLoad={() => setImgLoaded(true)}
+              style={{ y: imageY, scale: 1.08, opacity: imgLoaded ? 1 : 0, transition: 'opacity 380ms cubic-bezier(0.22,1,0.36,1)' }}
             />
             <div
               aria-hidden="true"

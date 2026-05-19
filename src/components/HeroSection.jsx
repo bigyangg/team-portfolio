@@ -5,6 +5,25 @@ import { heroStagger, heroItem } from '../lib/motion'
 import ParticleField from './motion/ParticleField'
 import MagneticButton from './motion/MagneticButton'
 
+// Wrapper for the hero bg image with skeleton fallback.
+// Inline because we need the parallax motion values applied directly.
+function HeroBg({ y, scale }) {
+  const [loaded, setLoaded] = useState(false)
+  return (
+    <>
+      {!loaded && <div className="skeleton absolute inset-0" aria-hidden="true" />}
+      <motion.img
+        src="/hero/himalaya-haze.png"
+        alt=""
+        aria-hidden="true"
+        onLoad={() => setLoaded(true)}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ y, scale, willChange: 'transform', opacity: loaded ? 1 : 0, transition: 'opacity 380ms cubic-bezier(0.22,1,0.36,1)' }}
+      />
+    </>
+  )
+}
+
 function HeroSection() {
   const [scrolled, setScrolled] = useState(0)
   const { scrollY } = useScroll()
@@ -25,14 +44,8 @@ function HeroSection() {
 
   return (
     <section className="relative h-[92vh] min-h-[640px] w-full overflow-hidden">
-      {/* Full-bleed Himalaya photograph with motion parallax */}
-      <motion.img
-        src="/hero/himalaya-haze.png"
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover"
-        style={{ y: bgY, scale: bgScale, willChange: 'transform' }}
-      />
+      {/* Full-bleed Himalaya photograph with parallax + skeleton fallback */}
+      <HeroBg y={bgY} scale={bgScale} />
 
       {/* Gradient washes for legibility + cinematic mood */}
       <div
