@@ -33,9 +33,9 @@ function PageLoader() {
             }}
           />
 
-          {/* H2 mark + spinning ring */}
+          {/* NGHTT mark + spinning ring */}
           <div className="relative flex flex-col items-center gap-5">
-            <div className="relative h-16 w-16">
+            <div className="relative h-20 w-20">
               {/* Outer ring */}
               <motion.span
                 className="absolute inset-0 rounded-full border-2 border-[var(--primary)]/15"
@@ -45,9 +45,17 @@ function PageLoader() {
                 animate={{ rotate: 360 }}
                 transition={{ duration: 0.9, ease: 'linear', repeat: Infinity }}
               />
-              {/* Center H2 */}
-              <div className="absolute inset-0 grid place-items-center font-display text-[20px] font-extrabold tracking-[-0.04em] text-[var(--primary)]">
-                H<span className="text-[0.55em] align-baseline">2</span>
+              {/* Center NGHTT mark */}
+              <div className="absolute inset-0 grid place-items-center">
+                <svg viewBox="0 0 64 64" className="h-9 w-9" fill="none" aria-hidden="true">
+                  <path
+                    d="M8 56 C 8 14, 56 14, 56 56"
+                    stroke="#10B981"
+                    strokeWidth="7"
+                    strokeLinecap="round"
+                  />
+                  <circle cx="32" cy="9" r="5" fill="#0D9488" />
+                </svg>
               </div>
             </div>
             <motion.p

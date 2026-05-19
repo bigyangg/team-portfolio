@@ -25,13 +25,22 @@ const getInitialTheme = () => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
-function NepalFlagMark() {
+function NghttMark() {
   return (
-    <svg viewBox="0 0 64 64" className="h-9 w-9 drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]" aria-label="Nepal flag">
-      <path d="M14 5V59" stroke="#F4F9F6" strokeWidth="2.5" />
-      <path d="M16 7L16 57L50 39L31 31L50 20L16 7Z" fill="#DC143C" stroke="#003893" strokeWidth="3" strokeLinejoin="round" />
-      <circle cx="31" cy="22" r="4" fill="#F4F9F6" />
-      <circle cx="31" cy="41" r="4.8" fill="#F4F9F6" />
+    <svg
+      viewBox="0 0 64 64"
+      className="h-9 w-9"
+      fill="none"
+      aria-label="NGHTT mark"
+      role="img"
+    >
+      <path
+        d="M8 56 C 8 14, 56 14, 56 56"
+        stroke="#10B981"
+        strokeWidth="7"
+        strokeLinecap="round"
+      />
+      <circle cx="32" cy="9" r="5" fill="#0D9488" />
     </svg>
   )
 }
@@ -75,7 +84,7 @@ function Navbar() {
       <div className="mx-auto flex w-full max-w-[1240px] items-center justify-between px-4 py-3 md:px-10 md:py-4">
         {/* Brand */}
         <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
-          <NepalFlagMark />
+          <NghttMark />
           <div className="hidden flex-col sm:flex">
             <span className="font-display text-[15px] font-extrabold leading-tight tracking-[-0.012em] text-[#052E2C]">
               NGHTT
