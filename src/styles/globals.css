@@ -701,6 +701,18 @@ body::before {
 .surface-forest .eyebrow { color: #6EE7B7; }
 .surface-forest .glow-text { color: #6EE7B7; }
 
+/* Ghost button on dark forest band needs light text + visible border */
+.surface-forest .btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: #E6F4EF;
+  border-color: rgba(110, 231, 183, 0.28);
+}
+.surface-forest .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #6EE7B7;
+  color: #6EE7B7;
+}
+
 /* Saturated accent strip — divides sections with a deliberate emerald pulse */
 .accent-strip {
   height: 2px;
