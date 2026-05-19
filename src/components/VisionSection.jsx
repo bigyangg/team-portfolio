@@ -59,10 +59,12 @@ function VisionSection() {
       viewport={{ once: true, margin: '-10% 0px' }}
       variants={staggerContainer}
     >
-      {/* 3D hydrogen + AI-mesh decoration, parallax-driven */}
+      {/* 3D hydrogen + AI-mesh as a full-bleed background layer.
+          Sits behind the content (z=0), parallax-driven, low opacity so
+          the Mission text and plant image read clearly on top. */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-[6%] top-[4%] hidden h-[520px] w-[520px] lg:block xl:-right-[2%] xl:h-[600px] xl:w-[600px]"
+        className="pointer-events-none absolute inset-0 z-0 hidden opacity-50 lg:block"
         style={{ y: moleculeY }}
       >
         <Suspense fallback={null}>
@@ -73,7 +75,7 @@ function VisionSection() {
       {/* Top accent strip */}
       <div aria-hidden="true" className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#6EE7B7]/40 to-transparent" />
 
-      <div className="mx-auto grid w-full max-w-[1240px] gap-12 px-5 md:px-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+      <div className="relative z-10 mx-auto grid w-full max-w-[1240px] gap-12 px-5 md:px-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
         {/* Image side — tilt + parallax */}
         <motion.div variants={riseItem}>
           <TiltCard
