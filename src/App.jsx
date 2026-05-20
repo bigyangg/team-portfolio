@@ -1,26 +1,65 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
-import GovShowcasePage from './pages/GovShowcasePage'
-import LandingPage from './pages/LandingPage'
+import FooterSection from './components/FooterSection'
+import HomePage from './pages/HomePage'
+import AboutPage from './pages/AboutPage'
+import ApplicationsPage from './pages/ApplicationsPage'
+import TeamPage from './pages/TeamPage'
+import SubmissionPage from './pages/SubmissionPage'
+import PageTransition from './components/motion/PageTransition'
+import PageLoader from './components/motion/PageLoader'
+import { useEffect } from 'react'
 
-function PortfolioView() {
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+  return null
+}
+
+function AnimatedRoutes() {
+  const location = useLocation()
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
+        <Route path="/applications" element={<PageTransition><ApplicationsPage /></PageTransition>} />
+        <Route path="/team" element={<PageTransition><TeamPage /></PageTransition>} />
+        <Route path="/submission" element={<PageTransition><SubmissionPage /></PageTransition>} />
+        <Route path="*" element={<PageTransition><HomePage /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  )
+}
+
+function AppShell() {
   return (
     <div className="min-h-screen overflow-x-clip bg-brand-bg text-[var(--text)]">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-[var(--primary)] focus:px-4 focus:py-2 focus:text-[var(--primary-foreground)] focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+      <PageLoader />
       <Navbar />
-      <main className="mx-auto w-full max-w-7xl overflow-x-clip px-4 pb-8 pt-6 md:px-8 md:pt-8">
-        <GovShowcasePage />
+      <ScrollToTop />
+      <main id="main">
+        <AnimatedRoutes />
       </main>
+      <FooterSection />
     </div>
   )
 }
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/portfolio" element={<PortfolioView />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <BrowserRouter>
+      <AppShell />
+    </BrowserRouter>
   )
 }
 

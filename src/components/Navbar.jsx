@@ -1,33 +1,46 @@
 import { useEffect, useState } from 'react'
-import { BadgeCheck, Lock, MoonStar, Sun, Unlock } from 'lucide-react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
+import { BadgeCheck, Lock, Menu, MoonStar, Sun, Unlock, X } from 'lucide-react'
+
+const THEME_STORAGE_KEY = 'nghtt-theme'
+
+const getInitialTheme = () => {
+  if (typeof window === 'undefined') return 'light'
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY)
+  if (stored === 'light' || stored === 'dark') return stored
+  return 'light' // default light, do NOT auto-detect prefers-color-scheme
+}
 import {
   MANAGE_LOCK_STATE_CHANGED_EVENT,
   requestManageLockState,
   requestManageLockToggle,
 } from '../lib/manageLockEvents'
 
-const THEME_STORAGE_KEY = 'nghtt-theme'
+const NAV_LINKS = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/applications', label: 'Applications' },
+  { to: '/team', label: 'Team' },
+  { to: '/submission', label: 'Submission' },
+]
 
-const getInitialTheme = () => {
-  if (typeof window === 'undefined') return 'light'
-  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
-  if (storedTheme === 'light' || storedTheme === 'dark') return storedTheme
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
-function NepalFlagMark() {
+function NghttMark() {
   return (
-    <svg viewBox="0 0 64 64" className="h-10 w-10 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" aria-label="Nepal flag">
-      <path d="M14 5V59" stroke="#FFFFFF" strokeWidth="2.5" />
+    <svg
+      viewBox="0 0 64 64"
+      className="h-9 w-9"
+      fill="none"
+      aria-label="NGHTT mark"
+      role="img"
+    >
       <path
-        d="M16 7L16 57L50 39L31 31L50 20L16 7Z"
-        fill="#DC143C"
-        stroke="#003893"
-        strokeWidth="3"
-        strokeLinejoin="round"
+        d="M8 56 C 8 14, 56 14, 56 56"
+        stroke="#10B981"
+        strokeWidth="7"
+        strokeLinecap="round"
       />
-      <circle cx="31" cy="22" r="4" fill="#FFFFFF" />
-      <circle cx="31" cy="41" r="4.8" fill="#FFFFFF" />
+      <circle cx="32" cy="9" r="5" fill="#0D9488" />
     </svg>
   )
 }
@@ -35,6 +48,9 @@ function NepalFlagMark() {
 function Navbar() {
   const [theme, setTheme] = useState(getInitialTheme)
   const [isManageLocked, setIsManageLocked] = useState(true)
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const { pathname } = useLocation()
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
@@ -42,88 +58,147 @@ function Navbar() {
   }, [theme])
 
   useEffect(() => {
-    const handleManageLockChange = (event) => {
-      setIsManageLocked(Boolean(event?.detail?.locked))
-    }
-
+    const handleManageLockChange = (event) => setIsManageLocked(Boolean(event?.detail?.locked))
     window.addEventListener(MANAGE_LOCK_STATE_CHANGED_EVENT, handleManageLockChange)
     requestManageLockState()
-
-    return () => {
-      window.removeEventListener(MANAGE_LOCK_STATE_CHANGED_EVENT, handleManageLockChange)
-    }
+    return () => window.removeEventListener(MANAGE_LOCK_STATE_CHANGED_EVENT, handleManageLockChange)
   }, [])
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Close mobile menu on route change
+  useEffect(() => { setMenuOpen(false) }, [pathname])
+
   const isDarkMode = theme === 'dark'
-  const headerClass = isDarkMode
-    ? 'border-b border-[var(--glass-border)] bg-[var(--glass-bg-strong)] text-[var(--white)] backdrop-blur-xl'
-    : 'border-b border-white/20 bg-[var(--navy)] text-[var(--white)]'
-  const controlChromeClass = isDarkMode
-    ? 'border-[var(--glass-border)] bg-[var(--input)]/95 text-[var(--foreground)]'
-    : 'border-white/35 bg-[var(--navy2)]/80 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]'
-  const chipClass = isDarkMode
-    ? 'border-[var(--glass-border)] bg-[var(--input)]/80'
-    : 'border-white/24 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]'
-  const flagWrapClass = isDarkMode
-    ? 'border-[var(--glass-border)] bg-[var(--input)]/80'
-    : 'border-white/24 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]'
-  const badgeTextClass = isDarkMode ? 'text-[var(--foreground)]' : 'text-white/90'
-  const toggleThumbClass = isDarkMode ? 'translate-x-10 bg-[var(--accent)]' : 'translate-x-0 bg-[var(--white)]'
 
   return (
-    <header className={headerClass}>
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-3 py-2.5 sm:px-4 md:flex-row md:items-center md:justify-between md:px-8 md:py-3">
-        <div className="flex min-w-0 items-center gap-2.5 md:gap-3.5">
-          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${flagWrapClass}`}>
-            <NepalFlagMark />
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-[box-shadow] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] border-b border-[var(--surface-rule)] bg-[var(--aurora-base)]/95 backdrop-blur-2xl ${
+        scrolled ? 'shadow-[0_4px_24px_-8px_rgba(5,46,44,0.18)]' : ''
+      }`}
+    >
+      <div className="mx-auto flex w-full max-w-[1240px] items-center justify-between px-4 py-3 md:px-10 md:py-4">
+        {/* Brand */}
+        <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
+          <NghttMark />
+          <div className="hidden flex-col sm:flex">
+            <span className="font-display text-[15px] font-extrabold leading-tight tracking-[-0.012em] text-[var(--text)]">
+              NGHTT
+            </span>
+            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+              Green Hydrogen Think Tank
+            </span>
           </div>
-          <div className="min-w-0">
-            <h1 className="font-heading text-2xl leading-tight text-[var(--white)] sm:text-3xl md:text-[34px] md:leading-[1.1]">
-              NGHTT Team Portfolio
-            </h1>
-            <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-white/80">
-              National Green Hydrogen Think Tank
-            </p>
-          </div>
-        </div>
+        </Link>
 
-        <div className="flex w-full flex-wrap items-center gap-1.5 md:w-auto md:justify-end">
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-1 lg:flex">
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === '/'}
+              className={({ isActive }) =>
+                `relative rounded-full px-4 py-2 text-[13px] font-bold transition-colors duration-200 ${
+                  isActive
+                    ? 'text-[var(--primary)]'
+                    : 'text-[var(--text)] hover:text-[var(--primary)]'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-full bg-[var(--primary-soft)] border border-[var(--primary)]/30"
+                    />
+                  )}
+                  <span className="relative">{link.label}</span>
+                </>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Right cluster */}
+        <div className="flex items-center gap-2">
+          {/* Theme toggle */}
           <button
             type="button"
             onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
             aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            className={`glass-hover relative inline-flex h-10 w-[76px] items-center rounded-full border p-1 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${controlChromeClass}`}
+            className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)]"
           >
-            <span
-              className={`pointer-events-none absolute left-1 top-1 h-8 w-8 rounded-full shadow-sm transition-transform duration-150 ease-out ${toggleThumbClass}`}
-              aria-hidden="true"
-            />
-            <span className="relative z-10 flex w-full items-center justify-between px-1">
-              <Sun className={`h-4 w-4 ${isDarkMode ? 'text-[var(--muted)]' : 'text-[var(--navy)]'}`} aria-hidden="true" />
-              <MoonStar className={`h-4 w-4 ${isDarkMode ? 'text-[var(--white)]' : 'text-white/90'}`} aria-hidden="true" />
-            </span>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={isDarkMode ? 'sun' : 'moon'}
+                initial={{ opacity: 0, rotate: -90, scale: 0.85 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: 90, scale: 0.85 }}
+                transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                className="absolute inset-0 grid place-items-center"
+              >
+                {isDarkMode ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
+              </motion.span>
+            </AnimatePresence>
           </button>
-          <span
-            className={`inline-flex min-h-10 items-center gap-1 rounded-md border px-2.5 text-[10px] font-semibold uppercase tracking-[0.08em] ${badgeTextClass} ${chipClass}`}
-          >
-            <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
-            <span className="sm:hidden">2082-83</span>
-            <span className="hidden sm:inline">NGHTT 2082-83</span>
+
+          {/* Submitted badge — desktop only */}
+          <span className="hidden items-center gap-1.5 rounded-full border border-[var(--primary)]/30 bg-[var(--primary-soft)] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--primary)] backdrop-blur-md md:inline-flex">
+            <BadgeCheck className="h-3.5 w-3.5 text-[var(--primary)]" aria-hidden="true" />
+            2082-83
           </span>
+
+          {/* Manage toggle — desktop only */}
           <button
             type="button"
             onClick={requestManageLockToggle}
-            className={`inline-flex min-h-10 w-auto max-w-full items-center justify-center gap-1.5 rounded-md border px-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] shadow-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:px-3 sm:text-xs ${
-              isManageLocked
-                ? 'border-white/22 bg-white/8 text-white/90 hover:bg-white/12'
-                : 'border-white/28 bg-white/16 text-white hover:bg-white/20'
-            }`}
+            className="hidden h-10 items-center gap-1.5 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-3 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)] md:inline-flex"
           >
-            {isManageLocked ? <Unlock className="h-3.5 w-3.5" aria-hidden="true" /> : <Lock className="h-3.5 w-3.5" aria-hidden="true" />}
-            {isManageLocked ? 'Manage/Edit Off' : 'Manage/Edit On'}
+            {isManageLocked ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
+            {isManageLocked ? 'Manage off' : 'Manage on'}
+          </button>
+
+          {/* Mobile menu */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            className="grid h-10 w-10 place-items-center rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text)] backdrop-blur-md lg:hidden"
+          >
+            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
+
+      {/* Mobile menu drawer */}
+      {menuOpen && (
+        <div className="border-t border-[var(--glass-border)] bg-[var(--glass-bg-strong)] backdrop-blur-2xl lg:hidden">
+          <nav className="mx-auto flex w-full max-w-[1240px] flex-col gap-1 px-4 py-4 md:px-10">
+            {NAV_LINKS.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === '/'}
+                className={({ isActive }) =>
+                  `rounded-xl px-4 py-3 font-display text-[18px] font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-[var(--primary-soft)] text-[var(--primary)]'
+                      : 'text-[var(--text)] hover:bg-[var(--glass-bg)]'
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   )
 }

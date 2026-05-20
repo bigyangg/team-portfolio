@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 64" width="340" height="64" fill="none">
+  <g>
+    <path d="M8 56 C 8 14, 56 14, 56 56" stroke="#10B981" stroke-width="7" stroke-linecap="round"></path>
+    <circle cx="32" cy="9" r="5" fill="#0D9488"></circle>
+  </g>
+  <text x="80" y="46" font-family="&#39;Space Grotesk&#39;, &#39;Inter&#39;, system-ui, sans-serif" font-weight="700" font-size="44" letter-spacing="-1.1" fill="#10B981">NG<tspan fill="#0D9488">H</tspan>TT</text>
+</svg>
