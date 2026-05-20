@@ -77,16 +77,6 @@ function HeroSection() {
         animate="show"
       >
         <div className="max-w-3xl">
-          <motion.div
-            variants={heroItem}
-            className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/50 bg-white/55 px-5 py-2 backdrop-blur-xl"
-          >
-            <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-            <span className="text-[12.5px] font-semibold text-[var(--text)]/85">
-              A proposal to the Ministry of Energy
-            </span>
-          </motion.div>
-
           <motion.h1
             variants={heroItem}
             className="font-display text-[36px] font-extrabold leading-[1.08] tracking-[-0.022em] text-[var(--text)] [text-wrap:balance] sm:text-[48px] md:text-[60px] lg:text-[72px] xl:text-[80px]"
