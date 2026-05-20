@@ -676,10 +676,15 @@ body::before {
 
 /* Section surface utilities — alternate page bands.
    Each pairs a background with a default text color and updates --primary
-   contrast so glow-text still reads. */
+   contrast so glow-text still reads. Surfaces are explicit design choices,
+   so they scope their own --text tokens and stay consistent regardless of
+   theme (light/dark mode toggle). */
 .surface-mint {
   background: var(--surface-mint);
-  color: var(--text);
+  color: #052E2C;
+  --text: #052E2C;
+  --foreground: #052E2C;
+  --muted-foreground: #4A6A65;
 }
 
 .surface-cream {

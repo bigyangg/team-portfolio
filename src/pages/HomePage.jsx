@@ -61,12 +61,13 @@ function HomePage() {
 
       {/* Quick-link directory */}
       <motion.section
-        className="snap-start relative mx-auto w-full max-w-[1240px] px-5 py-20 md:px-10 md:py-24"
+        className="surface-mint snap-start relative w-full"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: '-10% 0px' }}
         variants={staggerContainer}
       >
+        <div className="mx-auto w-full max-w-[1240px] px-5 py-20 md:px-10 md:py-24">
         <motion.div variants={riseItem} className="mb-8 flex flex-col items-start gap-3 md:mb-12 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="eyebrow">What you’re looking at</p>
@@ -113,6 +114,7 @@ function HomePage() {
             </motion.div>
           ))}
         </motion.div>
+        </div>
       </motion.section>
 
       <div className="snap-start">
