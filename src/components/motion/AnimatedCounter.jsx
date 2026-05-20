@@ -3,11 +3,13 @@ import { animate, useInView, useMotionValue, useTransform } from 'framer-motion'
 
 // Counts from 0 to `value` once when scrolled into view.
 // Uses framer-motion's animate() for non-React tween.
-function AnimatedCounter({ value, suffix = '', duration = 1.2, className = '' }) {
+function AnimatedCounter({ value, suffix = '', duration = 1.2, className = '', decimals = 0 }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-15% 0px' })
   const count = useMotionValue(0)
-  const rounded = useTransform(count, (v) => Math.round(v))
+  const rounded = useTransform(count, (v) =>
+    decimals > 0 ? v.toFixed(decimals) : String(Math.round(v)),
+  )
 
   useEffect(() => {
     if (!inView) return
@@ -36,7 +38,7 @@ function RoundedDisplay({ rounded }) {
   const ref = useRef(null)
   useEffect(() => {
     const unsubscribe = rounded.on('change', (v) => {
-      if (ref.current) ref.current.textContent = String(v)
+      if (ref.current) ref.current.textContent = v
     })
     return unsubscribe
   }, [rounded])

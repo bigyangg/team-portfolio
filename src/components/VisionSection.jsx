@@ -1,38 +1,39 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useState } from 'react'
-import { Mountain, Wind, Droplets, Flame } from 'lucide-react'
+import { Shield, Cpu, Lock, TrendingUp } from 'lucide-react'
 import { riseItem, staggerContainer } from '../lib/motion'
 import H2Molecule from './motion/H2Molecule'
 import TiltCard from './motion/TiltCard'
 import ElectrolysisGlyph from './motion/ElectrolysisGlyph'
 
+// The four NGHTT pillars, sourced verbatim from slide 5 of the proposal.
 const PILLARS = [
   {
-    icon: Droplets,
-    title: 'Electrolysis at altitude',
+    icon: Shield,
+    title: 'Sovereign Trust',
     body:
-      'Pilot plants in the high Himalayas convert monsoon hydroelectric surplus into storable, transportable green H₂.',
+      'Public trust under Nepal law. Not a government department, protected from political cycles. IP stays in Nepal forever.',
+    glyph: null,
+  },
+  {
+    icon: Cpu,
+    title: 'AI-First R&D',
+    body:
+      'Physics-informed neural networks simulate thousands of designs virtually. 15-year R&D compressed to 5 years at a fraction of the cost.',
     glyph: 'electrolysis',
   },
   {
-    icon: Wind,
-    title: 'Energy sovereignty',
+    icon: Lock,
+    title: 'Intranet-Sovereign',
     body:
-      'Replace imported fertiliser, diesel, and coal with home-produced green ammonia, hydrogen fuel cells, and heat.',
+      'HydraNet AI runs on Nepal\'s intranet only. No cloud, no foreign server. Every dataset, design, and result stays in Nepal.',
     glyph: null,
   },
   {
-    icon: Flame,
-    title: 'Decarbonised industry',
+    icon: TrendingUp,
+    title: 'Self-Funding by Y5',
     body:
-      'Brick kilns, cement, and heavy transport switched to hydrogen. Nepal\'s biggest emitters retooled, not retired.',
-    glyph: null,
-  },
-  {
-    icon: Mountain,
-    title: 'Mountain to grid',
-    body:
-      'A new energy export economy. Green hydrogen, ammonia, and ammonium pellets shipped across SAARC.',
+      'IP licensing, research services, and consulting generate NPR 25 Cr/yr by Y10. NGHTT costs the Ministry nothing after Year 5.',
     glyph: null,
   },
 ]
@@ -112,16 +113,16 @@ function VisionSection() {
             variants={riseItem}
             className="font-display mt-2 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] text-[#E6F4EF] sm:text-[36px] md:text-[42px]"
           >
-            From{' '}
-            <span className="glow-text">monsoon water</span> to molecular fuel.
+            Hydrogen technology Nepal{' '}
+            <span className="glow-text">owns</span>.
           </motion.h2>
           <motion.p
             variants={riseItem}
             className="mt-4 max-w-xl text-[14.5px] leading-[1.65] text-[#E6F4EF]/75 md:text-[15.5px]"
           >
-            NGHTT is a 27-person think tank convened to give Nepal a green hydrogen strategy
-            that is built, not borrowed. We map the chemistry, the policy, the capital stack,
-            and the people, then submit it as a single, signed brief.
+            NGHTT is a nationally designated public trust that uses Nepal's hydroelectric surplus
+            and AI-driven engineering to develop hydrogen technology Nepal owns. Not licenses,
+            not imports. Owns.
           </motion.p>
 
           <motion.div variants={staggerContainer} className="mt-8 grid gap-5 sm:grid-cols-2">

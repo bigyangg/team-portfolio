@@ -92,8 +92,9 @@ function HeroSection() {
             variants={heroItem}
             className="mt-7 max-w-2xl text-[15.5px] leading-[1.6] text-[var(--text)]/80 md:text-[17px]"
           >
-            We're a team of 27. Chemists, engineers, AI builders, lawyers and policy people, quietly
-            organising the institution that turns Nepal's monsoon hydropower into a hydrogen economy.
+            An 11-person founder team developing hydrogen technology Nepal owns. Not licenses,
+            not imports. Owns. AI compresses 15 years of R&amp;D into 5, on a single ministerial
+            designation order that costs the Ministry nothing to issue.
           </motion.p>
 
           <motion.div variants={heroItem} className="mt-8 flex flex-wrap items-center gap-3">

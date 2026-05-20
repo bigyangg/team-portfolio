@@ -83,13 +83,13 @@ function Navbar() {
     >
       <div className="mx-auto flex w-full max-w-[1240px] items-center justify-between px-4 py-3 md:px-10 md:py-4">
         {/* Brand */}
-        <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
+        <Link to="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-90 md:gap-3">
           <NghttMark />
-          <div className="hidden flex-col sm:flex">
-            <span className="font-display text-[15px] font-extrabold leading-tight tracking-[-0.012em] text-[var(--text)]">
+          <div className="flex min-w-0 flex-col">
+            <span className="font-display text-[14px] font-extrabold leading-tight tracking-[-0.012em] text-[var(--text)] md:text-[15px]">
               NGHTT
             </span>
-            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+            <span className="font-mono text-[8px] font-bold uppercase leading-tight tracking-[0.14em] text-[var(--accent)] md:text-[9.5px] md:tracking-[0.18em]">
               Green Hydrogen Think Tank
             </span>
           </div>

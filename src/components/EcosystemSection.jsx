@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Truck, Wheat, Flame, Battery, Sprout } from 'lucide-react'
+import { Truck, Wheat, Flame, Battery, Sprout, Globe2 } from 'lucide-react'
 import { riseItem, staggerContainer } from '../lib/motion'
 import SpotlightCard from './motion/SpotlightCard'
 import TiltCard from './motion/TiltCard'
@@ -47,6 +47,14 @@ const USE_CASES = [
     accent: 'rgba(52,211,153,0.22)',
     hoverGlyph: 'electrolysis',
   },
+  {
+    n: '06',
+    icon: Globe2,
+    title: 'South Asian Export',
+    body: 'Nepal-owned engine IP licensed to manufacturers in India, Bangladesh, and Sri Lanka by Year 10.',
+    accent: 'rgba(14,165,140,0.22)',
+    hoverGlyph: 'h2',
+  },
 ]
 
 function HoverGlyph({ kind }) {
@@ -85,16 +93,11 @@ function EcosystemSection() {
 
         <motion.div
           variants={staggerContainer}
-          className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6"
+          className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"
         >
-          {USE_CASES.map((u, i) => {
-            const lgSpan = i < 3
-              ? 'lg:col-span-2'
-              : i === 3
-                ? 'lg:col-span-2 lg:col-start-2'
-                : 'lg:col-span-2 lg:col-start-4'
+          {USE_CASES.map((u) => {
             return (
-              <motion.div key={u.n} variants={riseItem} className={lgSpan}>
+              <motion.div key={u.n} variants={riseItem}>
                 <TiltCard max={4} className="h-full">
                   <SpotlightCard
                     glowColor={u.accent}

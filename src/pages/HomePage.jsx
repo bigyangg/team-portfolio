@@ -21,17 +21,17 @@ const QUICK_LINKS = [
   },
   {
     to: '/applications',
-    eyebrow: 'Five Applications',
+    eyebrow: 'Six Applications',
     title: 'Where green H₂ moves the needle for Nepal',
-    body: 'Agriculture, fertilizer, heavy transport, industrial heat, and energy storage.',
+    body: 'Agriculture, fertilizer, freight, industrial heat, energy storage, and South Asian export.',
     icon: Sparkles,
     accent: 'rgba(45,212,191,0.22)',
   },
   {
     to: '/team',
     eyebrow: 'The Team',
-    title: '27 experts with verified, traceable CVs',
-    body: 'AI, chemistry, energy systems, policy. Mapped, ranked, ready.',
+    title: '11 founder team with verified, traceable CVs',
+    body: 'AI, chemistry, energy systems, policy, law. The complete operating team for Nepal\'s H₂ agenda.',
     icon: Users,
     accent: 'rgba(52,211,153,0.22)',
   },
@@ -46,10 +46,17 @@ const QUICK_LINKS = [
 ]
 
 const TARGETS = [
-  { v: 27, label: 'Research positions', suffix: '+' },
-  { v: 5, label: 'Field-tested machines' },
-  { v: 50, label: 'NPR crore in grants', suffix: '+' },
-  { v: 10, label: 'Peer-reviewed papers', suffix: '+' },
+  { v: 11, label: 'Founder team', suffix: '' },
+  { v: 11.84, label: 'NPR Cr capital grant', suffix: '', decimals: 2 },
+  { v: 25, label: 'NPR Cr/yr revenue by Y10', suffix: '' },
+  { v: 5, label: 'Patents filed by Y5', suffix: '+' },
+]
+
+const PROBLEM_STATS = [
+  { v: '3×', label: 'Urea price spike, 2022 — Russia/Ukraine war.' },
+  { v: '100%', label: 'Fuel bill paid abroad. Hydropower runs idle.' },
+  { v: '0', label: 'SAARC nations with domestically-owned H₂ engine IP.' },
+  { v: '15→5', label: 'Years of R&D compressed via AI-driven simulation.' },
 ]
 
 function HomePage() {
@@ -58,6 +65,34 @@ function HomePage() {
       <section>
         <HeroSection />
       </section>
+
+      {/* Problem stats strip — the case Nepal is paying for what it could own */}
+      <motion.section
+        className="surface-mint relative w-full border-y border-[var(--surface-rule-soft)]"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-10% 0px' }}
+        variants={staggerContainer}
+      >
+        <div className="mx-auto w-full max-w-[1240px] px-5 py-12 md:px-10 md:py-16">
+          <motion.p variants={riseItem} className="eyebrow">The Problem</motion.p>
+          <motion.h2 variants={riseItem} className="font-display mt-2 max-w-2xl text-[22px] font-bold leading-[1.15] tracking-[-0.02em] text-[var(--text)] md:text-[28px]">
+            Nepal is paying for what it could own.
+          </motion.h2>
+          <motion.div variants={staggerContainer} className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">
+            {PROBLEM_STATS.map((s) => (
+              <motion.div key={s.label} variants={riseItem} className="border-t border-[var(--surface-rule)] pt-4">
+                <div className="font-display tab-num text-[34px] font-extrabold leading-none tracking-[-0.035em] text-[var(--primary)] md:text-[44px]">
+                  {s.v}
+                </div>
+                <p className="mt-2 text-[12px] leading-[1.5] text-[var(--text)]/70 md:text-[13px]">
+                  {s.label}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </motion.section>
 
       {/* Quick-link directory */}
       <motion.section
@@ -76,8 +111,8 @@ function HomePage() {
             </h2>
           </div>
           <p className="max-w-md text-[13.5px] leading-[1.55] text-[var(--text)]/70 md:text-[14.5px]">
-            This portfolio bundles the NGHTT proposal, the five-application strategy, the
-            27-person research team, and the formal designation request into one place.
+            This portfolio bundles the NGHTT proposal, the six-application strategy, the
+            11-person founder team, and the formal designation request into one place.
           </p>
         </motion.div>
 
@@ -156,6 +191,7 @@ function HomePage() {
                 <AnimatedCounter
                   value={s.v}
                   suffix={s.suffix}
+                  decimals={s.decimals || 0}
                   className="font-display tab-num inline-block text-[44px] font-extrabold leading-none tracking-[-0.025em] text-[#6EE7B7] md:text-[56px]"
                 />
                 <p className="mt-3 text-[12.5px] font-semibold text-[#E6F4EF]/80 md:text-[13.5px]">
