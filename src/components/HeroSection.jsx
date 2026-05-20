@@ -65,8 +65,10 @@ function HeroSection() {
         }}
       />
 
-      {/* Drifting particle dust — kept light for smooth scroll */}
-      <ParticleField count={36} />
+      {/* Drifting particle dust — hidden below sm to save GPU on mobile */}
+      <div className="hidden sm:block absolute inset-0" aria-hidden="true">
+        <ParticleField count={36} />
+      </div>
 
       {/* Content */}
       <motion.div
@@ -97,7 +99,7 @@ function HeroSection() {
             designation order that costs the Ministry nothing to issue.
           </motion.p>
 
-          <motion.div variants={heroItem} className="mt-8 flex flex-wrap items-center gap-3">
+          <motion.div variants={heroItem} className="mt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
             <MagneticButton as="a" href="#team" className="btn btn-primary">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               View the team

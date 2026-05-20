@@ -1,163 +1,315 @@
-import { CheckCircle2, XCircle, FileText, ShieldCheck, Scale, Stamp, Building2 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { CheckCircle2 } from 'lucide-react'
 import PageHero from '../components/ui/PageHero'
+import MagneticButton from '../components/motion/MagneticButton'
+import { riseItem, staggerContainer } from '../lib/motion'
 
-const WHAT_IT_DOES = [
-  'Recognises NGHTT as Nepal’s single coordination platform for green hydrogen.',
-  'Encourages universities, agencies, donors, and the private sector to coordinate through NGHTT.',
-  'Unlocks NGHTT’s eligibility to receive international climate finance (ADB, GCF, GGGI).',
-  'Sends a clear signal to international partners: there is one designated counterpart.',
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const UNLOCKS = [
+  {
+    title: 'Trust registration',
+    body: 'NGHTT legally constituted within 30 days. Bank accounts, procurement, operations begin.',
+  },
+  {
+    title: 'University cooperation',
+    body: 'KU and TU sign cooperation agreements giving NGHTT lab access immediately.',
+  },
+  {
+    title: 'International donors',
+    body: 'ADB, GCF, GGGI begin formal consideration. Designation is their prerequisite.',
+  },
+  {
+    title: 'Private sector confidence',
+    body: 'Industry partners invest alongside the programme once national status is confirmed.',
+  },
 ]
 
-const WHAT_IT_DOES_NOT = [
+const TRANCHES = [
   {
-    head: 'Make NGHTT a government body.',
-    body: 'The Trust remains independent, governed by its own Board of Trustees and Trust Deed. The Ministry assumes no supervisory or financial liability.',
+    label: 'T1',
+    amount: 'NPR 1.50 Cr',
+    description: 'Trust registered, designation order, Year 1 permits.',
+    verification: 'Ministry legal team verifies trust deed.',
   },
   {
-    head: 'Grant regulatory or licensing authority.',
-    body: 'NGHTT is a coordination and R&D platform — not a regulator. Regulatory authority remains with the Ministry and AEPC.',
+    label: 'T2',
+    amount: 'NPR 3.00 Cr',
+    description: 'HPC node live, Godavari site secured, electrolyzer operational.',
+    verification: 'Ministry officer site inspection.',
   },
   {
-    head: 'Compel anyone to participate.',
-    body: 'The proposed language reads “encouraged to coordinate” — never required. Participation is voluntary, though institutional incentives make non-participation irrational.',
+    label: 'T3',
+    amount: 'NPR 2.50 Cr',
+    description: 'Year 1 audit filed, PINNs training begun, first journal paper.',
+    verification: 'Audit report + publication confirmation.',
   },
   {
-    head: 'Cost the Ministry anything financially.',
-    body: 'The designation is a one-page order. No budget allocation, no staffing, no recurring cost.',
+    label: 'T4',
+    amount: 'NPR 2.50 Cr',
+    description: 'Physical prototypes, dynamometer data, safety standards draft.',
+    verification: 'Technical committee review.',
+  },
+  {
+    label: 'T5',
+    amount: 'NPR 2.34 Cr',
+    description: 'Road-tested machinery, patents filed, 5+ publications, self-sustaining.',
+    verification: 'Final independent audit.',
   },
 ]
+
+const SUCCESS_ITEMS = [
+  'Nepal owns South Asia\'s first domestic hydrogen engine IP.',
+  '3–5 patents filed. Nepal collects royalties from the region.',
+  'NGHTT generates NPR 25 Cr/year by Year 10.',
+  'Hydrogen tractors in Terai. Fertiliser independence begins.',
+  'Nepal becomes the reference model for small-nation H₂ R&D.',
+]
+
+const SHORTFALL_ITEMS = [
+  'Only tranches tied to verified milestones are released.',
+  'Ministry holds the release lever. No open-ended commitment.',
+  'Nepal retains: trained team, HPC node, electrolyzer data.',
+  'Partial programme still leaves Nepal further ahead than today.',
+  'Independent annual audit. No financial surprise.',
+  'Worst case: less than one infrastructure project.',
+]
+
+// ─── Component ───────────────────────────────────────────────────────────────
 
 function SubmissionPage() {
   return (
     <>
+      {/* 1. Page Hero */}
       <PageHero
-        eyebrow="— The Designation Request"
+        eyebrow="THE DESIGNATION REQUEST"
         title={
           <>
-            One page.{' '}
-            <span className="glow-text">One Ministerial Order</span>. No liability.
+            One ministerial{' '}
+            <span className="glow-text">designation order.</span>
           </>
         }
-        intro={
-          <>
-            NGHTT requests a single Ministerial Designation Order recognising it as Nepal’s
-            national coordination platform for green hydrogen. The Trust is already being
-            built. The designation aligns existing efforts under one roof.
-          </>
-        }
+        intro="It costs the Ministry nothing to issue. It unlocks everything."
         breadcrumb={[{ label: 'Submission' }]}
-        image="/hero/columns.png"
       />
 
-      {/* Submission meta */}
-      <section className="mx-auto w-full max-w-[1240px] px-5 py-16 md:px-10 md:py-20">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { icon: FileText, label: 'Reference', value: 'NGHTT/PROPOSAL/2082-83/001' },
-            { icon: Building2, label: 'Submitted to', value: 'Ministry of Energy, WR & I' },
-            { icon: Scale, label: 'Legal basis', value: 'Muluki Dewani Sanhita 2074 · §314–351' },
-            { icon: Stamp, label: 'Date', value: '2026-04-26 (2082 BS)' },
-          ].map((m) => (
-            <div key={m.label} className="rounded-[20px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 backdrop-blur-xl">
-              <m.icon className="h-4 w-4 text-[var(--primary)]" aria-hidden="true" />
-              <p className="eyebrow mt-3">{m.label}</p>
-              <p className="font-display mt-1 text-[15px] font-bold leading-[1.3] text-[var(--text)]">{m.value}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Proposed Designation Language — featured quote */}
-      <section className="mx-auto w-full max-w-[1240px] px-5 pb-12 md:px-10 md:pb-20">
-        <div className="relative overflow-hidden rounded-[28px] border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] p-8 backdrop-blur-2xl md:p-14">
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(60% 50% at 0% 0%, rgba(110,231,183,0.22), transparent 60%), radial-gradient(50% 50% at 100% 100%, rgba(45,212,191,0.18), transparent 65%)',
-            }}
-          />
-          <div className="relative">
-            <p className="eyebrow">— Proposed Designation Language</p>
-            <blockquote className="font-display mt-5 text-[22px] font-semibold leading-[1.45] tracking-[-0.012em] text-[var(--text)]/95 md:text-[28px]">
-              <span className="text-[var(--primary)]">“</span>
-              The National Green Hydrogen Think Tank (NGHTT), registered as a public trust under
-              the Muluki Dewani Sanhita (Civil Code), 2074, is hereby designated as Nepal’s
-              National Coordination Platform for green hydrogen research, development, and
-              stakeholder integration. All academic institutions, government agencies,
-              development partners, and private sector entities engaged in green hydrogen
-              activities are encouraged to coordinate their initiatives through NGHTT to ensure
-              national coherence, eliminate duplication, and accelerate the deployment of green
-              hydrogen technology.
-              <span className="text-[var(--primary)]">”</span>
-            </blockquote>
-            <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--muted-foreground)]">
-              Drafted for issuance by the Honourable Minister of Energy, Water Resources &amp; Irrigation
-            </p>
+      {/* 2. The 4 Unlocks */}
+      <section className="surface-mint w-full py-20 md:py-28">
+        <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
+          <div className="mb-12 max-w-2xl">
+            <p className="eyebrow">WHAT IT UNLOCKS</p>
+            <h2 className="font-display mt-3 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] text-[var(--text)] md:text-[38px]">
+              Four things that cannot start without it.
+            </h2>
           </div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {UNLOCKS.map((u, i) => (
+              <motion.div
+                key={u.title}
+                variants={riseItem}
+                className="rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-6 backdrop-blur-2xl"
+              >
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="font-display mt-4 text-[18px] font-bold leading-tight text-[var(--text)]">
+                  {u.title}
+                </h3>
+                <p className="mt-2.5 text-[13.5px] leading-[1.65] text-[var(--muted-foreground)]">
+                  {u.body}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* What the designation DOES / DOES NOT do — side by side */}
-      <section className="mx-auto w-full max-w-[1240px] px-5 pb-20 md:px-10 md:pb-28">
-        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-          {/* Does */}
-          <div className="rounded-[24px] border border-[var(--primary)]/40 bg-[var(--glass-bg)] p-7 backdrop-blur-2xl md:p-9">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-[var(--primary)]" aria-hidden="true" />
-              <p className="eyebrow text-[var(--primary)]">What this designation does</p>
-            </div>
-            <ul className="mt-6 space-y-4">
-              {WHAT_IT_DOES.map((w) => (
-                <li key={w} className="flex items-start gap-3 text-[14.5px] leading-[1.55] text-[var(--text)]/85">
-                  <CheckCircle2 className="mt-[3px] h-4 w-4 shrink-0 text-[var(--primary)]" aria-hidden="true" />
-                  <span>{w}</span>
-                </li>
+      {/* 3. Budget — 5-tranche disbursement — surface-cream */}
+      <section className="surface-cream w-full py-20 md:py-28">
+        <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
+          <div className="mb-12">
+            <p className="eyebrow">THE BUDGET</p>
+            <h2 className="font-display mt-3 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] md:text-[38px]">
+              5-tranche disbursement. No milestone met, no next tranche released.
+            </h2>
+          </div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            className="space-y-0 divide-y"
+            style={{ borderColor: 'rgba(42,31,15,0.10)' }}
+          >
+            {/* Column headers */}
+            <div className="hidden grid-cols-[80px_160px_minmax(0,1fr)_minmax(0,1fr)] gap-6 pb-3 md:grid">
+              {['Tranche', 'Amount', 'Milestone', 'Verification'].map((h) => (
+                <p key={h} className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: 'rgba(42,31,15,0.45)' }}>
+                  {h}
+                </p>
               ))}
-            </ul>
-          </div>
-
-          {/* Does NOT */}
-          <div className="rounded-[24px] border border-[var(--surface-rule)] bg-[var(--glass-bg)] p-7 backdrop-blur-2xl md:p-9">
-            <div className="flex items-center gap-2">
-              <XCircle className="h-5 w-5 text-[var(--muted-foreground)]" aria-hidden="true" />
-              <p className="eyebrow">What this designation does NOT do</p>
             </div>
-            <ul className="mt-6 space-y-5">
-              {WHAT_IT_DOES_NOT.map((w) => (
-                <li key={w.head} className="border-l-2 border-[var(--surface-rule)] pl-4">
-                  <p className="font-display text-[15px] font-bold leading-tight text-[var(--text)]">{w.head}</p>
-                  <p className="mt-1.5 text-[13.5px] leading-[1.55] text-[var(--text)]/65">{w.body}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
+
+            {TRANCHES.map((t) => (
+              <motion.div
+                key={t.label}
+                variants={riseItem}
+                className="grid gap-3 py-6 md:grid-cols-[80px_160px_minmax(0,1fr)_minmax(0,1fr)] md:gap-6 md:items-start"
+              >
+                <p className="font-mono text-[13px] font-bold" style={{ color: '#B8542A' }}>{t.label}</p>
+                <p className="font-display text-[17px] font-bold leading-tight">{t.amount}</p>
+                <p className="text-[13.5px] leading-[1.6]" style={{ color: 'rgba(42,31,15,0.70)' }}>{t.description}</p>
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] mb-1 md:hidden" style={{ color: 'rgba(42,31,15,0.45)' }}>Verification</p>
+                  <p className="text-[13px] leading-[1.6]" style={{ color: 'rgba(42,31,15,0.55)' }}>{t.verification}</p>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* Total row */}
+            <div className="grid gap-3 py-7 md:grid-cols-[80px_160px_minmax(0,1fr)_minmax(0,1fr)] md:gap-6 md:items-center">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: 'rgba(42,31,15,0.45)' }}>Total</p>
+              <p className="font-display text-[22px] font-extrabold leading-tight">NPR 11.84 Cr</p>
+              <p className="text-[13.5px] leading-[1.6] md:col-span-2" style={{ color: 'rgba(42,31,15,0.55)' }}>
+                Compared to traditional R&D: USD 40–50M over 8 years. This programme achieves equivalent physics in 3–5 years at a fraction of that cost.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Why now — Gap analysis */}
-      <section className="mx-auto w-full max-w-[1240px] px-5 pb-20 md:px-10 md:pb-28">
-        <div className="relative overflow-hidden rounded-[26px] border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] p-8 backdrop-blur-2xl md:p-12">
-          <p className="eyebrow">— The Gap NGHTT Fills</p>
-          <h2 className="font-display mt-3 text-[28px] font-bold leading-[1.1] tracking-[-0.02em] text-[var(--text)] md:text-[36px]">
-            Policy intent without a coordinator goes nowhere.
-          </h2>
-          <p className="mt-4 max-w-3xl text-[14.5px] leading-[1.7] text-[var(--text)]/75 md:text-[16px]">
-            The <span className="font-semibold text-[var(--text)]">Green Hydrogen Policy 2080</span> and{' '}
-            <span className="font-semibold text-[var(--text)]">Budget 2082/83</span> have created policy intent
-            and fiscal incentives. The Alternative Energy Promotion Centre is funding initial work. A
-            <span className="font-semibold text-[var(--text)]"> NPR 1.6 billion fertilizer plant</span> is proposed.
-            What is missing — and what every stakeholder has independently identified — is a single, permanent
-            institution with the authority and technical capacity to bring all these actors together,
-            coordinate their efforts, and deliver physically engineered hydrogen technology.
-          </p>
-          <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-4 py-2 backdrop-blur-xl">
-            <ShieldCheck className="h-4 w-4 text-[var(--primary)]" aria-hidden="true" />
-            <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text)]/80">
-              NGHTT is built to be that institution.
-            </span>
+      {/* 4. Governance — surface-forest */}
+      <section className="surface-forest w-full py-20 md:py-28">
+        <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
+          <div className="mb-14 max-w-2xl">
+            <p className="eyebrow">GOVERNANCE</p>
+            <h2 className="font-display mt-3 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] text-[var(--text)] md:text-[38px]">
+              The Ministry controls every rupee at every stage.
+            </h2>
           </div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            className="grid gap-6 md:grid-cols-3"
+          >
+            {[
+              {
+                title: 'Who controls the money',
+                body: 'No milestone met, no next tranche released. The Ministry holds the lever at every stage. No open-ended commitment, no surprises. Dual signatures on every expense above NPR 1 lakh. Competitive tendering required above NPR 5 lakh. Ministry-appointed independent auditor, not NGHTT\'s.',
+              },
+              {
+                title: 'If targets are not met',
+                body: 'Loss is bounded. Only tranches tied to verified milestones are released. Nepal retains the trained team, the HPC node, and the electrolyzer data regardless of outcome.',
+              },
+              {
+                title: 'Why it survives political change',
+                body: 'Public-trust structure with perpetual succession. NGHTT does not depend on any single government, minister, or party. Institutional knowledge and IP stay in Nepal regardless of what changes in Singha Durbar.',
+              },
+            ].map((g) => (
+              <motion.div
+                key={g.title}
+                variants={riseItem}
+                className="rounded-[18px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-7 backdrop-blur-2xl"
+              >
+                <h3 className="font-display text-[18px] font-bold leading-tight text-[var(--text)]">
+                  {g.title}
+                </h3>
+                <p className="mt-3 text-[13.5px] leading-[1.7] text-[var(--muted-foreground)]">
+                  {g.body}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 5. The Decision — risk-reward */}
+      <section className="surface-mint w-full py-20 md:py-28">
+        <div className="mx-auto w-full max-w-[1240px] px-5 md:px-10">
+          <div className="mb-14 max-w-2xl">
+            <p className="eyebrow">THE DECISION</p>
+            <h2 className="font-display mt-3 text-[28px] font-bold leading-[1.08] tracking-[-0.022em] text-[var(--text)] md:text-[38px]">
+              Either way, Nepal moves forward.
+            </h2>
+          </div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            className="grid gap-6 md:grid-cols-2"
+          >
+            {/* If it succeeds */}
+            <motion.div
+              variants={riseItem}
+              className="rounded-[20px] border p-8"
+              style={{
+                borderColor: 'rgba(5,150,105,0.35)',
+                background: 'rgba(5,150,105,0.05)',
+              }}
+            >
+              <p className="eyebrow text-[var(--primary)]">IF NGHTT SUCCEEDS</p>
+              <ul className="mt-6 space-y-4">
+                {SUCCESS_ITEMS.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-[14px] leading-[1.6] text-[var(--text)]/85">
+                    <CheckCircle2 className="mt-[3px] h-4 w-4 shrink-0 text-[var(--primary)]" aria-hidden="true" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* If it falls short */}
+            <motion.div
+              variants={riseItem}
+              className="rounded-[20px] border border-[var(--glass-border)] bg-[var(--glass-bg)] p-8 backdrop-blur-2xl"
+            >
+              <p className="eyebrow">IF IT FALLS SHORT OF GOALS</p>
+              <ul className="mt-6 space-y-4">
+                {SHORTFALL_ITEMS.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-[14px] leading-[1.6] text-[var(--muted-foreground)]">
+                    <span className="mt-[6px] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--muted-foreground)]/50" aria-hidden="true" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
+
+          {/* Closing line */}
+          <motion.p
+            variants={riseItem}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="mt-14 max-w-3xl text-[16px] font-semibold leading-[1.6] text-[var(--text)] md:text-[18px]"
+          >
+            The cost of inaction, another decade of dependency, is far higher than the cost of beginning.
+          </motion.p>
+
+          <motion.div
+            variants={riseItem}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="mt-8"
+          >
+            <MagneticButton as="a" href="/team" className="btn btn-primary">
+              Meet the team behind this proposal
+            </MagneticButton>
+          </motion.div>
         </div>
       </section>
     </>

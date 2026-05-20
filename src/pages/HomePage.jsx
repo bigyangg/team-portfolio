@@ -9,6 +9,11 @@ import TiltCard from '../components/motion/TiltCard'
 import AnimatedCounter from '../components/motion/AnimatedCounter'
 import MagneticButton from '../components/motion/MagneticButton'
 import { riseItem, staggerContainer } from '../lib/motion'
+import SummaryBlock from '../components/home/SummaryBlock'
+import RevenueSection from '../components/home/RevenueSection'
+import BudgetSection from '../components/home/BudgetSection'
+import FAQSection from '../components/home/FAQSection'
+import ContactCTA from '../components/home/ContactCTA'
 
 const QUICK_LINKS = [
   {
@@ -94,6 +99,8 @@ function HomePage() {
         </div>
       </motion.section>
 
+      <SummaryBlock />
+
       {/* Quick-link directory */}
       <motion.section
         className="surface-mint relative w-full"
@@ -160,6 +167,8 @@ function HomePage() {
         <EcosystemSection />
       </div>
 
+      <FAQSection />
+
       {/* Year-Five counters — forest band for contrast */}
       <motion.section
         className="surface-forest grain relative w-full overflow-hidden py-16 md:py-20"
@@ -211,6 +220,10 @@ function HomePage() {
           </motion.div>
         </div>
       </motion.section>
+
+      <RevenueSection />
+      <BudgetSection />
+      <ContactCTA />
     </div>
   )
 }

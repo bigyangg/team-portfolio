@@ -7,9 +7,16 @@ function FooterSection() {
     <footer className="relative mt-20 w-full md:mt-24">
       <div className="mx-auto w-full max-w-[1240px] px-5 pb-10 pt-8 md:px-10">
         <div className="flex flex-col items-center justify-between gap-5 border-t border-[var(--surface-rule-soft)] pt-8 sm:flex-row">
-          <p className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-[var(--muted-foreground)]">
-            NGHTT · National Green Hydrogen Think Tank · 2082 BS
-          </p>
+          <div className="flex flex-col gap-1.5">
+            <img
+              src="/brand/nghtt-lockup.svg"
+              alt="NGHTT — National Green Hydrogen Think Tank"
+              className="h-7 opacity-70"
+            />
+            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[var(--muted-foreground)]">
+              2082 BS
+            </span>
+          </div>
 
           <button
             type="button"

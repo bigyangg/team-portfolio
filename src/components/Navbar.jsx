@@ -132,7 +132,7 @@ function Navbar() {
             type="button"
             onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
             aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)]"
+            className="relative hidden sm:grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)]"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.span

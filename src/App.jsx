@@ -7,6 +7,7 @@ import AboutPage from './pages/AboutPage'
 import ApplicationsPage from './pages/ApplicationsPage'
 import TeamPage from './pages/TeamPage'
 import SubmissionPage from './pages/SubmissionPage'
+import NotFoundPage from './pages/NotFoundPage'
 import PageTransition from './components/motion/PageTransition'
 import PageLoader from './components/motion/PageLoader'
 import { useEffect } from 'react'
@@ -29,7 +30,7 @@ function AnimatedRoutes() {
         <Route path="/applications" element={<PageTransition><ApplicationsPage /></PageTransition>} />
         <Route path="/team" element={<PageTransition><TeamPage /></PageTransition>} />
         <Route path="/submission" element={<PageTransition><SubmissionPage /></PageTransition>} />
-        <Route path="*" element={<PageTransition><HomePage /></PageTransition>} />
+        <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   )
