@@ -86,10 +86,10 @@ function Navbar() {
         <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
           <NghttMark />
           <div className="hidden flex-col sm:flex">
-            <span className="font-display text-[15px] font-extrabold leading-tight tracking-[-0.012em] text-[#052E2C]">
+            <span className="font-display text-[15px] font-extrabold leading-tight tracking-[-0.012em] text-[var(--text)]">
               NGHTT
             </span>
-            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] text-[#0D9488]">
+            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Green Hydrogen Think Tank
             </span>
           </div>
@@ -106,7 +106,7 @@ function Navbar() {
                 `relative rounded-full px-4 py-2 text-[13px] font-bold transition-colors duration-200 ${
                   isActive
                     ? 'text-[var(--primary)]'
-                    : 'text-[#052E2C] hover:text-[var(--primary)]'
+                    : 'text-[var(--text)] hover:text-[var(--primary)]'
                 }`
               }
             >
