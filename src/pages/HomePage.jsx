@@ -54,14 +54,14 @@ const TARGETS = [
 
 function HomePage() {
   return (
-    <div className="snap-y snap-proximity">
-      <section className="snap-start">
+    <div>
+      <section>
         <HeroSection />
       </section>
 
       {/* Quick-link directory */}
       <motion.section
-        className="surface-mint snap-start relative w-full"
+        className="surface-mint relative w-full"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: '-10% 0px' }}
@@ -117,17 +117,17 @@ function HomePage() {
         </div>
       </motion.section>
 
-      <div className="snap-start">
+      <div>
         <VisionSection />
       </div>
 
-      <div className="snap-start">
+      <div>
         <EcosystemSection />
       </div>
 
       {/* Year-Five counters — forest band for contrast */}
       <motion.section
-        className="surface-forest grain snap-start relative w-full overflow-hidden py-16 md:py-20"
+        className="surface-forest grain relative w-full overflow-hidden py-16 md:py-20"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: '-10% 0px' }}

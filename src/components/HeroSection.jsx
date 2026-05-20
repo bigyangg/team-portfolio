@@ -65,8 +65,8 @@ function HeroSection() {
         }}
       />
 
-      {/* Drifting particle dust */}
-      <ParticleField count={70} />
+      {/* Drifting particle dust — kept light for smooth scroll */}
+      <ParticleField count={36} />
 
       {/* Content */}
       <motion.div

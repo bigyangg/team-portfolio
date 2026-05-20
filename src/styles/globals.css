@@ -224,23 +224,7 @@ body {
   transition: color 240ms var(--ease-out-quart);
 }
 
-/* AURORA — multiple drifting radial gradients on a fixed layer behind everything */
-body::before {
-  content: '';
-  position: fixed;
-  inset: -10% -10% -10% -10%;
-  background:
-    radial-gradient(45% 50% at 15% 12%, var(--aurora-1) 0%, transparent 55%),
-    radial-gradient(50% 50% at 88% 18%, var(--aurora-2) 0%, transparent 60%),
-    radial-gradient(40% 45% at 50% 60%, var(--aurora-3) 0%, transparent 65%),
-    radial-gradient(45% 50% at 18% 88%, var(--aurora-4) 0%, transparent 60%),
-    radial-gradient(55% 60% at 90% 95%, var(--aurora-5) 0%, transparent 60%),
-    var(--aurora-base);
-  filter: saturate(110%);
-  z-index: -2;
-  animation: aurora-drift 28s ease-in-out infinite alternate;
-  will-change: transform;
-}
+/* Aurora is defined later in the file — keep one source of truth */
 
 /* Soft grain texture overlay for premium feel */
 body::after {
@@ -637,8 +621,8 @@ body::before {
     radial-gradient(45% 35% at 82% 18%, var(--aurora-2), transparent 65%),
     radial-gradient(40% 35% at 35% 82%, var(--aurora-3), transparent 65%),
     radial-gradient(45% 40% at 78% 78%, var(--aurora-4), transparent 65%);
-  opacity: 0.55;
-  animation: aurora-drift 22s ease-in-out infinite;
+  opacity: 0.4;
+  animation: aurora-drift 38s ease-in-out infinite;
   will-change: transform;
 }
 
