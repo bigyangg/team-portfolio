@@ -335,7 +335,7 @@ function AboutPage() {
           >
             {/* Table header */}
             <div className="hidden grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-6 pb-3 md:grid">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: 'rgba(42,31,15,0.45)' }}>Organisation</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: 'rgba(42,31,15,0.45)' }}>Programme</p>
               <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: 'rgba(42,31,15,0.45)' }}>Cost</p>
               <p className="font-mono text-[11px] uppercase tracking-[0.16em]" style={{ color: 'rgba(42,31,15,0.45)' }}>Duration</p>
             </div>

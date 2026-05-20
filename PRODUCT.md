@@ -4,7 +4,9 @@
 
 ## Product Purpose
 
-A formal portfolio site that bundles the NGHTT (National Green Hydrogen Think Tank) proposal, the five-application strategy, the 27-person research team with verified CVs, and the Ministerial Designation request into one place. Submitted to Nepal's Ministry of Energy as a single signed brief.
+A formal portfolio site that bundles the NGHTT (National Green Hydrogen Think Tank) proposal, the six-application strategy, the 11-person founder team with verified CVs, and the Ministerial Designation request into one place. Submitted to Nepal's Ministry of Energy as a single signed brief.
+
+**NGHTT is a nationally designated public trust.** Not an organization, not a department, not an NGO, not a startup. A trust, registered under Nepal law, with perpetual succession that survives political cycles. Refer to it as "the trust" or "the public trust" — never "the organization" or "the company."
 
 This is not a startup landing page, not a research blog, not a university department site. It is a government-facing petition: serious, source-traced, accountable.
 
@@ -12,7 +14,7 @@ This is not a startup landing page, not a research blog, not a university depart
 
 Primary: officials at Nepal's Ministry of Energy, Water Resources, and Irrigation reviewing the designation request. Likely opens the site once on a desktop in an office, reads it linearly, then forwards the URL or PDF to colleagues.
 
-Secondary: international funders and SAARC counterparts evaluating Nepal's hydrogen readiness. Tertiary: the 27 named team members who will share this link as proof of affiliation.
+Secondary: international funders and SAARC counterparts evaluating Nepal's hydrogen readiness. Tertiary: the 11 named founder-team members who will share this link as proof of affiliation.
 
 ## Brand & Tone
 
