@@ -72,7 +72,6 @@ const SORT_OPTIONS = {
 }
 
 const CUSTOM_ROLE_VALUE = '__custom__'
-const MAX_VISIBLE_EDUCATION_ENTRIES = 3
 
 const ROLE_OPTIONS = [
   'Principal Investigator',
@@ -149,15 +148,6 @@ const getErrorMessage = (error, fallbackMessage) => {
   return fallbackMessage
 }
 
-const parseEducationEntries = (education) => {
-  const raw = String(education || '').trim()
-  if (!raw || raw.toLowerCase() === 'not added yet') return []
-  return raw
-    .split(/(?:\s*;\s*|\r?\n+)/)
-    .map((item) => item.trim().replace(/[,\s]+$/, ''))
-    .filter(Boolean)
-}
-
 const buildEditForm = (member) => ({
   fullName: member?.fullName || '',
   role: member?.role || '',
@@ -182,7 +172,7 @@ function MemberAvatar({ member, sizeClass = 'h-12 w-12', textSizeClass = 'text-s
         <img
           src={member.photoUrl}
           alt={`${member.fullName} profile`}
-          className="h-full w-full object-cover object-[center_18%]"
+          className="h-full w-full object-cover"
           loading="lazy"
           onError={() => setHasImageError(true)}
         />
@@ -232,7 +222,6 @@ function GovShowcasePage() {
   const [manageAuthAction, setManageAuthAction] = useState('unlock')
   const [managePin, setManagePin] = useState('')
   const [manageAuthError, setManageAuthError] = useState('')
-  const [isProfileOverlayOpen, setIsProfileOverlayOpen] = useState(false)
   const profileDetailRef = useRef(null)
 
   useEffect(() => {
@@ -298,29 +287,19 @@ function GovShowcasePage() {
   }, [])
 
   useEffect(() => {
-    if (!isMediaManagerOpen && !isCvViewerOpen && !isManageAuthOpen && !isProfileOverlayOpen) return
+    if (!isMediaManagerOpen && !isCvViewerOpen && !isManageAuthOpen) return
     const onEsc = (event) => {
       if (event.key === 'Escape') {
         setIsMediaManagerOpen(false)
         setIsCvViewerOpen(false)
         setIsManageAuthOpen(false)
-        setIsProfileOverlayOpen(false)
         setManageAuthError('')
         setManagePin('')
       }
     }
     window.addEventListener('keydown', onEsc)
     return () => window.removeEventListener('keydown', onEsc)
-  }, [isMediaManagerOpen, isCvViewerOpen, isManageAuthOpen, isProfileOverlayOpen])
-
-  useEffect(() => {
-    if (!isProfileOverlayOpen) return
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = previousOverflow
-    }
-  }, [isProfileOverlayOpen])
+  }, [isMediaManagerOpen, isCvViewerOpen, isManageAuthOpen])
 
   const capabilities = useMemo(() => {
     const set = new Set()
@@ -354,13 +333,6 @@ function GovShowcasePage() {
     if (!filteredMembers.length) return null
     return filteredMembers.find((member) => member.id === selectedMemberId) ?? filteredMembers[0]
   }, [filteredMembers, selectedMemberId])
-  const hasActiveMemberContactDetails = Boolean(
-    activeMember?.cvUrl || activeMember?.contact?.email || activeMember?.contact?.phone,
-  )
-  const hasActiveMemberContactInfo = Boolean(activeMember?.contact?.email || activeMember?.contact?.phone)
-  const activeMemberEducationEntries = parseEducationEntries(activeMember?.education)
-  const visibleEducationEntries = activeMemberEducationEntries.slice(0, MAX_VISIBLE_EDUCATION_ENTRIES)
-  const hiddenEducationCount = Math.max(0, activeMemberEducationEntries.length - visibleEducationEntries.length)
   const resolvedPhotoTargetMemberId =
     photoTargetMemberId && members.some((member) => member.id === photoTargetMemberId)
       ? photoTargetMemberId
@@ -396,11 +368,9 @@ function GovShowcasePage() {
 
   const focusMemberDetailsOnMobile = () => {
     if (!window.matchMedia('(max-width: 1023px)').matches) return
-    setIsProfileOverlayOpen(true)
-  }
-
-  const closeProfileOverlay = () => {
-    setIsProfileOverlayOpen(false)
+    window.requestAnimationFrame(() => {
+      profileDetailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
   }
 
   const openManageAuthDialog = (action) => {
@@ -1059,13 +1029,13 @@ function GovShowcasePage() {
                          />
                        </label>
 
-                       <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
+                       <label className="text-sm font-medium text-[var(--text)]">
                          Education
-                         <textarea
-                           rows={2}
+                         <input
+                           type="text"
                            value={editData.education}
                            onChange={(event) => handleEditChange('education', event.target.value)}
-                           className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                           className="mt-1 h-10 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                          />
                        </label>
 
@@ -1091,12 +1061,11 @@ function GovShowcasePage() {
                        </label>
 
                        <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
-                         Highlights (separate with "." or new line)
+                         Highlights (one per line)
                          <textarea
-                           rows={4}
                            value={editData.highlights}
                            onChange={(event) => handleEditChange('highlights', event.target.value)}
-                           className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm leading-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                           className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                          />
                        </label>
 
@@ -1166,7 +1135,7 @@ function GovShowcasePage() {
                              </span>
                            ))}
                          </div>
-                       </section>
+                       </div>
                      ) : null}
 
                      {/* Highlights */}
@@ -1181,7 +1150,7 @@ function GovShowcasePage() {
                              </li>
                            ))}
                          </ul>
-                       </section>
+                       </div>
                      ) : null}
 
                      {/* Education */}
@@ -1430,13 +1399,13 @@ function GovShowcasePage() {
                       />
                     </label>
 
-                    <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
+                    <label className="text-sm font-medium text-[var(--text)]">
                       Education
-                      <textarea
-                        rows={2}
+                      <input
+                        type="text"
                         value={formData.education}
                         onChange={(event) => handleChange('education', event.target.value)}
-                        className="mt-1 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 py-2 text-sm leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                        className="mt-1 h-10 w-full rounded-md border border-[var(--border)] bg-[var(--input)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                       />
                     </label>
 
@@ -1509,7 +1478,7 @@ function GovShowcasePage() {
                     </fieldset>
 
                     <label className="text-sm font-medium text-[var(--text)] md:col-span-2">
-                      Highlights (separate with "." or new line)
+                      Highlights (one per line)
                       <textarea
                         value={formData.highlights}
                         onChange={(event) => handleChange('highlights', event.target.value)}
