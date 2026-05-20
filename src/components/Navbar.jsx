@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { BadgeCheck, Lock, Menu, MoonStar, Sun, Unlock, X } from 'lucide-react'
+import { BadgeCheck, Lock, Menu, Unlock, X } from 'lucide-react'
 import {
   MANAGE_LOCK_STATE_CHANGED_EVENT,
   requestManageLockState,
   requestManageLockToggle,
 } from '../lib/manageLockEvents'
-
-const THEME_STORAGE_KEY = 'nghtt-theme'
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -17,13 +14,6 @@ const NAV_LINKS = [
   { to: '/team', label: 'Team' },
   { to: '/submission', label: 'Submission' },
 ]
-
-const getInitialTheme = () => {
-  if (typeof window === 'undefined') return 'light'
-  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
-  if (storedTheme === 'light' || storedTheme === 'dark') return storedTheme
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
 
 function NghttMark() {
   return (
@@ -46,16 +36,16 @@ function NghttMark() {
 }
 
 function Navbar() {
-  const [theme, setTheme] = useState(getInitialTheme)
   const [isManageLocked, setIsManageLocked] = useState(true)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
 
+  // Force light mode — the brand is a light-theme expression
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-    window.localStorage.setItem(THEME_STORAGE_KEY, theme)
-  }, [theme])
+    document.documentElement.classList.remove('dark')
+    window.localStorage.removeItem('nghtt-theme')
+  }, [])
 
   useEffect(() => {
     const handleManageLockChange = (event) => setIsManageLocked(Boolean(event?.detail?.locked))
@@ -72,8 +62,6 @@ function Navbar() {
 
   // Close mobile menu on route change
   useEffect(() => { setMenuOpen(false) }, [pathname])
-
-  const isDarkMode = theme === 'dark'
 
   return (
     <header
@@ -127,27 +115,6 @@ function Navbar() {
 
         {/* Right cluster */}
         <div className="flex items-center gap-2">
-          {/* Theme toggle */}
-          <button
-            type="button"
-            onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
-            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] text-[var(--text)] backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)]"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={isDarkMode ? 'sun' : 'moon'}
-                initial={{ opacity: 0, rotate: -90, scale: 0.85 }}
-                animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                exit={{ opacity: 0, rotate: 90, scale: 0.85 }}
-                transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                className="absolute inset-0 grid place-items-center"
-              >
-                {isDarkMode ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
-              </motion.span>
-            </AnimatePresence>
-          </button>
-
           {/* Submitted badge — desktop only */}
           <span className="hidden items-center gap-1.5 rounded-full border border-[var(--primary)]/30 bg-[var(--primary-soft)] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--primary)] backdrop-blur-md md:inline-flex">
             <BadgeCheck className="h-3.5 w-3.5 text-[var(--primary)]" aria-hidden="true" />

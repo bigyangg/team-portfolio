@@ -685,6 +685,10 @@ body::before {
 .surface-cream {
   background: var(--surface-cream);
   color: var(--surface-on-cream);
+  /* Scope text tokens so children inherit dark-on-cream regardless of theme */
+  --text: #2A1F0F;
+  --foreground: #2A1F0F;
+  --muted-foreground: rgba(42, 31, 15, 0.6);
   --surface-rule: rgba(42, 31, 15, 0.10);
 }
 .surface-cream .eyebrow { color: rgba(42, 31, 15, 0.55); }
@@ -693,6 +697,10 @@ body::before {
 .surface-forest {
   background: var(--surface-forest);
   color: var(--surface-on-forest);
+  /* Scope text tokens so children inherit light-on-dark regardless of theme */
+  --text: #E6F4EF;
+  --foreground: #E6F4EF;
+  --muted-foreground: #9FBAB4;
   --surface-rule: rgba(110, 231, 183, 0.18);
   --glass-border: rgba(110, 231, 183, 0.18);
   --glass-bg: rgba(255, 255, 255, 0.04);
