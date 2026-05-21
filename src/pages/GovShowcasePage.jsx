@@ -167,7 +167,7 @@ function MemberAvatar({ member, sizeClass = 'h-12 w-12', textSizeClass = 'text-s
 
   return (
     <div
-      className={`relative ${sizeClass} shrink-0 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--muted-surface)]`}
+      className={`relative ${sizeClass} shrink-0 overflow-hidden rounded-xl border-[1.5px] border-[rgba(5,46,44,0.12)] bg-gradient-to-br from-[var(--primary-soft)] to-white`}
     >
       {shouldShowPhoto ? (
         <img
@@ -179,7 +179,7 @@ function MemberAvatar({ member, sizeClass = 'h-12 w-12', textSizeClass = 'text-s
         />
       ) : (
         <span
-          className={`inline-flex h-full w-full items-center justify-center font-semibold uppercase text-[var(--navy)] ${textSizeClass}`}
+          className={`inline-flex h-full w-full items-center justify-center font-display font-extrabold uppercase tracking-tight text-[var(--primary)] ${textSizeClass}`}
           aria-hidden="true"
         >
           {getInitials(member.fullName) || 'NA'}
@@ -859,10 +859,10 @@ function GovShowcasePage() {
                       setIsProfileModalOpen(true)
                     }}
                     aria-pressed={isActive}
-                    className={`group relative overflow-hidden rounded-[22px] border p-5 text-left backdrop-blur-2xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:ring-[var(--accent-ring)] ${
+                    className={`group relative overflow-hidden rounded-[22px] border-[1.5px] p-5 text-left backdrop-blur-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:ring-[var(--accent-ring)] ${
                       isActive
-                        ? 'border-[var(--primary)] bg-gradient-to-br from-[var(--glass-bg-strong)] to-[var(--glass-bg)] shadow-[0_20px_56px_-12px_rgba(16,185,129,0.45),0_0_0_1px_rgba(16,185,129,0.30)]'
-                        : 'border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_8px_28px_rgba(5,46,44,0.06)] hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:bg-[var(--glass-bg-strong)] hover:shadow-[0_20px_48px_-8px_rgba(16,185,129,0.30)]'
+                        ? 'border-[var(--primary)] bg-white shadow-[0_24px_56px_-12px_rgba(16,185,129,0.40),0_0_0_2px_rgba(16,185,129,0.30)]'
+                        : 'border-[rgba(5,46,44,0.10)] bg-white/85 shadow-[0_10px_28px_-8px_rgba(5,46,44,0.12)] hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:bg-white hover:shadow-[0_20px_44px_-10px_rgba(16,185,129,0.28)]'
                     }`}
                     style={{ animationDelay: `${Math.min(index * 30, 360)}ms` }}
                   >
