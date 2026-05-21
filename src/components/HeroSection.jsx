@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ChevronDown, Sparkles } from 'lucide-react'
 import { heroStagger, heroItem } from '../lib/motion'
@@ -100,7 +101,7 @@ function HeroSection() {
           </motion.p>
 
           <motion.div variants={heroItem} className="mt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
-            <MagneticButton as="a" href="#team" className="btn btn-primary">
+            <MagneticButton as={Link} to="/team" className="btn btn-primary">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               View the team
             </MagneticButton>
