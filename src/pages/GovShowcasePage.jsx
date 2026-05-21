@@ -167,7 +167,7 @@ function MemberAvatar({ member, sizeClass = 'h-12 w-12', textSizeClass = 'text-s
 
   return (
     <div
-      className={`relative ${sizeClass} shrink-0 overflow-hidden rounded-xl border-[1.5px] border-[rgba(5,46,44,0.12)] bg-gradient-to-br from-[var(--primary-soft)] to-white`}
+      className={`relative ${sizeClass} shrink-0 overflow-hidden rounded-xl border-[1.5px] border-[rgba(5,46,44,0.12)] bg-gradient-to-br from-[var(--primary-soft)] to-white dark:border-[rgba(110,231,183,0.25)] dark:from-[rgba(110,231,183,0.18)] dark:to-[#0a2521]`}
     >
       {shouldShowPhoto ? (
         <img
@@ -861,8 +861,8 @@ function GovShowcasePage() {
                     aria-pressed={isActive}
                     className={`group relative overflow-hidden rounded-[22px] border-[1.5px] p-5 text-left backdrop-blur-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:ring-[var(--accent-ring)] ${
                       isActive
-                        ? 'border-[var(--primary)] bg-white shadow-[0_24px_56px_-12px_rgba(16,185,129,0.40),0_0_0_2px_rgba(16,185,129,0.30)]'
-                        : 'border-[rgba(5,46,44,0.10)] bg-white/85 shadow-[0_10px_28px_-8px_rgba(5,46,44,0.12)] hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:bg-white hover:shadow-[0_20px_44px_-10px_rgba(16,185,129,0.28)]'
+                        ? 'border-[var(--primary)] bg-white shadow-[0_24px_56px_-12px_rgba(16,185,129,0.40),0_0_0_2px_rgba(16,185,129,0.30)] dark:border-[#6EE7B7] dark:bg-[#0c2a26] dark:shadow-[0_24px_56px_-12px_rgba(110,231,183,0.30),0_0_0_2px_rgba(110,231,183,0.40)]'
+                        : 'border-[rgba(5,46,44,0.10)] bg-white/85 shadow-[0_10px_28px_-8px_rgba(5,46,44,0.12)] hover:-translate-y-1 hover:border-[var(--primary)]/60 hover:bg-white hover:shadow-[0_20px_44px_-10px_rgba(16,185,129,0.28)] dark:border-[rgba(110,231,183,0.18)] dark:bg-[#0a2521]/85 dark:shadow-[0_10px_28px_-8px_rgba(0,0,0,0.40)] dark:hover:border-[#6EE7B7]/60 dark:hover:bg-[#0c2a26] dark:hover:shadow-[0_20px_44px_-10px_rgba(110,231,183,0.25)]'
                     }`}
                     style={{ animationDelay: `${Math.min(index * 30, 360)}ms` }}
                   >
@@ -957,7 +957,7 @@ function GovShowcasePage() {
                 <aside
                   ref={profileDetailRef}
                   id="member-details"
-                  className="anim-rise relative flex w-full max-w-2xl flex-col overflow-hidden rounded-[24px] border border-[var(--glass-border-strong)] bg-white shadow-[0_40px_100px_-20px_rgba(5,46,44,0.50),0_0_0_1px_rgba(255,255,255,0.6)]"
+                  className="anim-rise relative flex w-full max-w-2xl flex-col overflow-hidden rounded-[24px] border border-[var(--glass-border-strong)] bg-white shadow-[0_40px_100px_-20px_rgba(5,46,44,0.50),0_0_0_1px_rgba(255,255,255,0.6)] dark:border-[rgba(110,231,183,0.25)] dark:bg-[#0a2521] dark:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.70),0_0_0_1px_rgba(110,231,183,0.18)]"
                   style={{ maxHeight: 'min(92vh, 880px)' }}
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -966,7 +966,7 @@ function GovShowcasePage() {
                     type="button"
                     onClick={() => setIsProfileModalOpen(false)}
                     aria-label="Close profile"
-                    className="absolute right-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-full border border-[rgba(5,46,44,0.12)] bg-white/95 text-[var(--text)] shadow-[0_4px_12px_rgba(5,46,44,0.10)] backdrop-blur-sm transition-colors duration-200 hover:border-[var(--primary)]/60 hover:bg-white hover:text-[var(--primary)]"
+                    className="absolute right-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-full border border-[rgba(5,46,44,0.12)] bg-white/95 text-[var(--text)] shadow-[0_4px_12px_rgba(5,46,44,0.10)] backdrop-blur-sm transition-colors duration-200 hover:border-[var(--primary)]/60 hover:bg-white hover:text-[var(--primary)] dark:border-[rgba(110,231,183,0.25)] dark:bg-[#0c2a26]/95 dark:text-[#E6F4EF] dark:shadow-[0_4px_12px_rgba(0,0,0,0.40)] dark:hover:border-[#6EE7B7]/60 dark:hover:bg-[#0c2a26] dark:hover:text-[#6EE7B7]"
                   >
                     <X className="h-4 w-4" aria-hidden="true" />
                   </button>
@@ -1025,7 +1025,7 @@ function GovShowcasePage() {
                      </div>
                    </div>
                    {/* Divider */}
-                   <div className="relative h-px w-full bg-gradient-to-r from-transparent via-[rgba(5,46,44,0.12)] to-transparent" />
+                   <div className="relative h-px w-full bg-gradient-to-r from-transparent via-[rgba(5,46,44,0.12)] to-transparent dark:via-[rgba(110,231,183,0.20)]" />
                  </div>
 
                  {editStatusMessage ? (
