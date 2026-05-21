@@ -954,60 +954,75 @@ function GovShowcasePage() {
                   if (e.target === e.currentTarget) setIsProfileModalOpen(false)
                 }}
               >
-                <button
-                  type="button"
-                  onClick={() => setIsProfileModalOpen(false)}
-                  aria-label="Close profile"
-                  className="fixed right-4 top-4 z-[81] grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md transition-colors duration-200 hover:bg-white/20 md:right-6 md:top-6"
-                >
-                  <X className="h-5 w-5" aria-hidden="true" />
-                </button>
-
                 <aside
                   ref={profileDetailRef}
                   id="member-details"
-                  className="glass-card-strong anim-rise relative w-full max-w-3xl overflow-hidden rounded-[24px]"
+                  className="anim-rise relative w-full max-w-3xl overflow-hidden rounded-[24px] border border-[var(--glass-border-strong)] bg-white shadow-[0_40px_100px_-20px_rgba(5,46,44,0.50),0_0_0_1px_rgba(255,255,255,0.6)]"
                   onClick={(e) => e.stopPropagation()}
                 >
+                  {/* Close button anchored to the panel corner, never the viewport */}
+                  <button
+                    type="button"
+                    onClick={() => setIsProfileModalOpen(false)}
+                    aria-label="Close profile"
+                    className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full border border-[rgba(5,46,44,0.12)] bg-white/85 text-[var(--text)] backdrop-blur-sm transition-colors duration-200 hover:border-[var(--primary)]/60 hover:bg-white hover:text-[var(--primary)]"
+                  >
+                    <X className="h-4 w-4" aria-hidden="true" />
+                  </button>
               {activeMember ? (
                 <>
-                 {/* Spotlight header — 2-column on desktop */}
-                 <div className="relative grid gap-6 border-b border-[var(--surface-rule-soft)] p-6 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:p-8">
-                   {/* Aurora wash specific to the spotlight */}
+                 {/* Hero header — large photo on left, name stack on right */}
+                 <div className="relative">
+                   {/* Aurora wash */}
                    <span
                      aria-hidden="true"
                      className="pointer-events-none absolute inset-0"
                      style={{
                        background:
-                         'radial-gradient(50% 80% at 20% 0%, rgba(110,231,183,0.22), transparent 60%), radial-gradient(50% 80% at 90% 100%, rgba(45,212,191,0.18), transparent 65%)',
+                         'radial-gradient(60% 90% at 0% 0%, rgba(110,231,183,0.18), transparent 60%), radial-gradient(50% 80% at 100% 100%, rgba(45,212,191,0.14), transparent 65%)',
                      }}
                    />
-                   <MemberAvatar
-                     member={activeMember}
-                     sizeClass="relative h-24 w-24 ring-4 ring-white/60 sm:h-28 sm:w-28"
-                     textSizeClass="text-2xl"
-                   />
-                   <div className="relative min-w-0">
-                     <p className="eyebrow">{activeMember.role}</p>
-                     <h3 className="font-display mt-2 text-[28px] font-extrabold leading-[1.02] tracking-[-0.022em] text-[var(--text)] sm:text-[36px] md:text-[40px]">
-                       {activeMember.fullName}
-                     </h3>
-                     {activeMember.location && (
-                       <p className="mt-2.5 inline-flex items-center gap-1.5 text-[13px] text-[var(--muted-foreground)]">
-                         <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-                         {activeMember.location}
-                       </p>
-                     )}
+                   <div className="relative flex flex-col gap-6 p-6 sm:p-8 sm:pr-16 md:flex-row md:items-center md:gap-8 md:p-10 md:pr-20">
+                     <MemberAvatar
+                       member={activeMember}
+                       sizeClass="h-28 w-28 shrink-0 ring-4 ring-white shadow-[0_12px_32px_-8px_rgba(5,46,44,0.25)] sm:h-32 sm:w-32 md:h-36 md:w-36"
+                       textSizeClass="text-3xl md:text-4xl"
+                     />
+                     <div className="min-w-0 flex-1">
+                       <p className="eyebrow">{activeMember.role}</p>
+                       <h3
+                         id="profile-modal-title"
+                         className="font-display mt-2 text-[30px] font-extrabold leading-[1.02] tracking-[-0.022em] text-[var(--text)] sm:text-[38px] md:text-[44px]"
+                       >
+                         {activeMember.fullName}
+                       </h3>
+                       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-[var(--muted-foreground)]">
+                         {activeMember.location && (
+                           <span className="inline-flex items-center gap-1.5">
+                             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                             {activeMember.location}
+                           </span>
+                         )}
+                         {activeMember.cvUrl && (
+                           <span className="inline-flex items-center gap-1.5 text-[var(--primary)]">
+                             <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                             CV verified
+                           </span>
+                         )}
+                       </div>
+                       {!isEditProfileOpen && !isManageLocked ? (
+                         <button
+                           type="button"
+                           onClick={handleStartEditProfile}
+                           className="mt-4 inline-flex items-center gap-1 rounded-full border border-[rgba(5,46,44,0.10)] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted-foreground)] transition-colors hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
+                         >
+                           Edit profile
+                         </button>
+                       ) : null}
+                     </div>
                    </div>
-                   {!isEditProfileOpen && !isManageLocked ? (
-                     <button
-                       type="button"
-                       onClick={handleStartEditProfile}
-                       className="btn btn-ghost relative shrink-0"
-                     >
-                       Edit profile
-                     </button>
-                   ) : null}
+                   {/* Divider */}
+                   <div className="relative h-px w-full bg-gradient-to-r from-transparent via-[rgba(5,46,44,0.12)] to-transparent" />
                  </div>
 
                  {editStatusMessage ? (
