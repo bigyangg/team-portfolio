@@ -946,7 +946,7 @@ function GovShowcasePage() {
             {/* ═════ PROFILE MODAL — centered popup spotlight ═════ */}
             {isProfileModalOpen && activeMember && (
               <div
-                className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-[#052E2C]/70 px-3 py-6 backdrop-blur-md md:items-center md:px-6 md:py-10"
+                className="fixed inset-0 z-[80] flex items-center justify-center bg-[#052E2C]/70 p-3 backdrop-blur-md md:p-6"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="profile-modal-title"
@@ -957,18 +957,21 @@ function GovShowcasePage() {
                 <aside
                   ref={profileDetailRef}
                   id="member-details"
-                  className="anim-rise relative w-full max-w-3xl overflow-hidden rounded-[24px] border border-[var(--glass-border-strong)] bg-white shadow-[0_40px_100px_-20px_rgba(5,46,44,0.50),0_0_0_1px_rgba(255,255,255,0.6)]"
+                  className="anim-rise relative flex w-full max-w-2xl flex-col overflow-hidden rounded-[24px] border border-[var(--glass-border-strong)] bg-white shadow-[0_40px_100px_-20px_rgba(5,46,44,0.50),0_0_0_1px_rgba(255,255,255,0.6)]"
+                  style={{ maxHeight: 'min(92vh, 880px)' }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {/* Close button anchored to the panel corner, never the viewport */}
+                  {/* Sticky close button — stays visible while modal content scrolls */}
                   <button
                     type="button"
                     onClick={() => setIsProfileModalOpen(false)}
                     aria-label="Close profile"
-                    className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full border border-[rgba(5,46,44,0.12)] bg-white/85 text-[var(--text)] backdrop-blur-sm transition-colors duration-200 hover:border-[var(--primary)]/60 hover:bg-white hover:text-[var(--primary)]"
+                    className="absolute right-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-full border border-[rgba(5,46,44,0.12)] bg-white/95 text-[var(--text)] shadow-[0_4px_12px_rgba(5,46,44,0.10)] backdrop-blur-sm transition-colors duration-200 hover:border-[var(--primary)]/60 hover:bg-white hover:text-[var(--primary)]"
                   >
                     <X className="h-4 w-4" aria-hidden="true" />
                   </button>
+                  {/* Scrollable content region */}
+                  <div className="flex-1 overflow-y-auto">
               {activeMember ? (
                 <>
                  {/* Hero header — large photo on left, name stack on right */}
@@ -1247,6 +1250,7 @@ function GovShowcasePage() {
                  )}
                </>
              ) : null}
+                  </div>
                 </aside>
               </div>
             )}
