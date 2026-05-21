@@ -161,6 +161,26 @@ const buildEditForm = (member) => ({
   phone: member?.contact?.phone || '',
 })
 
+// Parse an education string into structured rows.
+// Accepts ';' or newline as delimiters. For each entry, extracts a trailing
+// (year-range) into entry.year, takes the first comma-separated part as
+// the degree, and joins the rest as the institution.
+function parseEducationEntries(education = '') {
+  return education
+    .split(/[;\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const yearMatch = entry.match(/\(([^)]+)\)\s*$/)
+      const year = yearMatch ? yearMatch[1].trim() : ''
+      const withoutYear = yearMatch ? entry.slice(0, yearMatch.index).trim().replace(/,\s*$/, '') : entry
+      const parts = withoutYear.split(',').map((p) => p.trim()).filter(Boolean)
+      const degree = parts[0] || withoutYear
+      const institution = parts.slice(1).join(', ')
+      return { degree, institution, year }
+    })
+}
+
 function MemberAvatar({ member, sizeClass = 'h-12 w-12', textSizeClass = 'text-sm' }) {
   const [hasImageError, setHasImageError] = useState(false)
   const shouldShowPhoto = Boolean(member.photoUrl) && !hasImageError
@@ -1200,14 +1220,37 @@ function GovShowcasePage() {
                        </div>
                      ) : null}
 
-                     {/* Education */}
+                     {/* Education — parses each ;-separated degree into degree / institution / year */}
                      {activeMember.education && (
                        <div className="mt-6 border-t border-[var(--surface-rule-soft)] pt-5">
                          <p className="eyebrow flex items-center gap-1.5">
                            <GraduationCap className="h-3 w-3" aria-hidden="true" />
                            Education
                          </p>
-                         <p className="mt-2 text-[14px] leading-6 text-[var(--text)]/85">{activeMember.education}</p>
+                         <ul className="mt-3 space-y-2">
+                           {parseEducationEntries(activeMember.education).map((entry, idx) => (
+                             <li
+                               key={idx}
+                               className="grid grid-cols-[1fr_auto] items-baseline gap-3 rounded-lg border border-[rgba(5,46,44,0.08)] bg-[rgba(255,255,255,0.55)] px-3.5 py-2.5 dark:border-[rgba(110,231,183,0.15)] dark:bg-[rgba(255,255,255,0.03)]"
+                             >
+                               <div className="min-w-0">
+                                 <p className="font-display text-[13.5px] font-bold leading-tight text-[var(--text)]">
+                                   {entry.degree}
+                                 </p>
+                                 {entry.institution && (
+                                   <p className="mt-0.5 text-[12px] leading-snug text-[var(--text)]/65">
+                                     {entry.institution}
+                                   </p>
+                                 )}
+                               </div>
+                               {entry.year && (
+                                 <span className="font-mono tab-num shrink-0 text-[10.5px] font-bold uppercase tracking-[0.08em] text-[var(--primary)]">
+                                   {entry.year}
+                                 </span>
+                               )}
+                             </li>
+                           ))}
+                         </ul>
                        </div>
                      )}
 
