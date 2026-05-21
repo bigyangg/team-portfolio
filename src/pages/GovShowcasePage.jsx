@@ -174,6 +174,7 @@ function MemberAvatar({ member, sizeClass = 'h-12 w-12', textSizeClass = 'text-s
           src={member.photoUrl}
           alt={`${member.fullName} profile`}
           className="h-full w-full object-cover"
+          style={{ objectPosition: 'center 18%' }}
           loading="lazy"
           onError={() => setHasImageError(true)}
         />
@@ -1672,7 +1673,7 @@ function GovShowcasePage() {
             if (event.target === event.currentTarget) setIsCvViewerOpen(false)
           }}
         >
-          <section className="glass-card-strong flex h-[88vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl">
+          <section className="glass-card-strong flex h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl">
             <div className="flex flex-col gap-3 border-b border-[var(--border)] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
               <h3 id="cv-viewer-title" className="truncate text-base font-semibold text-[var(--text)] sm:text-lg">
                 {cvViewerTitle || 'CV Viewer'}
