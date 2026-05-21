@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 @import 'tailwindcss';
 
+/* Tailwind v4: class-based dark mode. Activates `dark:` variants
+   when the .dark class is on <html> (set by the navbar theme toggle). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ===============================================================
    Green Hydrogen · Liquid Glass · Premium
    --------------------------------------------------------------
