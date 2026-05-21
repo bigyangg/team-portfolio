@@ -14,6 +14,7 @@ import {
   ArrowUpRight,
   Users,
   Tags,
+  X,
 } from 'lucide-react'
 import initialTeamMembers from '../data/teamMembers'
 import {
@@ -193,6 +194,7 @@ function GovShowcasePage() {
     mergeSeedAndStoredMembers(initialTeamMembers, loadMembersFromStorage()),
   )
   const [selectedMemberId, setSelectedMemberId] = useState('')
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [capabilityFilter, setCapabilityFilter] = useState('All')
   const [sortBy, setSortBy] = useState('name')
@@ -389,6 +391,21 @@ function GovShowcasePage() {
   useEffect(() => {
     emitManageLockState(isManageLocked)
   }, [isManageLocked])
+
+  // Profile modal: ESC closes, body scroll locks while open
+  useEffect(() => {
+    if (!isProfileModalOpen) return
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setIsProfileModalOpen(false)
+    }
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [isProfileModalOpen])
 
   useEffect(() => {
     const handleToggleRequest = () => {
@@ -839,7 +856,7 @@ function GovShowcasePage() {
                       setIsEditProfileOpen(false)
                       setEditErrors({})
                       setEditStatusMessage('')
-                      focusMemberDetailsOnMobile()
+                      setIsProfileModalOpen(true)
                     }}
                     aria-pressed={isActive}
                     className={`group relative overflow-hidden rounded-[22px] border p-5 text-left backdrop-blur-2xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:ring-[var(--accent-ring)] ${
@@ -926,21 +943,32 @@ function GovShowcasePage() {
               })}
             </div>
 
-            {/* ═════ SPOTLIGHT — feature panel for the selected member ═════ */}
-            {activeMember && (
-              <div className="mt-12 md:mt-16">
-                <div className="mb-4 flex items-center gap-3">
-                  <Sparkles className="h-4 w-4 text-[var(--primary)]" aria-hidden="true" />
-                  <p className="eyebrow">Spotlight</p>
-                  <span className="h-px flex-1 bg-gradient-to-r from-[var(--primary)]/30 to-transparent" />
-                </div>
-              </div>
-            )}
-            <aside
-              ref={profileDetailRef}
-              id="member-details"
-              className={`relative overflow-hidden ${activeMember ? 'anim-rise glass-card-strong' : 'hidden'}`}
-            >
+            {/* ═════ PROFILE MODAL — centered popup spotlight ═════ */}
+            {isProfileModalOpen && activeMember && (
+              <div
+                className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-[#052E2C]/70 px-3 py-6 backdrop-blur-md md:items-center md:px-6 md:py-10"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="profile-modal-title"
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) setIsProfileModalOpen(false)
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setIsProfileModalOpen(false)}
+                  aria-label="Close profile"
+                  className="fixed right-4 top-4 z-[81] grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md transition-colors duration-200 hover:bg-white/20 md:right-6 md:top-6"
+                >
+                  <X className="h-5 w-5" aria-hidden="true" />
+                </button>
+
+                <aside
+                  ref={profileDetailRef}
+                  id="member-details"
+                  className="glass-card-strong anim-rise relative w-full max-w-3xl overflow-hidden rounded-[24px]"
+                  onClick={(e) => e.stopPropagation()}
+                >
               {activeMember ? (
                 <>
                  {/* Spotlight header — 2-column on desktop */}
@@ -1204,7 +1232,9 @@ function GovShowcasePage() {
                  )}
                </>
              ) : null}
-            </aside>
+                </aside>
+              </div>
+            )}
           </>
         )}
       </section>

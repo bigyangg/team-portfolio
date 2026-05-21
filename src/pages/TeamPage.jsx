@@ -8,14 +8,15 @@ function TeamPage() {
         eyebrow="— The Team"
         title={
           <>
-            27 experts. One{' '}
+            11 founders. One{' '}
             <span className="glow-text">signed brief</span>.
           </>
         }
         intro={
           <>
-            Every profile below is sourced from a verified CV submitted to the Ministry of Energy.
-            Click any card to read the full capability brief and open the original document.
+            The multidisciplinary founder team of the trust. Every profile below is sourced from a
+            verified CV submitted to the Ministry of Energy. Click any card to open the full
+            capability brief.
           </>
         }
         breadcrumb={[{ label: 'Team' }]}
